@@ -151,7 +151,7 @@ function show(num){
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        maxCost[i] = Math.floor(200*Math.random());//测试
+        // maxCost[i] = Math.floor(200*Math.random());//测试
 
         if(maxCost[i] < 0)maxCost[i] = 0;
         inputs[i].value = maxCost[i];
