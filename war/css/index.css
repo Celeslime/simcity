@@ -6,15 +6,14 @@ body{
 #inputs {
     display: grid;
     grid-template-columns: auto auto auto auto auto auto;
-    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
 }
 #inputs div.input{
-    margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
-    width: 100px;
     /* text-align: center; */
     font-size: 16px;
     /* font-family: '宋体'; */
@@ -30,8 +29,19 @@ body{
     border-radius: 5px;
     width: 100%;
     font-size: 32px;
-    text-align: center;
+    text-align: right;
     margin: 5px 0;
+}
+.input span{
+    font-family: '黑体';
+    /* font-weight: bold; */
+    display: flex;
+    justify-content: space-between;
+}
+.input span > span{
+    /* display: inline-block; */
+    /* float: right; */
+    font-weight: normal;
 }
 @media screen and (max-width: 900px) {
     #inputs {
@@ -47,17 +57,15 @@ body{
 @media screen and (max-width: 500px) {
     #inputs {
         grid-template-columns: auto auto auto;
-        justify-content: unset;
+        gap: 5px;
     }
     #inputs div.input {
         width: 80px;
         font-size: 14px;
-        margin: 5px;
         padding: 5px;
     }
     #inputs div.input > input {
         font-size: 24px;
-        margin-top: 2px;
     }
 }
 
@@ -69,20 +77,23 @@ div#table{
 }
 #startBtn{
     /* float: right; */
-    margin: 10px;
+    margin: 0 10px 10px 10px;
     padding: 10px;
     border-radius: 5px;
     border: solid 1px #ccc;
     background-color: #f9f9f9;
     font-size: 16px;
     height: 100%;
+    line-height: 1.5;
+
 }
 p#consoleLog{
-    margin: 10px;
+    margin: 0 0 10px 10px;
     padding: 10px;
     border: solid 1px #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
     font-size: 16px;
     width: 100%;
+    line-height: 1.5;
 }
