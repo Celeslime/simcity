@@ -73,10 +73,18 @@ function checkRemain(num){
     }
     return ans;
 }
-function zipList(list, num){
+var artList = getUnit(data.length, 0);// 至此，已成艺术
+for(var i = 0; i < data.length; i++){
+    for(var j = 0; j < data[0].value.length; j++){
+        artList[i] += data[i].value[j]; 
+    }
+    artList[i] = 11 / artList[i];
+}
+function zipList(list, rate){
     var ans = [];
     for(var i=0;i<list.length;i++){
-        var t = Math.floor(list[i]*num) - 1
+        var t = Math.floor(list[i] - artList[i] * (Math.random() > rate))
+        // var t = Math.floor(list[i] * rate) - 1;// 收敛速度慢
         ans[i] = t>0?t:0;
     }
     return ans;
@@ -93,7 +101,7 @@ function getBetterList(num){
     addToFull(tempNum);
     if(getScore(num) < getScore(tempNum)){
         num = tempNum;
-        console.log(Math.floor(temp*100)+'%',getScore(num));
+        console.log(Math.floor(temp * 100)+'%',getScore(num));
         loading = 0;
     }
     else{
@@ -104,37 +112,30 @@ function getBetterList(num){
 function start(){
     num = getUnit(data.length, 0);
     freshMaxCost();
-    temp = 0.5;
+    temp = 0;
     while(true){
         num = getBetterList(num);
-        if(loading > 2000){
-            temp = 1 - (1-temp)/1.1;
-            loading -= 20;
-            if(temp >= 1-1e-10 )break;
+        if(loading > 10000){
+            temp = 1 - (1 - temp) / 1.1;
+            if(temp >= 0.5)break;
+            loading = 0;
         }
     }
-    fixResult(1e5);
     show(num);
 }
-function fixResult(n = 1e5){
-    console.log('离散修正')
-    for(var i = 0; i < n; i++){
-        temp = 1;
-        num = getBetterList(num);
+function freshMaxCost(){
+    for(var i=0;i<inputs.length;i++){
+        maxCost[i] = Number(inputs[i].value);
+        // maxCost[i] = 100//Math.floor(200*Math.random());//测试
+        if(maxCost[i] < 0)maxCost[i] = 0;
+        inputs[i].value = maxCost[i];
     }
-}
-function getAverage(){
-    var sum=0;
-    for(var i = 0; i < 1e4; i++){
-        var list = zipList(num,0)
-        addToFull(list)
-        sum += getScore(list)
-    }
-    return sum/1e4;
+    localStorage.setItem('own',JSON.stringify(maxCost));
 }
 // 1000战资个人纪录
-// 14700 10*[53, 41, 44, 15, 18, 15, 0, 14, 5, 0, 10, 0, 4, 8, 0, 0, 2, 0, 0, 3, 0, 0, 0, 0]
-// 14710 10*[65, 43, 56, 13, 14, 12, 0, 11, 4, 0, 10, 0, 4, 8, 0, 0, 10, 0, 0, 1, 0, 0, 0, 0]
+// 14700
+// 14710
+// 14717
 function show(num){
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
@@ -169,16 +170,6 @@ function show(num){
         inputs[i].previousSibling.innerHTML = dataNames[i]+'<span>'+ (-remainCost[i])+'</span>';
     }
 }
-function freshMaxCost(){
-    for(var i=0;i<inputs.length;i++){
-        maxCost[i] = Number(inputs[i].value);
-        // maxCost[i] = Math.floor(200*Math.random());//测试
-
-        if(maxCost[i] < 0)maxCost[i] = 0;
-        inputs[i].value = maxCost[i];
-    }
-    localStorage.setItem('own',JSON.stringify(maxCost));
-}
 function copyFn(){
     var val = document.getElementById('copyText');
     window.getSelection().selectAllChildren(val);
@@ -190,9 +181,7 @@ function copyFn(){
     },2000);
 }
 function getPureText(text){
-    // 将text中'日'替换为'曰'
-    // '霖'替换为'@霖'
-    return text.replace(/日/g,'曰').replace(/霖/g,'@霖');
+    return text.replace(/日/g,'曰').replace(/霖/g,'-霖');
 }
 function SectionToChinese(section){
     var chnNumChar = ["零","一","二","三","四","五","六","七","八","九"];
@@ -200,6 +189,7 @@ function SectionToChinese(section){
     var strIns = '', chnStr = '';
     var unitPos = 0;
     var zero = true;
+    if(section === 0) return chnNumChar[0];
     while(section > 0){
         var v = section % 10;
         if(v === 0){

@@ -43,6 +43,9 @@ body{
     /* float: right; */
     font-weight: normal;
 }
+h1{
+    margin: 10px;
+}
 @media screen and (max-width: 900px) {
     #inputs {
         grid-template-columns: auto auto auto auto;
@@ -57,10 +60,10 @@ body{
 @media screen and (max-width: 500px) {
     #inputs {
         grid-template-columns: auto auto auto;
-        gap: 5px;
+        /* gap: 5px; */
     }
     #inputs div.input {
-        width: 80px;
+        /* width: 80px; */
         font-size: 14px;
         padding: 5px;
     }
