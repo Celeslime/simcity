@@ -36,6 +36,4 @@ for(var i=2;i<raw_data.length;i++){
         score: Number(rows[i][15]),
     });
 }
-var own = JSON.parse(localStorage.getItem("own"));
-if(own == null)own = raw_data[1].split('\t').slice(1,13).map(Number);
 var dataNames = raw_data[1].split('\t').slice(1);

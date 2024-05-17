@@ -1,5 +1,8 @@
-var temp, loading; 
+var temp, loading = 0; 
 var inputs = [], maxCost = [], num = [];
+var own = JSON.parse(localStorage.getItem("own"));
+if(own==null)own = getUnit(12,0);
+if(!own[0] && own[0] != 0)own = getUnit(12,0);
 
 function getUnit(n,value){
     var list = []
