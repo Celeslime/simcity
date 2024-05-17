@@ -134,11 +134,13 @@ function getAverage(){
 // 14710 10*[65, 43, 56, 13, 14, 12, 0, 11, 4, 0, 10, 0, 4, 8, 0, 0, 10, 0, 0, 1, 0, 0, 0, 0]
 function show(num){
     outputDiv.innerHTML = '';
+    copyText.innerHTML = '';
     var flag = true;
     var listSpan = document.createElement('span');
     listSpan.className = 'tips';
-    listSpan.innerHTML = '总计：'+getScore(num)*100+'分';
+    listSpan.innerHTML = '总计：'+getScore(num)*100+'分<br>';
     outputDiv.appendChild(listSpan)
+    copyText.innerHTML+='总计：'+SectionToChinese(getScore(num)*100)+'分<br>';
     
     for(var i=0;i<num.length;i++){
         if(num[i] != 0){
@@ -153,6 +155,7 @@ function show(num){
             listSpan.className = 'card';
             listSpan.innerHTML = data[i].name + ' × ' + num[i];
             outputDiv.appendChild(listSpan);
+            copyText.innerHTML+=getPureText(data[i].name + ' × ' + num[i]+'<br>');
             // outputP.innerHTML += data[i].name + ' × ' + num[i] + '<br>';
         }   
     }
@@ -174,7 +177,7 @@ function freshMaxCost(){
     localStorage.setItem('own',JSON.stringify(maxCost));
 }
 function copyFn(){
-    var val = document.getElementById('outputDiv');
+    var val = document.getElementById('copyText');
     window.getSelection().selectAllChildren(val);
     document.execCommand ("Copy");
     var copyBtn = document.getElementById('copyBtn');
@@ -183,8 +186,35 @@ function copyFn(){
         copyBtn.value = '复制';
     },2000);
 }
-
-
+function getPureText(text){
+    // 将text中'日'替换为'曰'
+    // '霖'替换为'@霖'
+    return text.replace(/日/g,'曰').replace(/霖/g,'@霖');
+}
+function SectionToChinese(section){
+    var chnNumChar = ["零","一","二","三","四","五","六","七","八","九"];
+    var chnUnitChar = ["","十","百","千","万","亿","万亿","亿亿"];
+    var strIns = '', chnStr = '';
+    var unitPos = 0;
+    var zero = true;
+    while(section > 0){
+        var v = section % 10;
+        if(v === 0){
+             if(!zero){
+                  zero = true;
+                  chnStr = chnNumChar[v] + chnStr;
+             }
+        }else{
+              zero = false;
+              strIns = chnNumChar[v];
+              strIns += chnUnitChar[unitPos];
+              chnStr = strIns + chnStr;
+        }
+        unitPos++;
+        section = Math.floor(section / 10);
+     }
+     return chnStr;
+}
 
 
 
@@ -213,3 +243,4 @@ document.getElementById('startBtn').addEventListener('click',function(){
 });
 document.getElementById('copyBtn').addEventListener('click',copyFn);
 var outputDiv = document.getElementById('outputDiv');
+var copyText = document.getElementById('copyText');
