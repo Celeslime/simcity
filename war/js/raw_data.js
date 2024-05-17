@@ -1,9 +1,9 @@
-var row_data = 
-`
+{
+let raw_data = `
 有	14	13	13	10	8	8	8	6	4	4	4	4
 巨石怪				1				1					0.31	8.00	2	4	8	1.10074	4.40
 B级电影怪兽			2			2					2		1.56	1.60	10	20	16	1	20.00
-人生不地熟	1											1	0.47	5.33	3	6	16	1	6.00
+人生地不熟	1											1	0.47	5.33	3	6	16	1	6.00
 破盾									5	1			-1.09	-2.29	7	14	8	1.10074	15.41
 迪斯科旋风			1		1							2	0.94	2.67	6	12	16	1	12.00
 末日蜘蛛		5		2					1				1.41	1.78	9	18	8	1.10074	19.81
@@ -26,19 +26,22 @@ V机器人		2							2				0.63	4.00	4	8	8	1.10074	8.81
 磁铁	2			1				2					0.47	5.33	3	6	3	1.260869766	7.57
 电击之神	3		3						3				0.00	5.33	9	12	16	1	12.00
 `.split('\n');
-var raws = [];
+let rows = [];
 var data = [];
-for(var i=2;i<row_data.length;i++){
-    if(row_data[i]==''){continue;}
-    raws[i] = row_data[i].split('\t');
+for(var i=2;i<raw_data.length;i++){
+    if(raw_data[i]==''){continue;}
+    rows[i] = raw_data[i].split('\t');
     data.push({
-        name: raws[i][0],
-        value: raws[i].slice(1,13).map(Number),
-        score: Number(raws[i][16]),
+        name: rows[i][0],
+        value: rows[i].slice(1,13).map(Number),
+        score: Number(rows[i][15]),
     });
 }
 var own = JSON.parse(localStorage.getItem("own"));
-if(own == null)own = row_data[1].split('\t').slice(1,13).map(Number);
+if(own == null)own = raw_data[1].split('\t').slice(1,13).map(Number);
+var dataNames = `铁砧	弹药	扩音器	望远镜	老虎钳	橡胶鞋	橡胶鸭	消防栓	汽油	医疗箱	疏通塞	螺旋桨`.split('\t');
 
-var dataNames = 
-`铁砧	弹药	扩音器	望远镜	老虎钳	橡胶鞋	橡胶鸭	消防栓	汽油	医疗箱	疏通塞	螺旋桨`.split('\t');
+
+
+
+}
