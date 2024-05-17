@@ -115,7 +115,7 @@ function start(){
     temp = 0;
     while(true){
         num = getBetterList(num);
-        if(loading > 10000){
+        if(loading > 4000){
             temp = 1 - (1 - temp) / 1.1;
             if(temp >= 0.5)break;
             loading = 0;
@@ -127,7 +127,9 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         // maxCost[i] = 100//Math.floor(200*Math.random());//测试
-        if(maxCost[i] < 0)maxCost[i] = 0;
+        if(maxCost[i] < 0){
+            maxCost[i] = 0;
+        }
         inputs[i].value = maxCost[i];
     }
     localStorage.setItem('own',JSON.stringify(maxCost));
