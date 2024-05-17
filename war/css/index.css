@@ -75,7 +75,11 @@ div#table{
     flex-direction: row-reverse;
     justify-content: space-between;
 }
-#startBtn{
+.btnDiv{
+    display: flex;
+    flex-direction: column;
+}
+.btnDiv input{
     /* float: right; */
     margin: 0 10px 10px 10px;
     padding: 10px;
@@ -83,11 +87,13 @@ div#table{
     border: solid 1px #ccc;
     background-color: #f9f9f9;
     font-size: 16px;
-    height: 100%;
     line-height: 1.5;
-
 }
-p#consoleLog{
+.btnDiv textarea{
+    visibility: hidden;
+    width: 0;
+}
+div#outputDiv{
     margin: 0 0 10px 10px;
     padding: 10px;
     border: solid 1px #ccc;
@@ -96,4 +102,17 @@ p#consoleLog{
     font-size: 16px;
     width: 100%;
     line-height: 1.5;
+}
+span.tips{
+    color: #333;
+    display: block;
+    margin: 5px 0;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+span.card{
+    color: #555;
+    display: block;
+    margin-left: 10px;
 }

@@ -122,7 +122,7 @@ function fixResult(n = 1e5){
 }
 function getAverage(){
     var sum=0;
-    for(var i=0;i<1e4;i++){
+    for(var i = 0; i < 1e4; i++){
         var list = zipList(num,0)
         addToFull(list)
         sum += getScore(list)
@@ -130,17 +130,32 @@ function getAverage(){
     return sum/1e4;
 }
 // 1000战资个人纪录
-// 14687 [154, 83, 402, 196, 420, 0, 65, 0, 566, 0, 0, 145, 0, 47, 81, 0, 0, 0, 0, 39, 152, 8, 0, 0]
 // 14700 10*[53, 41, 44, 15, 18, 15, 0, 14, 5, 0, 10, 0, 4, 8, 0, 0, 2, 0, 0, 3, 0, 0, 0, 0]
 // 14710 10*[65, 43, 56, 13, 14, 12, 0, 11, 4, 0, 10, 0, 4, 8, 0, 0, 10, 0, 0, 1, 0, 0, 0, 0]
 function show(num){
-    outputP.innerHTML = '';
+    outputDiv.innerHTML = '';
+    var flag = true;
+    var listSpan = document.createElement('span');
+    listSpan.className = 'tips';
+    listSpan.innerHTML = '总计：'+getScore(num)*100+'分';
+    outputDiv.appendChild(listSpan)
+    
     for(var i=0;i<num.length;i++){
         if(num[i] != 0){
-            outputP.innerHTML += data[i].name + ': ' + num[i] + '<br>';
-        }
+            if(i > 8 && flag){
+                listSpan = document.createElement('span');
+                listSpan.className = 'tips';
+                listSpan.innerHTML = '以下卡牌可能不适合囤积战资：'
+                outputDiv.appendChild(listSpan)
+                flag = false;
+            }
+            listSpan = document.createElement('span');
+            listSpan.className = 'card';
+            listSpan.innerHTML = data[i].name + ' × ' + num[i];
+            outputDiv.appendChild(listSpan);
+            // outputP.innerHTML += data[i].name + ' × ' + num[i] + '<br>';
+        }   
     }
-    outputP.innerHTML += '<br>总计：'+getScore(num)*100+'分';
 
     var remainCost = calcCost(num)
     console.log('remain',remainCost)
@@ -157,6 +172,16 @@ function freshMaxCost(){
         inputs[i].value = maxCost[i];
     }
     localStorage.setItem('own',JSON.stringify(maxCost));
+}
+function copyFn(){
+    var val = document.getElementById('outputDiv');
+    window.getSelection().selectAllChildren(val);
+    document.execCommand ("Copy");
+    var copyBtn = document.getElementById('copyBtn');
+    copyBtn.value = '✔️';
+    setTimeout(function(){
+        copyBtn.value = '复制';
+    },2000);
 }
 
 
@@ -183,8 +208,8 @@ for(var i = 0; i < data[0].value.length; i++){
     document.getElementById('inputs').appendChild(inputDiv);
 }
 document.getElementById('startBtn').addEventListener('click',function(){
-    var time = 0;
-    outputP.innerHTML = '计算已经开始，受设备算力与数据量影响，计算时间通常小于30s，请稍等...';
+    outputDiv.innerHTML = '计算已经开始，受设备算力与数据量影响，计算时间通常约5s，请稍等...';
     setTimeout(start, 10);
 });
-var outputP = document.getElementById('consoleLog');
+document.getElementById('copyBtn').addEventListener('click',copyFn);
+var outputDiv = document.getElementById('outputDiv');
