@@ -96,13 +96,12 @@ function start(){
         addBestOneToFull(num);
         num = zipList(num, temp);
     }
-    num = num.map(Math.floor);
     show(num);
 }
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        // maxCost[i] = Math.floor(5*Math.random());// @测试
+        maxCost[i] = 10//Math.floor(5*Math.random());// @测试
         if(maxCost[i] < 0){
             maxCost[i] = 0;
         }
@@ -115,13 +114,16 @@ function freshMaxCost(){
 // 14710
 // 14717
 // 14747.606
-function show(num){
+function show(u){
+    var num = u.map(function(x){
+        return Math.floor(x + 0.005)
+    });
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
     var flag = true;
     var listSpan = document.createElement('span');
     listSpan.className = 'tips';
-    listSpan.innerHTML = '总计：'+getScore(num)*100+'分<br>';
+    listSpan.innerHTML = '生成评分：' + Math.floor(getScore(u)*100) + '分<br>总计：'+getScore(num)*100+'分';
     outputDiv.appendChild(listSpan)
     copyText.innerHTML += '总计：'+SectionToChinese(getScore(num)*100)+'分<br>';
     
