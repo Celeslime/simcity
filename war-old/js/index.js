@@ -1,8 +1,7 @@
 var temp, loading = 0; 
-var inputs = [], maxCost = [];
-var num = getUnit(data.length, 0)
+var inputs = [], maxCost = [], num = [];
 var own = JSON.parse(localStorage.getItem("own"));
-if(own == null)own = getUnit(12,0);
+if(own==null)own = getUnit(12,0);
 if(!own[0] && own[0] != 0)own = getUnit(12,0);
 
 function getUnit(n,value){
@@ -11,6 +10,25 @@ function getUnit(n,value){
         list.push(value)
     }
     return list;
+}
+function calcCost(num){
+    var ans = getUnit(data[0].value.length, 0)
+    for(var i = 0; i < num.length; i++){
+        if(num[i] == 0){
+            continue;
+        }
+        for(var j = 0;j < ans.length; j++){
+            ans[j] += data[i].value[j] * num[i];
+        }
+    }
+    return ans;
+}
+function multList(list, num){
+    var ans = [];
+    for(var i = 0; i < list.length; i++){
+        ans.push(list[i] * num);
+    }
+    return ans;
 }
 function addList(list1, list2){
     var ans = [];
@@ -26,52 +44,54 @@ function supList(list1, list2){
     }
     return ans;
 }
-function zipList(list, rate){
-    var ans = [];
-    for(var i = 0; i < list.length; i++){
-        ans[i] = list[i] * rate;
-    }
-    return ans;
+function addToFull(num){
+    while(addOne(num)){};
 }
-
-function calcCost(num){
-    var ans = getUnit(data[0].value.length, 0)
-    for(var i = 0; i < num.length; i++){
-        if(num[i] == 0){
-            continue;
-        }
-        for(var j = 0;j < ans.length; j++){
-            ans[j] += data[i].value[j] * num[i];
-        }
-    }
-    return ans;
-}
-function addBestOneToFull(num){
-    var remainCost = supList(maxCost, calcCost(num));
-    var bestScore = 0, bestId, bestCount;
-    for(var i = 0; i < data.length; i++){
-        var min = Infinity;
-        for(var j = 0; j < data[i].value.length; j++){
-            if(remainCost[j] == 0 && data[i].value[j] == 0){
-                continue;
-            }
-            min = Math.min(min, remainCost[j] / data[i].value[j]);
-        }
-        if(min * data[i].score > bestScore){
-            bestScore = min * data[i].score;
-            bestId = i;
-            bestCount = min;
-        }
-    }
-    if(bestScore == 0){
+function addOne(num){
+    var check = checkRemain(num);
+    if(check.length == 0){
         return false;
     }
-    num[bestId] += bestCount;
+    var randId = check[Math.floor(Math.random() * check.length)];
+    num[randId]++;
     return true;
+}
+function checkRemain(num){
+    var remainCost = supList(maxCost, calcCost(num))
+    var ans = [];
+    for(var i = 0; i < data.length; i++){
+        var flag = true;
+        for(var j = 0; j < data[i].value.length; j++){
+            if(remainCost[j] < data[i].value[j]){
+                flag = false;
+                break;
+            }
+        }
+        if(flag){
+            ans.push(i);
+        }
+    }
+    return ans;
+}
+var artList = getUnit(data.length, 0);// 至此，已成艺术
+for(var i = 0; i < data.length; i++){
+    for(var j = 0; j < data[0].value.length; j++){
+        artList[i] += data[i].value[j]; 
+    }
+    artList[i] = 11 / artList[i];
+}
+function zipList(list, rate){
+    var ans = [];
+    for(var i=0;i<list.length;i++){
+        var t = Math.floor(list[i] - artList[i] * (Math.random() > rate))
+        // var t = Math.floor(list[i] * rate) - 1;// 收敛速度慢
+        ans[i] = t>0?t:0;
+    }
+    return ans;
 }
 function getScore(list){
     var ans = 0;
-    for(var i = 0; i < list.length; i++){
+    for(var i=0;i<list.length;i++){
         ans += list[i] * data[i].score;
     }
     return ans;
@@ -92,17 +112,21 @@ function getBetterList(num){
 function start(){
     num = getUnit(data.length, 0);
     freshMaxCost();
-    for(temp = 0; temp <= 1; temp += 0.00001){
-        addBestOneToFull(num);
-        num = zipList(num, temp);
+    temp = 0;
+    while(true){
+        num = getBetterList(num);
+        if(loading > 4000){
+            temp = 1 - (1 - temp) / 1.1;
+            if(temp >= 0.5)break;
+            loading = 0;
+        }
     }
-    num = num.map(Math.round);
     show(num);
 }
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        maxCost[i] = 100//Math.floor(200*Math.random());// @测试
+        // maxCost[i] = 100//Math.floor(200*Math.random());//测试
         if(maxCost[i] < 0){
             maxCost[i] = 0;
         }
@@ -114,7 +138,6 @@ function freshMaxCost(){
 // 14700
 // 14710
 // 14717
-// 14747.606
 function show(num){
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
@@ -123,7 +146,7 @@ function show(num){
     listSpan.className = 'tips';
     listSpan.innerHTML = '总计：'+getScore(num)*100+'分<br>';
     outputDiv.appendChild(listSpan)
-    copyText.innerHTML += '总计：'+SectionToChinese(getScore(num)*100)+'分<br>';
+    copyText.innerHTML+='总计：'+SectionToChinese(getScore(num)*100)+'分<br>';
     
     for(var i=0;i<num.length;i++){
         if(num[i] != 0){
@@ -138,9 +161,11 @@ function show(num){
             listSpan.className = 'card';
             listSpan.innerHTML = data[i].name + ' × ' + num[i];
             outputDiv.appendChild(listSpan);
-            copyText.innerHTML += getPureText(data[i].name + ' × ' + num[i]+'<br>');
+            copyText.innerHTML+=getPureText(data[i].name + ' × ' + num[i]+'<br>');
+            // outputP.innerHTML += data[i].name + ' × ' + num[i] + '<br>';
         }   
     }
+
     var remainCost = calcCost(num)
     console.log('remain',remainCost)
     for(var i=0;i<remainCost.length;i++){
@@ -208,8 +233,9 @@ for(var i = 0; i < data[0].value.length; i++){
     document.getElementById('inputs').appendChild(inputDiv);
 }
 document.getElementById('startBtn').addEventListener('click',function(){
-    start();
+    outputDiv.innerHTML = '计算已经开始，受设备算力与数据量影响，计算时间通常约5s，请稍等...';
+    setTimeout(start, 10);
 });
-document.getElementById('copyBtn').addEventListener('click', copyFn);
+document.getElementById('copyBtn').addEventListener('click',copyFn);
 var outputDiv = document.getElementById('outputDiv');
 var copyText = document.getElementById('copyText');

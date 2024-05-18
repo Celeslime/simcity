@@ -2,14 +2,10 @@ body{
     max-width: 900px;
     margin: 20px auto;
 }
-html {
-    overflow-x: hidden;
-	overflow-y: scroll;
-}
 
 #inputs {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: auto auto auto auto auto auto;
     gap: 10px;
     padding: 10px;
 }
@@ -52,16 +48,20 @@ h1{
 }
 @media screen and (max-width: 900px) {
     #inputs {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: auto auto auto auto;
     }
 }
 @media screen and (max-width: 650px) {
     #inputs {
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: auto auto auto;
     }
     
 }
 @media screen and (max-width: 500px) {
+    #inputs {
+        grid-template-columns: auto auto auto;
+        /* gap: 5px; */
+    }
     #inputs div.input {
         /* width: 80px; */
         font-size: 14px;
