@@ -2,10 +2,14 @@ body{
     max-width: 900px;
     margin: 20px auto;
 }
+html {
+    overflow-x: hidden;
+	overflow-y: scroll;
+}
 
 #inputs {
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
     padding: 10px;
 }
@@ -48,20 +52,16 @@ h1{
 }
 @media screen and (max-width: 900px) {
     #inputs {
-        grid-template-columns: auto auto auto auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
 @media screen and (max-width: 650px) {
     #inputs {
-        grid-template-columns: auto auto auto;
+        grid-template-columns: 1fr 1fr 1fr;
     }
     
 }
 @media screen and (max-width: 500px) {
-    #inputs {
-        grid-template-columns: auto auto auto;
-        /* gap: 5px; */
-    }
     #inputs div.input {
         /* width: 80px; */
         font-size: 14px;
@@ -118,4 +118,15 @@ span.card{
     color: #555;
     display: block;
     margin-left: 10px;
+}
+#copyText {
+    display: none;
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    opacity: 0;
+}
+a{
+    float: right;
+    margin: 10px;
 }

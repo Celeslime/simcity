@@ -119,3 +119,14 @@ span.card{
     display: block;
     margin-left: 10px;
 }
+#copyText {
+    display: none;
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    opacity: 0;
+}
+a{
+    float: right;
+    margin: 10px;
+}

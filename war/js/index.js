@@ -96,13 +96,13 @@ function start(){
         addBestOneToFull(num);
         num = zipList(num, temp);
     }
-    num = num.map(Math.round);
+    num = num.map(Math.floor);
     show(num);
 }
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        maxCost[i] = 100//Math.floor(200*Math.random());// @测试
+        maxCost[i] = Math.floor(5*Math.random());// @测试
         if(maxCost[i] < 0){
             maxCost[i] = 0;
         }
@@ -131,7 +131,7 @@ function show(num){
                 listSpan = document.createElement('span');
                 listSpan.className = 'tips';
                 listSpan.innerHTML = '以下卡牌可能不适合囤积战资：'
-                outputDiv.appendChild(listSpan)
+                // outputDiv.appendChild(listSpan)
                 flag = false;
             }
             listSpan = document.createElement('span');
@@ -149,6 +149,7 @@ function show(num){
 }
 function copyFn(){
     var val = document.getElementById('copyText');
+    copyText.style.display = 'block';
     window.getSelection().selectAllChildren(val);
     document.execCommand ("Copy");
     var copyBtn = document.getElementById('copyBtn');
