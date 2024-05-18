@@ -102,7 +102,7 @@ function start(){
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        maxCost[i] = Math.floor(5*Math.random());// @测试
+        // maxCost[i] = Math.floor(5*Math.random());// @测试
         if(maxCost[i] < 0){
             maxCost[i] = 0;
         }
