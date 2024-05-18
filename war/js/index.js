@@ -1,125 +1,65 @@
+var outputDiv = document.getElementById('outputDiv');
+var copyText = document.getElementById('copyText');
+
 var temp, loading = 0; 
 var inputs = [], maxCost = [];
 var num = getUnit(data.length, 0)
+
 var own = JSON.parse(localStorage.getItem("own"));
-if(own == null)own = getUnit(12,0);
-if(!own[0] && own[0] != 0)own = getUnit(12,0);
+if(own == null) own = getUnit(12,0);
+if(!own[0]) own = getUnit(12,0);
 
-function getUnit(n,value){
-    var list = []
-    for(var i = 0; i < n; i++){
-        list.push(value)
-    }
-    return list;
-}
-function addList(list1, list2){
-    var ans = [];
-    for(var i = 0; i < list1.length; i++){
-        ans[i] = list1[i] + list2[i];
-    }
-    return ans;
-}
-function supList(list1, list2){
-    var ans = [];
-    for(var i = 0; i < list1.length; i++){
-        ans[i] = list1[i] - list2[i];
-    }
-    return ans;
-}
-function zipList(list, rate){
-    var ans = [];
-    for(var i = 0; i < list.length; i++){
-        ans[i] = list[i] * rate;
-    }
-    return ans;
-}
-
-function calcCost(num){
-    var ans = getUnit(data[0].value.length, 0)
-    for(var i = 0; i < num.length; i++){
-        if(num[i] == 0){
-            continue;
-        }
-        for(var j = 0;j < ans.length; j++){
-            ans[j] += data[i].value[j] * num[i];
-        }
-    }
-    return ans;
-}
-function addBestOneToFull(num){
-    var remainCost = supList(maxCost, calcCost(num));
-    var bestScore = 0, bestId, bestCount;
-    for(var i = 0; i < data.length; i++){
-        var min = Infinity;
-        for(var j = 0; j < data[i].value.length; j++){
-            if(remainCost[j] == 0 && data[i].value[j] == 0){
-                continue;
-            }
-            min = Math.min(min, remainCost[j] / data[i].value[j]);
-        }
-        if(min * data[i].score > bestScore){
-            bestScore = min * data[i].score;
-            bestId = i;
-            bestCount = min;
-        }
-    }
-    if(bestScore == 0){
-        return false;
-    }
-    num[bestId] += bestCount;
-    return true;
-}
-function getScore(list){
-    var ans = 0;
-    for(var i = 0; i < list.length; i++){
-        ans += list[i] * data[i].score;
-    }
-    return ans;
-}
-function getBetterList(num){
-    var tempNum = zipList(num, temp);
-    addToFull(tempNum);
-    if(getScore(num) < getScore(tempNum)){
-        num = tempNum;
-        console.log(Math.floor(temp * 100)+'%',getScore(num));
-        loading = 0;
+for(var i = 0; i < data[0].value.length; i++){
+    var input = document.createElement('input');
+    var inputDiv = document.createElement('div');
+    var inputSpan = document.createElement('span');
+    inputSpan.innerHTML = dataNames[i];
+    inputDiv.setAttribute('class','input');
+    input.setAttribute('type','number');
+    input.setAttribute('name',dataNames[i]);
+    if(own.length != 0){
+        input.setAttribute('value',own[i]);
     }
     else{
-        loading++;
+        input.setAttribute('value',0);
     }
-    return num;
+    inputs[i] = input;
+    inputDiv.appendChild(inputSpan);
+    inputDiv.appendChild(input);
+    document.getElementById('inputs').appendChild(inputDiv);
 }
+document.getElementById('startBtn').addEventListener('click',start);
+document.getElementById('copyBtn').addEventListener('click', copyFn);
+/*
+        <1000战资个人纪录榜单>
+    14700
+    14710
+    14717
+    14747 算法更新！
+    14903 直达九霄！
+    14912 冲向终点！
+*/
 function start(){
     num = getUnit(data.length, 0);
+    var maxNum = num, maxNumScore = 0;
     freshMaxCost();
-    for(temp = 0; temp <= 1; temp += 0.00001){
+    for(temp = 1; temp > 1e-5; temp *= 0.999){
+        num = zipList(num, 1 - temp);
         addBestOneToFull(num);
-        num = zipList(num, temp);
-    }
-    show(num);
-}
-function freshMaxCost(){
-    for(var i=0;i<inputs.length;i++){
-        maxCost[i] = Number(inputs[i].value);
-        if(window.location.host === 'localhost' || window.location.host === '127.0.0.1'){
-            // maxCost[i] = 10//Math.floor(5*Math.random());// @测试
+        if(getScore(num) > maxNumScore){
+            maxNumScore = getScore(num);
+            maxNum = num;
         }
-        if(maxCost[i] < 0){
-            maxCost[i] = 0;
+        else{
+            num = maxNum;
         }
-        inputs[i].value = maxCost[i];
     }
-    localStorage.setItem('own',JSON.stringify(maxCost));
+    num = maxNum;
+    while(addBestOneToFull(num));
+    show(maxNum);
 }
-// 1000战资个人纪录
-// 14700
-// 14710
-// 14717
-// 14747.606
 function show(u){
-    var num = u.map(function(x){
-        return Math.floor(x + 0.005)
-    });
+    var num = u.map(Math.floor);
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
     var flag = true;
@@ -146,10 +86,64 @@ function show(u){
         }   
     }
     var remainCost = calcCost(num)
-    console.log('remain',remainCost)
     for(var i=0;i<remainCost.length;i++){
         inputs[i].previousSibling.innerHTML = dataNames[i]+'<span>'+ (-remainCost[i])+'</span>';
     }
+}
+function addBestOneToFull(num){
+    var remainCost = supList(maxCost, calcCost(num));
+    var bestScore = 0, bestId, bestCount;
+    for(var i = 0; i < data.length; i++){
+        var min = Infinity;
+        for(var j = 0; j < data[i].value.length; j++){
+            if(remainCost[j] == 0 && data[i].value[j] == 0){
+                continue;
+            }
+            min = Math.min(min, remainCost[j] / data[i].value[j]);
+        }
+        if(min * data[i].score > bestScore){
+            bestScore = min * data[i].score;
+            bestId = i;
+            bestCount = min;
+        }
+    }
+    if(bestScore == 0){
+        return false;
+    }
+    num[bestId] += bestCount;
+    return true;
+}
+function freshMaxCost(){
+    for(var i=0;i<inputs.length;i++){
+        maxCost[i] = Number(inputs[i].value);
+        if(window.location.host === '127.0.0.1'){
+            maxCost[i] = 1000;//Math.floor(50*Math.random());// @测试
+        }
+        if(maxCost[i] < 0){
+            maxCost[i] = 0;
+        }
+        inputs[i].value = maxCost[i];
+    }
+    localStorage.setItem('own',JSON.stringify(maxCost));
+}
+function getScore(list){
+    var ans = 0;
+    for(var i = 0; i < list.length; i++){
+        ans += list[i] * data[i].score;
+    }
+    return ans;
+}
+function calcCost(num){
+    var ans = getUnit(data[0].value.length, 0)
+    for(var i = 0; i < num.length; i++){
+        if(num[i] == 0){
+            continue;
+        }
+        for(var j = 0;j < ans.length; j++){
+            ans[j] += data[i].value[j] * num[i];
+        }
+    }
+    return ans;
 }
 function copyFn(){
     var val = document.getElementById('copyText');
@@ -190,31 +184,31 @@ function SectionToChinese(section){
      }
      return chnStr;
 }
-
-
-
-for(var i = 0; i < data[0].value.length; i++){
-    var input = document.createElement('input');
-    var inputDiv = document.createElement('div');
-    var inputSpan = document.createElement('span');
-    inputSpan.innerHTML = dataNames[i];
-    inputDiv.setAttribute('class','input');
-    input.setAttribute('type','number');
-    input.setAttribute('name',dataNames[i]);
-    if(own.length != 0){
-        input.setAttribute('value',own[i]);
+function getUnit(n,value){
+    var list = []
+    for(var i = 0; i < n; i++){
+        list.push(value)
     }
-    else{
-        input.setAttribute('value',0);
-    }
-    inputs[i] = input;
-    inputDiv.appendChild(inputSpan);
-    inputDiv.appendChild(input);
-    document.getElementById('inputs').appendChild(inputDiv);
+    return list;
 }
-document.getElementById('startBtn').addEventListener('click',function(){
-    start();
-});
-document.getElementById('copyBtn').addEventListener('click', copyFn);
-var outputDiv = document.getElementById('outputDiv');
-var copyText = document.getElementById('copyText');
+function addList(list1, list2){
+    var ans = [];
+    for(var i = 0; i < list1.length; i++){
+        ans[i] = list1[i] + list2[i];
+    }
+    return ans;
+}
+function supList(list1, list2){
+    var ans = [];
+    for(var i = 0; i < list1.length; i++){
+        ans[i] = list1[i] - list2[i];
+    }
+    return ans;
+}
+function zipList(list, rate){
+    var ans = [];
+    for(var i = 0; i < list.length; i++){
+        ans[i] = list[i] * rate;
+    }
+    return ans;
+}
