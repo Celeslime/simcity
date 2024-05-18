@@ -101,7 +101,9 @@ function start(){
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        maxCost[i] = 10//Math.floor(5*Math.random());// @测试
+        if(window.location.host === 'localhost' || window.location.host === '127.0.0.1'){
+            // maxCost[i] = 10//Math.floor(5*Math.random());// @测试
+        }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
         }
