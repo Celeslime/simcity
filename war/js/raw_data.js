@@ -33,7 +33,7 @@ for(var i=2;i<raw_data.length;i++){
     data.push({
         name: rows[i][0],
         value: rows[i].slice(1,13).map(Number),
-        score: Number(rows[i][16]),
+        score: Number(rows[i][15]),
     });
 }
 var dataNames = raw_data[1].split('\t').slice(1);

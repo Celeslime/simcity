@@ -41,13 +41,15 @@ document.getElementById('copyBtn').addEventListener('click', copyFn);
 */
 function start(){
     num = getUnit(data.length, 0);
-    var maxNum = num, maxNumScore = 0;
+    var maxNum = num, maxNumScore = 0, temScore = 0;
     freshMaxCost();
     for(temp = 1; temp > 1e-5; temp *= 0.999){
         num = zipList(num, 1 - temp);
         addBestOneToFull(num);
-        if(getScore(num) > maxNumScore){
-            maxNumScore = getScore(num);
+        temScore = getScore(num);
+        // 要不要将这里改成模拟退火过程呢？
+        if(Metrospolis(temScore, maxNumScore, temp * 1e4)){
+            maxNumScore = temScore;
             maxNum = num;
         }
         else{
@@ -58,37 +60,59 @@ function start(){
     while(addBestOneToFull(num));
     show(maxNum);
 }
+function Metrospolis(temScore, maxNumScore, temp){// 666好一手模拟退火
+    if(temScore > maxNumScore){
+        return true;
+    }
+    else {
+        return false;// 模拟退火算什么东西！
+        return Math.random() < Math.exp(-(maxNumScore - temScore)/temp);
+    }
+}
 function show(u){
-    var num = u.map(Math.floor);
+    var num = u.map((x)=>(Math.floor(x + 0.05)));
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
-    var flag = true;
-    var listSpan = document.createElement('span');
-    listSpan.className = 'tips';
-    listSpan.innerHTML = '生成评分：' + Math.floor(getScore(u)*100) + '分<br>总计：'+getScore(num)*100+'分';
-    outputDiv.appendChild(listSpan)
-    copyText.innerHTML += '总计：'+SectionToChinese(getScore(num)*100)+'分<br>';
-    
+    outputDiv.appendChild(
+        getSpan('生成评分：' + Math.floor(getScore(u)*100) + '分<br>总计：'+getScore(num)*100+'分', 'tips')
+    );
+    copyText.innerHTML += '总计：'+getPureNum(getScore(num)*100)+'分<br>';
     for(var i=0;i<num.length;i++){
         if(num[i] != 0){
-            if(i > 8 && flag){
-                listSpan = document.createElement('span');
-                listSpan.className = 'tips';
-                listSpan.innerHTML = '以下卡牌可能不适合囤积战资：'
-                // outputDiv.appendChild(listSpan)
-                flag = false;
-            }
-            listSpan = document.createElement('span');
-            listSpan.className = 'card';
-            listSpan.innerHTML = data[i].name + ' × ' + num[i];
-            outputDiv.appendChild(listSpan);
-            copyText.innerHTML += getPureText(data[i].name + ' × ' + num[i]+'<br>');
+            outputDiv.appendChild(
+                getSpan(data[i].name + ' × ' + num[i])
+            );
+            copyText.innerHTML += getPureText(data[i].name + ' × ' + getPureNum(num[i]) +'<br>');
         }   
     }
-    var remainCost = calcCost(num)
-    for(var i=0;i<remainCost.length;i++){
-        inputs[i].previousSibling.innerHTML = dataNames[i]+'<span>'+ (-remainCost[i])+'</span>';
+    var collectCards = [];
+    for(var i = 0;i < num.length; i++){
+        var rate = u[i] - num[i];
+        collectCards.push({
+            id: i,
+            rate: rate
+        });
     }
+    collectCards.sort(function(a, b){
+        return b.rate - a.rate;
+    })
+    outputDiv.appendChild(getSpan('收集卡片', 'tips'));
+    for(var i = 0;i < collectCards.length; i++){
+        var rate = (collectCards[i].rate * 100).toFixed(0);
+        if(rate < 50) break;
+        outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
+    }
+    var cost = calcCost(num)
+    for(var i = 0; i < cost.length; i++){
+        inputs[i].previousSibling.innerHTML = 
+            dataNames[i] + '<span>余 ' + (maxCost[i] - cost[i]) +'</span>';
+    }
+}
+function getSpan(text, className = 'card'){
+    var span = document.createElement('span');
+    span.className = className;
+    span.innerHTML = text;
+    return span;
 }
 function addBestOneToFull(num){
     var remainCost = supList(maxCost, calcCost(num));
@@ -117,7 +141,7 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         if(window.location.host === '127.0.0.1'){
-            maxCost[i] = 1000;//Math.floor(50*Math.random());// @测试
+            // maxCost[i] = Math.floor(20*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
@@ -159,30 +183,8 @@ function copyFn(){
 function getPureText(text){
     return text.replace(/日/g,'曰').replace(/霖/g,'-霖');
 }
-function SectionToChinese(section){
-    var chnNumChar = ["零","一","二","三","四","五","六","七","八","九"];
-    var chnUnitChar = ["","十","百","千","万","亿","万亿","亿亿"];
-    var strIns = '', chnStr = '';
-    var unitPos = 0;
-    var zero = true;
-    if(section === 0) return chnNumChar[0];
-    while(section > 0){
-        var v = section % 10;
-        if(v === 0){
-             if(!zero){
-                  zero = true;
-                  chnStr = chnNumChar[v] + chnStr;
-             }
-        }else{
-              zero = false;
-              strIns = chnNumChar[v];
-              strIns += chnUnitChar[unitPos];
-              chnStr = strIns + chnStr;
-        }
-        unitPos++;
-        section = Math.floor(section / 10);
-     }
-     return chnStr;
+function getPureNum(num){
+    return num.toFixed(0).replace(/15/g,'l5')
 }
 function getUnit(n,value){
     var list = []
