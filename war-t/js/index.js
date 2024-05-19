@@ -41,9 +41,33 @@ document.getElementById('copyBtn').addEventListener('click', copyFn);
     14932 抵达终点！
 */
 function start(){
+    // num = getUnit(data.length, 0);
+    // var maxNum = num, maxNumScore = 0, temScore = 0;
     freshMaxCost();
+    // for(temp = 1; temp > 1e-5; temp *= 0.999){
+    //     num = zipList(num, 1 - temp);
+    //     addBestOneToFull(num);
+    //     temScore = getScore(num);
+    //     // 不要将这里改成模拟退火
+    //     if(temScore > maxNumScore){
+    //         maxNumScore = temScore;
+    //         maxNum = num;
+    //     }
+    //     else{
+    //         num = maxNum;
+    //     }
+    // }
     num = getWarBest(maxCost).slice(0,24);
+    while(addBestOneToFull(num));
     show(num);
+}
+function Metrospolis(temScore, maxScore, temp){
+    if(temScore > maxScore){
+        return true;
+    }
+    else {
+        return Math.random() < Math.exp(-(maxScore - temScore)/temp);
+    }
 }
 function show(u){
     var num = u.map((x)=>(Math.floor(x + 0.05)));
@@ -89,6 +113,29 @@ function getSpan(text, className = 'card'){
     span.className = className;
     span.innerHTML = text;
     return span;
+}
+function addBestOneToFull(num){
+    var remainCost = supList(maxCost, calcCost(num));
+    var bestScore = 0, bestId, bestCount;
+    for(var i = 0; i < data.length; i++){
+        var min = Infinity;
+        for(var j = 0; j < data[i].value.length; j++){
+            if(remainCost[j] == 0 && data[i].value[j] == 0){
+                continue;
+            }
+            min = Math.min(min, remainCost[j] / data[i].value[j]);
+        }
+        if(bestScore < min * data[i].score || (bestScore == min * data[i].score && Math.random() < 0.01)){
+            bestScore = min * data[i].score;
+            bestId = i;
+            bestCount = min;
+        }
+    }
+    if(bestScore == 0){
+        return false;
+    }
+    num[bestId] += bestCount;
+    return true;
 }
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
@@ -145,4 +192,25 @@ function getUnit(n,value){
         list.push(value)
     }
     return list;
+}
+function addList(list1, list2){
+    var ans = [];
+    for(var i = 0; i < list1.length; i++){
+        ans[i] = list1[i] + list2[i];
+    }
+    return ans;
+}
+function supList(list1, list2){
+    var ans = [];
+    for(var i = 0; i < list1.length; i++){
+        ans[i] = list1[i] - list2[i];
+    }
+    return ans;
+}
+function zipList(list, rate){
+    var ans = [];
+    for(var i = 0; i < list.length; i++){
+        ans[i] = list[i] * rate;
+    }
+    return ans;
 }

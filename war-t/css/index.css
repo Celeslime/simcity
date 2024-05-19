@@ -1,0 +1,132 @@
+body{
+    max-width: 900px;
+    margin: 20px auto;
+}
+html {
+    overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 10px;
+}
+#inputs div.input{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    /* text-align: center; */
+    font-size: 16px;
+    /* font-family: '宋体'; */
+    cursor: pointer;
+    justify-self: center;
+    align-self: center;
+}
+#inputs div.input > input {
+    font-family: 'Times New Roman', Times, serif;
+    background: none;
+    box-sizing: border-box;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 32px;
+    text-align: center;
+    margin: 5px 0;
+}
+.input span{
+    font-family: '黑体';
+    /* font-weight: bold; */
+    display: flex;
+    justify-content: space-between;
+}
+.input span > span{
+    /* display: inline-block; */
+    /* float: right; */
+    font-weight: normal;
+}
+h1{
+    margin: 10px;
+}
+@media screen and (max-width: 900px) {
+    #inputs {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+@media screen and (max-width: 650px) {
+    #inputs {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    
+}
+@media screen and (max-width: 500px) {
+    #inputs div.input {
+        /* width: 80px; */
+        font-size: 14px;
+        padding: 5px;
+    }
+    #inputs div.input > input {
+        font-size: 24px;
+    }
+}
+
+
+div#table{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+.btnDiv{
+    display: flex;
+    flex-direction: column;
+}
+.btnDiv input{
+    /* float: right; */
+    margin: 0 10px 10px 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: solid 1px #ccc;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    line-height: 1.5;
+}
+.btnDiv textarea{
+    visibility: hidden;
+    width: 0;
+}
+div#outputDiv{
+    margin: 0 0 10px 10px;
+    padding: 10px;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    width: 100%;
+    line-height: 1.5;
+}
+span.tips{
+    color: #333;
+    display: block;
+    margin: 5px 0;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+span.card{
+    color: #555;
+    display: block;
+    margin-left: 10px;
+}
+#copyText {
+    display: none;
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    opacity: 0;
+}
+a{
+    float: right;
+    margin: 10px;
+}
