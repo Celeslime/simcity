@@ -54,13 +54,13 @@ function show(u){
     outputDiv.appendChild(
         getSpan('总计：'+(getScore(num)*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分', 'tips')
     );
-    copyText.innerHTML += '可使用卡牌：';
+    copyText.innerHTML += '可使用卡牌：<br>';
     for(var i=0;i<num.length;i++){
         if(num[i] != 0){
             outputDiv.appendChild(
                 getSpan(data[i].name + ' × ' + num[i])
             );
-            copyText.innerHTML += getPureText(data[i].name + ' × ' + getPureNum(num[i]) +'<br>');
+            copyText.innerHTML += ' '+getPureText(data[i].name + ' × ' + getPureNum(num[i]) +'<br>');
         }   
     }
 
@@ -96,7 +96,7 @@ function show(u){
         }
     }
 
-    // return;
+    if(mode!=19)return;
 
     // 显示偏增量 +
     var maxScore = 0;
