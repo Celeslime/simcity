@@ -41,23 +41,23 @@ document.getElementById('copyBtn').addEventListener('click', copyFn);
     14932 抵达终点！
 */
 function start(){
-    // num = getUnit(data.length, 0);
-    // var maxNum = num, maxNumScore = 0, temScore = 0;
+    num = getUnit(data.length, 0);
+    var maxNum = num, maxNumScore = 0, temScore = 0;
     freshMaxCost();
-    // for(temp = 1; temp > 1e-5; temp *= 0.999){
-    //     num = zipList(num, 1 - temp);
-    //     addBestOneToFull(num);
-    //     temScore = getScore(num);
-    //     // 不要将这里改成模拟退火
-    //     if(temScore > maxNumScore){
-    //         maxNumScore = temScore;
-    //         maxNum = num;
-    //     }
-    //     else{
-    //         num = maxNum;
-    //     }
-    // }
-    num = getWarBest(maxCost).slice(0,24);
+    for(temp = 1; temp > 1e-5; temp *= 0.999){
+        num = zipList(num, 1 - temp);
+        addBestOneToFull(num);
+        temScore = getScore(num);
+        // 不要将这里改成模拟退火
+        if(temScore > maxNumScore){
+            maxNumScore = temScore;
+            maxNum = num;
+        }
+        else{
+            num = maxNum;
+        }
+    }
+    num = maxNum;
     while(addBestOneToFull(num));
     show(num);
 }
@@ -141,7 +141,7 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         if(window.location.host === '127.0.0.1'){
-            maxCost[i] = Math.floor(20*Math.random());// @测试
+            // maxCost[i] = Math.floor(20*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
