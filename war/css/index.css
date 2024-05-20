@@ -1,6 +1,7 @@
 body{
     max-width: 900px;
     margin: 20px auto;
+    color: #333;
 }
 html {
     overflow-x: hidden;
@@ -44,10 +45,14 @@ html {
 }
 .input span > span{
     font-size: 60%;
-    color: #e34848;
-    border: solid 1px #e34848;
+    /* color: #ccc; */
+    border: solid 1px #ccc;
     border-radius: 5px;
     padding: 3px 5px;
+}
+.input span > span.trade{
+    color: #2f7dd5;
+    border-color: #2f7dd5;
 }
 h1{
     margin: 10px;
@@ -125,11 +130,14 @@ span.card{
     margin-left: 10px;
 }
 #copyText {
-    display: none;
     z-index: -1;
-    position: fixed;
-    top: 0;
+    position: absolute;
+    margin-top: -200px;
+    margin-left: 50px;
     opacity: 0;
+    color: transparent;
+    height: 0;
+    width: 0;
 }
 .links a{
     float: right;

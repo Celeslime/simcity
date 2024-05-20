@@ -52,9 +52,9 @@ function show(u){
 
     // 显示卡牌
     outputDiv.appendChild(
-        getSpan('总计：'+getScore(num)*100+'/'+Math.floor(getScore(u)*100)+'分', 'tips')
+        getSpan('总计：'+(getScore(num)*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分', 'tips')
     );
-    copyText.innerHTML += '总计：'+getPureNum(getScore(num)*100)+'分<br>';
+    copyText.innerHTML += '可使用卡牌：';
     for(var i=0;i<num.length;i++){
         if(num[i] != 0){
             outputDiv.appendChild(
@@ -81,7 +81,7 @@ function show(u){
         if(rate < 50) break;
         if(i == 0){
             outputDiv.appendChild(getSpan(
-                '剩余：'+Math.floor(getScore(u)*100-getScore(num)*100)+'/'+Math.floor(getScore(u)*100)+'分','tips'
+                '可选：'+((getScore(u)-getScore(num))*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分','tips'
             ));
         }
         outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
@@ -96,15 +96,15 @@ function show(u){
         }
     }
 
-    return;
+    // return;
 
-    // 显示偏增量
+    // 显示偏增量 +
     var maxScore = 0;
     var maxId = 0;
     var scores = [];
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
-        temList[i] += 5;
+        temList[i] += 1;
         var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
         if(temScore >= maxScore){
             maxScore = temScore;
@@ -112,10 +112,11 @@ function show(u){
         }
         scores.push(temScore);
     }
-    inputs[maxId].previousSibling.appendChild(getSpan('+5','buy'));
-    console.log(scores);
+    inputs[maxId].previousSibling.appendChild(getSpan('缺','trade'));
+    copyText.innerHTML += '缺少战资：' + getPureText(dataNames[maxId]) + '<br>';
+    // console.log(scores);
 
-    // 显示偏增量
+    // 显示偏增量 -
     if(mode == 15)return;
     var maxScore = 0;
     var maxId = 0;
@@ -123,7 +124,7 @@ function show(u){
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] -= 1;
-        if(temList < 0)continue;
+        if(temList[i] < 0)continue;
         var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
         if(temScore >= maxScore){
             maxScore = temScore;
@@ -131,8 +132,9 @@ function show(u){
         }
         scores.push(temScore);
     }
-    inputs[maxId].previousSibling.appendChild(getSpan('-1','buy'));
-    console.log(scores);
+    inputs[maxId].previousSibling.appendChild(getSpan('余','trade'));
+    copyText.innerHTML += '多余战资：' + getPureText(dataNames[maxId]) + '<br>';
+    // console.log(scores);
 
 }
 function getSpan(text, className = 'card'){
@@ -180,7 +182,6 @@ function calcCost(num){
 }
 function copyFn(){
     var val = document.getElementById('copyText');
-    copyText.style.display = 'block';
     window.getSelection().selectAllChildren(val);
     document.execCommand ("Copy");
     var copyBtn = document.getElementById('copyBtn');
