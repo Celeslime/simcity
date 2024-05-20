@@ -1,25 +1,4 @@
 //port from Github @ https://github.com/SakurabaSeira/Simplex-Online
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function getResult(goal,limit){
 	//调用getLoosen函数 将原先的限制条件矩阵进行扩充
 	//加入松弛变量，基变量和价值系数

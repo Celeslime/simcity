@@ -43,9 +43,12 @@ html {
     justify-content: space-between;
 }
 .input span > span{
-    /* display: inline-block; */
-    /* float: right; */
     font-weight: normal;
+    font-size: 60%;
+    color: #e34848;
+    border: solid 1px #e34848;
+    border-radius: 5px;
+    padding: 3px 5px;
 }
 h1{
     margin: 10px;
@@ -126,7 +129,7 @@ span.card{
     top: 0;
     opacity: 0;
 }
-a{
+.links a{
     float: right;
     margin: 10px;
 }

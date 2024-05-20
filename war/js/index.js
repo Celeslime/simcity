@@ -50,7 +50,7 @@ function show(u){
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
     outputDiv.appendChild(
-        getSpan('生成评分：' + Math.floor(getScore(u)*100) + '分<br>总计：'+getScore(num)*100+'分', 'tips')
+        getSpan('总计：'+getScore(num)*100+'/'+Math.floor(getScore(u)*100)+'分', 'tips')
     );
     copyText.innerHTML += '总计：'+getPureNum(getScore(num)*100)+'分<br>';
     for(var i=0;i<num.length;i++){
@@ -72,16 +72,23 @@ function show(u){
     collectCards.sort(function(a, b){
         return b.rate - a.rate;
     })
-    outputDiv.appendChild(getSpan('收集卡片', 'tips'));
     for(var i = 0;i < collectCards.length; i++){
         var rate = (collectCards[i].rate * 100).toFixed(0);
         if(rate < 50) break;
+        if(i == 0){
+            outputDiv.appendChild(
+                getSpan('可选：'+(Math.floor(getScore(u)*100)-getScore(num)*100)+'/'+Math.floor(getScore(u)*100)+'分', 'tips')
+            );
+        }
         outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
     }
     var cost = calcCost(num)
     for(var i = 0; i < cost.length; i++){
-        inputs[i].previousSibling.innerHTML = 
-            dataNames[i] + '<span>余 ' + (maxCost[i] - cost[i]) +'</span>';
+        if((maxCost[i] - cost[i]) != 0){
+            inputs[i].previousSibling.innerHTML = 
+                dataNames[i] + '<span>余' + (maxCost[i] - cost[i]) +'</span>';
+        }
+
     }
 }
 function getSpan(text, className = 'card'){
