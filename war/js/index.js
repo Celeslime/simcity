@@ -49,6 +49,8 @@ function show(u){
     var num = u.map((x)=>(Math.floor(x + 0.05)));
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
+
+    // 显示卡牌
     outputDiv.appendChild(
         getSpan('总计：'+getScore(num)*100+'/'+Math.floor(getScore(u)*100)+'分', 'tips')
     );
@@ -61,6 +63,8 @@ function show(u){
             copyText.innerHTML += getPureText(data[i].name + ' × ' + getPureNum(num[i]) +'<br>');
         }   
     }
+
+    // 显示可选的卡牌
     var collectCards = [];
     for(var i = 0;i < num.length; i++){
         var rate = u[i] - num[i];
@@ -76,20 +80,60 @@ function show(u){
         var rate = (collectCards[i].rate * 100).toFixed(0);
         if(rate < 50) break;
         if(i == 0){
-            outputDiv.appendChild(
-                getSpan('可选：'+(Math.floor(getScore(u)*100)-getScore(num)*100)+'/'+Math.floor(getScore(u)*100)+'分', 'tips')
-            );
+            outputDiv.appendChild(getSpan(
+                '剩余：'+Math.floor(getScore(u)*100-getScore(num)*100)+'/'+Math.floor(getScore(u)*100)+'分','tips'
+            ));
         }
         outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
     }
+
+    // 显示剩余战资数量
     var cost = calcCost(num)
     for(var i = 0; i < cost.length; i++){
+        inputs[i].previousSibling.innerHTML = dataNames[i];
         if((maxCost[i] - cost[i]) != 0){
-            inputs[i].previousSibling.innerHTML = 
-                dataNames[i] + '<span>余' + (maxCost[i] - cost[i]) +'</span>';
+            inputs[i].previousSibling.appendChild(getSpan('余'+(maxCost[i]-cost[i]),'remain'));
         }
-
     }
+
+    return;
+
+    // 显示偏增量
+    var maxScore = 0;
+    var maxId = 0;
+    var scores = [];
+    for(var i = 0; i < maxCost.length; i++){
+        var temList = maxCost.concat()
+        temList[i] += 5;
+        var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
+        if(temScore >= maxScore){
+            maxScore = temScore;
+            maxId = i;
+        }
+        scores.push(temScore);
+    }
+    inputs[maxId].previousSibling.appendChild(getSpan('+5','buy'));
+    console.log(scores);
+
+    // 显示偏增量
+    if(mode == 15)return;
+    var maxScore = 0;
+    var maxId = 0;
+    var scores = [];
+    for(var i = 0; i < maxCost.length; i++){
+        var temList = maxCost.concat()
+        temList[i] -= 1;
+        if(temList < 0)continue;
+        var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
+        if(temScore >= maxScore){
+            maxScore = temScore;
+            maxId = i;
+        }
+        scores.push(temScore);
+    }
+    inputs[maxId].previousSibling.appendChild(getSpan('-1','buy'));
+    console.log(scores);
+
 }
 function getSpan(text, className = 'card'){
     var span = document.createElement('span');
@@ -101,7 +145,7 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         if(window.location.host === '127.0.0.1'){
-            maxCost[i] = Math.floor(20*Math.random());// @测试
+            // maxCost[i] = Math.floor(20*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
@@ -109,6 +153,11 @@ function freshMaxCost(){
         inputs[i].value = maxCost[i];
     }
     localStorage.setItem('own',JSON.stringify(maxCost));
+}
+function setMaxCost(val){
+    for(var i=0;i<inputs.length;i++){
+        inputs[i].value = val[i];
+    }
 }
 function getScore(list){
     var ans = 0;
