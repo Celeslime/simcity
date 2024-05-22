@@ -17,7 +17,8 @@ for(var i = 0; i < data[0].value.length; i++){
 // document.getElementById('startBtn').addEventListener('click',start);
 document.getElementById('copyBtn').addEventListener('click', copyFn);
 start()
-/*<1000战资个人纪录榜单>
+/*
+    算法改进史，1000战资：
         14700
         14710
         14717
@@ -27,13 +28,16 @@ start()
         14932 抵达终点！
 
 
-        未知bug
-        setMaxcost([11, 10, 12, 11, 11, 10, 12, 10, 10, 10, 5, 2])
+    未知bug，在这里记录：
+        1. 某些数据的计算结果会出现大量负数
+            未完全修复：调整了卡牌位置
+        2. 减少战资反而分数上升
+            未修复
 */
 function start(){
     freshMaxCost();
     var num = getWarBest(maxCost);
-    console.log(num,maxCost);
+    // console.log(num,maxCost);
     num = num.slice(0,24)
     show(num);
 }
@@ -107,7 +111,7 @@ function show(u){
     }
     // 显示偏增量 -
     var minScore = 0;
-    var minID = 0;
+    var minId = 0;
     var scores = [];
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
@@ -116,15 +120,17 @@ function show(u){
         var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
         if(temScore >= minScore){
             minScore = temScore;
-            minID = i;
+            minId = i;
         }
         scores.push(temScore);
     }
-    if(maxId != minID){
+    if(maxId != minId){
         tipSpans[maxId].appendChild(getSpan('缺','trade box'));
         copyText.innerHTML += '缺少战资：' + getPureText(dataNames[maxId]) + '<br>';
-        tipSpans[minID].appendChild(getSpan('余','trade box'));
-        copyText.innerHTML += '多余战资：' + getPureText(dataNames[minID]) + '<br>';
+        if(maxCost[minId] != 0){
+            tipSpans[minId].appendChild(getSpan('余','trade box'));
+            copyText.innerHTML += '多余战资：' + getPureText(dataNames[minId]) + '<br>';
+        }
     }
     
 
@@ -177,7 +183,7 @@ function copyFn(){
     window.getSelection().selectAllChildren(val);
     document.execCommand ("Copy");
     var copyBtn = document.getElementById('copyBtn');
-    copyBtn.value = '✔️';
+    copyBtn.value = '完成';
     setTimeout(function(){
         copyBtn.value = '复制';
     },2000);
