@@ -14,8 +14,8 @@ for(var i = 0; i < data[0].value.length; i++){
     var inputElement = createInputElement(dataNames[i], initialValue);
     document.getElementById('inputs').appendChild(inputElement);
 }
-// document.getElementById('startBtn').addEventListener('click',start);
 document.getElementById('copyBtn').addEventListener('click', copyFn);
+document.getElementById('freshBtn').addEventListener('click', refresh);
 start()
 /*
     算法改进史，1000战资：
@@ -30,13 +30,13 @@ start()
 
     未知bug，在这里记录：
         1. 某些数据的计算结果会出现大量负数
-            未完全修复：调整了卡牌位置
+            未完全修复：设置了自动刷新
         2. 减少战资反而分数上升
             未修复
 */
-function start(){
+function start(rand = false){
     freshMaxCost();
-    var num = getWarBest(maxCost);
+    var num = getWarBest(maxCost,rand);
     // console.log(num,maxCost);
     num = num.slice(0,24)
     show(num);
@@ -45,6 +45,20 @@ function show(u){
     var num = u.map((x)=>(Math.floor(x + 0.05)));
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
+
+    // 显示剩余战资数量
+    var tipSpans = document.getElementsByClassName('result-tip');
+    var cost = calcCost(num)
+    for(var i = 0; i < cost.length; i++){
+        tipSpans[i].innerHTML = '';
+        if((maxCost[i] - cost[i]) > 0){
+            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]),'remain box'));
+        }
+        else if((maxCost[i] - cost[i]) < 0){// 出现数据问题，刷新
+            start(true);
+            return;
+        }
+    }
 
     // 显示卡牌
     outputDiv.appendChild(
@@ -83,57 +97,77 @@ function show(u){
         outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
     }
 
-    // 显示剩余战资数量
-    var tipSpans = document.getElementsByClassName('result-tip');
-    var cost = calcCost(num)
-    for(var i = 0; i < cost.length; i++){
-        tipSpans[i].innerHTML = '';
-        if((maxCost[i] - cost[i]) != 0){
-            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]),'remain box'));
-        }
-    }
+    // if(mode != 19)return;// 否则线性规划算法概率卡死
 
-    if(mode != 19)return;// 否则线性规划算法小概率卡死
-
-    // 显示偏增量 +
+    // 显示多余或缺少
+    var idState = getUnit(12,0);
+    // 缺少战资
     var maxScore = 0;
-    var maxId = 0;
-    var scores = [];
+    var maxId = [];
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] += 1;
-        var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
-        if(temScore >= maxScore){
+        var temScore = Math.round(getScore(getWarBest(temList)));
+        if(temScore > maxScore){
             maxScore = temScore;
-            maxId = i;
+            maxId = [i];
         }
-        scores.push(temScore);
+        else if(temScore == maxScore){
+            maxId.push(i);
+        }
     }
-    // 显示偏增量 -
-    var minScore = 0;
-    var minId = 0;
-    var scores = [];
+    for(var i in maxId){
+        idState[maxId[i]] -= 1;
+    }
+    // 多余战资
+    var maxScore = 0;
+    var maxId = [];
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] -= 1;
         if(temList[i] < 0)continue;
-        var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
-        if(temScore >= minScore){
-            minScore = temScore;
-            minId = i;
+        var temScore = Math.round(getScore(getWarBest(temList)));
+        if(temScore > maxScore){
+            maxScore = temScore;
+            maxId = [i];
         }
-        scores.push(temScore);
-    }
-    if(maxId != minId){
-        tipSpans[maxId].appendChild(getSpan('缺','trade box'));
-        copyText.innerHTML += '缺少战资：' + getPureText(dataNames[maxId]) + '<br>';
-        if(maxCost[minId] != 0){
-            tipSpans[minId].appendChild(getSpan('余','trade box'));
-            copyText.innerHTML += '多余战资：' + getPureText(dataNames[minId]) + '<br>';
+        else if(temScore == maxScore){
+            maxId.push(i);
         }
     }
-    
-
+    for(var i in maxId){
+        idState[maxId[i]] += 1;
+    }
+    // console.log(idState);
+    var flag = true;
+    for(var i in idState){
+        if(idState[i] > 0){
+            tipSpans[i].appendChild(getSpan('余','trade box'));
+            if(flag){
+                copyText.innerHTML += '多余战资：' + getPureText(dataNames[i]);
+                flag = false;
+            }
+            else{
+                copyText.innerHTML += '、' + getPureText(dataNames[i]);
+            }
+        }
+    }
+    if(!flag){
+        copyText.innerHTML += '<br>';
+    }
+    var flag = true;
+    for(var i in idState){
+        if(idState[i] < 0){
+            tipSpans[i].appendChild(getSpan('缺','trade box'));
+            if(flag){
+                copyText.innerHTML += '缺少战资：' + getPureText(dataNames[i]);
+                flag = false;
+            }
+            else{
+                copyText.innerHTML += '、' + getPureText(dataNames[i]);
+            }
+        }
+    }
 }
 function getSpan(text, className = 'card'){
     var span = document.createElement('span');
@@ -183,10 +217,18 @@ function copyFn(){
     window.getSelection().selectAllChildren(val);
     document.execCommand ("Copy");
     var copyBtn = document.getElementById('copyBtn');
-    copyBtn.value = '完成';
+    copyBtn.value = '👌';
     setTimeout(function(){
         copyBtn.value = '复制';
-    },2000);
+    },500);
+}
+function refresh(){
+    start(true);
+    var freshBtn = document.getElementById('freshBtn');
+    freshBtn.value = '🎉';
+    setTimeout(function(){
+        freshBtn.value = '刷新';
+    },500);
 }
 function getPureText(text){
     return text.replace(/日/g,'曰').replace(/霖/g,'-霖');
@@ -218,14 +260,12 @@ function createInputElement(dataName, initialValue){
     numInputDiv.setAttribute('class','num-input box-group');
 
     var plusBtn = document.createElement('button');
-    plusBtn.setAttribute('id','plusBtn');
-    plusBtn.setAttribute('class','btn box');
+    plusBtn.setAttribute('class','btn box plus');
     plusBtn.innerHTML = '+';
     plusBtn.onclick = (e)=>(e.target.previousElementSibling.value++,start());
 
     var minusBtn = document.createElement('button');
-    minusBtn.setAttribute('id','minusBtn');
-    minusBtn.setAttribute('class','btn box');
+    minusBtn.setAttribute('class','btn box minus');
     minusBtn.innerHTML = '-';
     // 不小于0
     minusBtn.onclick = (e)=>(e.target.nextElementSibling.value > 0 ? e.target.nextElementSibling.value-- : 0,start());

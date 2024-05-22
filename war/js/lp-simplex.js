@@ -51,7 +51,13 @@ function getResult(goal,limit){
 		else break;
 	}
 	//进行单纯形法的操作步骤
-	while(true){
+	var counter=1;
+	while(counter++){
+		//限制迭代次数
+		if(counter>100){
+			console.log('WARNING: 迭代次数过多熔断');
+			return false;
+		}
 		//判断是否存在正的检验数
 		var max=0,max_index=null;
 		for(var i=0;i<cb.length;i++){
@@ -146,31 +152,66 @@ function getLoosen(limit,goal){
 	}
 	return loosen;
 };
-function getWarBest(cost){
-	var m = data[0].value.length; // 12
-	var n = data.length; // 24
+function getWarBest(cost, rand = false){
+	// 随机排序
+	var order = [];
+	for(var i=0;i<data.length;i++){
+		order.push(i);
+	}
+	if(rand){
+		order.sort(()=>(Math.random()-0.5));
+		// console.log(rand);
+	}
+	var temData = [];
+	for(var i=0;i<order.length;i++){
+		temData.push(data[order[i]]);
+	}
+	var m = temData[0].value.length; // 12
+	var n = temData.length; // 24
 	var A = new Array(m);
-	
 
 	for(var i=0;i<m;i++){
 		A[i] = new Array();
 	    for(var j=0;j<n;j++){
-	        A[i][j] = data[j].value[i];
+	        A[i][j] = temData[j].value[i];
 	    }
 	}
 	// var b = new Array(m).fill(1);
-    b = cost;
+    var b = cost;
 	var c = new Array(n);
 	for(var i=0;i<n;i++){
-	    c[i] = data[i].score;
+	    c[i] = temData[i].score;
 	}
-	var r = solveLP(A,b,c);
-    return r;
-	var sum = 0;
-	for(var i=0;i<24;i++){
-		sum += r[i]*data[i].score;
+	var r=solveLP(A,b,c);
+	var counter = 1;
+	while(r === false){
+		order.sort(()=>(Math.random()-0.5));
+		temData = [];
+		for(var i=0;i<order.length;i++){
+			temData.push(data[order[i]]);
+		}
+		for(var i=0;i<m;i++){
+			A[i] = new Array();
+			for(var j=0;j<n;j++){
+				A[i][j] = temData[j].value[i];
+			}
+		}
+		for(var i=0;i<n;i++){
+			c[i] = temData[i].score;
+		}
+		r=solveLP(A,b,c);
+		if(counter++>10){
+			console.log("ERROR: 反复熔断");
+			break;
+		}
 	}
-	return sum;
+	r=r.slice(0,n);
+	// 将r按照order还原
+	var result = [];
+	for(var i=0;i<order.length;i++){
+		result.push(r[order.indexOf(i)]);
+	}
+    return result;
 }
 function solveLP(A,b,c){
 	var t=new Array();
