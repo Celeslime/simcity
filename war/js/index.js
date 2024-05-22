@@ -74,7 +74,6 @@ function show(u){
             var plusBtn = getSpan('+', 'adjust-btn box');
             plusBtn.addEventListener('click', function(){
                 let id = i;
-                deletedCard.pop(deletedCard.indexOf(id));
                 for(var j in maxCost){
                     maxCost[j] += data[id].value[j];
                 }
