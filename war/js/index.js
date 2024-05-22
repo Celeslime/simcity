@@ -2,7 +2,7 @@ var outputDiv = document.getElementById('outputDiv');
 var copyText = document.getElementById('copyText');
 
 var temp, loading = 0; 
-var inputs = [], maxCost = [];
+var inputs = [], maxCost = [], deletedCard = [];
 var num = getUnit(data.length, 0)
 
 var own = JSON.parse(localStorage.getItem("own"));
@@ -64,12 +64,46 @@ function show(u){
     outputDiv.appendChild(
         getSpan('总计：'+(getScore(num)*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分', 'tips')
     );
-    copyText.innerHTML += '可使用卡牌：<br>';
-    for(var i = 0;i < num.length;i++){
-        if(num[i] != 0){
-            outputDiv.appendChild(
-                getSpan(data[i].name + ' × ' + num[i])
-            );
+    copyText.innerHTML += '可使用卡牌最优解：<br>';
+    for(let i = 0;i < num.length;i++){
+        if(num[i] != 0 || deletedCard.indexOf(i) != -1){
+            var cardSpan = getSpan('', 'card');
+            var textSpan = getSpan(data[i].name + ' × ' + num[i], 'text');
+            // var adjustBtns = document.createElement('div');
+            // adjustBtns.className = 'adjust-btns box-group';
+            var plusBtn = getSpan('+', 'adjust-btn box');
+            plusBtn.addEventListener('click', function(){
+                let id = i;
+                deletedCard.pop(deletedCard.indexOf(id));
+                for(var j in maxCost){
+                    maxCost[j] += data[id].value[j];
+                }
+                setMaxCost(maxCost)
+                start();
+            })
+            var minusBtn = getSpan('-', 'adjust-btn box');
+            minusBtn.addEventListener('click', function(){
+                let id = i;
+                if(num[id] == 1)
+                    deletedCard.push(id);
+                if(num[id] == 0)
+                    return;
+                for(var j in maxCost){
+                    maxCost[j] -= data[id].value[j];
+                }
+                setMaxCost(maxCost)
+                start();
+            })
+            if(num[i] == 0){
+                //disable minusBtn
+                minusBtn.className += ' disable';
+            }
+            cardSpan.appendChild(minusBtn);
+            cardSpan.appendChild(textSpan);
+            cardSpan.appendChild(plusBtn);
+
+            // cardSpan.appendChild(adjustBtns);
+            outputDiv.appendChild(cardSpan);
             copyText.innerHTML += ' '+getPureText(data[i].name + ' × ' + getPureNum(num[i]) +'<br>');
         }   
     }
@@ -96,8 +130,6 @@ function show(u){
         }
         outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
     }
-
-    // if(mode != 19)return;// 否则线性规划算法概率卡死
 
     // 显示多余或缺少
     var idState = getUnit(12,0);
