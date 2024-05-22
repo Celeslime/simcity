@@ -6,43 +6,35 @@ var inputs = [], maxCost = [];
 var num = getUnit(data.length, 0)
 
 var own = JSON.parse(localStorage.getItem("own"));
-if(own == null) own = getUnit(12,0);
-if(!own[0]) own = getUnit(12,0);
+if(own == null) own = [];
+if(own.length != 12) own = getUnit(12,0);
 
 for(var i = 0; i < data[0].value.length; i++){
-    var input = document.createElement('input');
-    var inputDiv = document.createElement('div');
-    var inputSpan = document.createElement('span');
-    inputSpan.innerHTML = dataNames[i];
-    inputDiv.setAttribute('class','input');
-    input.setAttribute('type','number');
-    input.setAttribute('name',dataNames[i]);
-    if(own.length != 0){
-        input.setAttribute('value',own[i]);
-    }
-    else{
-        input.setAttribute('value',0);
-    }
-    inputs[i] = input;
-    inputDiv.appendChild(inputSpan);
-    inputDiv.appendChild(input);
-    document.getElementById('inputs').appendChild(inputDiv);
+    var initialValue = (own.length != 0) ? own[i] : 0;
+    var inputElement = createInputElement(dataNames[i], initialValue);
+    document.getElementById('inputs').appendChild(inputElement);
 }
-document.getElementById('startBtn').addEventListener('click',start);
+// document.getElementById('startBtn').addEventListener('click',start);
 document.getElementById('copyBtn').addEventListener('click', copyFn);
-/*
-        <1000战资个人纪录榜单>
-    14700
-    14710
-    14717
-    14747 算法更新！
-    14903 直达九霄！
-    14912 冲向终点！
-    14932 抵达终点！
+start()
+/*<1000战资个人纪录榜单>
+        14700
+        14710
+        14717
+        14747 算法更新！
+        14903 直达九霄！
+        14912 冲向终点！
+        14932 抵达终点！
+
+
+        未知bug
+        setMaxcost([11, 10, 12, 11, 11, 10, 12, 10, 10, 10, 5, 2])
 */
 function start(){
     freshMaxCost();
-    num = getWarBest(maxCost).slice(0,24);
+    var num = getWarBest(maxCost);
+    console.log(num,maxCost);
+    num = num.slice(0,24)
     show(num);
 }
 function show(u){
@@ -55,7 +47,7 @@ function show(u){
         getSpan('总计：'+(getScore(num)*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分', 'tips')
     );
     copyText.innerHTML += '可使用卡牌：<br>';
-    for(var i=0;i<num.length;i++){
+    for(var i = 0;i < num.length;i++){
         if(num[i] != 0){
             outputDiv.appendChild(
                 getSpan(data[i].name + ' × ' + num[i])
@@ -78,7 +70,7 @@ function show(u){
     })
     for(var i = 0;i < collectCards.length; i++){
         var rate = (collectCards[i].rate * 100).toFixed(0);
-        if(rate < 50) break;
+        if(rate < 10) break;
         if(i == 0){
             outputDiv.appendChild(getSpan(
                 '可选：'+((getScore(u)-getScore(num))*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分','tips'
@@ -88,15 +80,16 @@ function show(u){
     }
 
     // 显示剩余战资数量
+    var tipSpans = document.getElementsByClassName('result-tip');
     var cost = calcCost(num)
     for(var i = 0; i < cost.length; i++){
-        inputs[i].previousSibling.innerHTML = dataNames[i];
+        tipSpans[i].innerHTML = '';
         if((maxCost[i] - cost[i]) != 0){
-            inputs[i].previousSibling.appendChild(getSpan('余'+(maxCost[i]-cost[i]),'remain'));
+            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]),'remain box'));
         }
     }
 
-    if(mode!=19)return;
+    if(mode != 19)return;// 否则线性规划算法小概率卡死
 
     // 显示偏增量 +
     var maxScore = 0;
@@ -112,29 +105,28 @@ function show(u){
         }
         scores.push(temScore);
     }
-    inputs[maxId].previousSibling.appendChild(getSpan('缺','trade'));
-    copyText.innerHTML += '缺少战资：' + getPureText(dataNames[maxId]) + '<br>';
-    // console.log(scores);
-
     // 显示偏增量 -
-    if(mode == 15)return;
-    var maxScore = 0;
-    var maxId = 0;
+    var minScore = 0;
+    var minID = 0;
     var scores = [];
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] -= 1;
         if(temList[i] < 0)continue;
         var temScore = getScore(getWarBest(temList).slice(0,24)) * 100;
-        if(temScore >= maxScore){
-            maxScore = temScore;
-            maxId = i;
+        if(temScore >= minScore){
+            minScore = temScore;
+            minID = i;
         }
         scores.push(temScore);
     }
-    inputs[maxId].previousSibling.appendChild(getSpan('余','trade'));
-    copyText.innerHTML += '多余战资：' + getPureText(dataNames[maxId]) + '<br>';
-    // console.log(scores);
+    if(maxId != minID){
+        tipSpans[maxId].appendChild(getSpan('缺','trade box'));
+        copyText.innerHTML += '缺少战资：' + getPureText(dataNames[maxId]) + '<br>';
+        tipSpans[minID].appendChild(getSpan('余','trade box'));
+        copyText.innerHTML += '多余战资：' + getPureText(dataNames[minID]) + '<br>';
+    }
+    
 
 }
 function getSpan(text, className = 'card'){
@@ -202,4 +194,52 @@ function getUnit(n,value){
         list.push(value)
     }
     return list;
+}
+function createInputElement(dataName, initialValue){
+    var inputDiv = document.createElement('div');
+    inputDiv.setAttribute('class','input box');
+
+    var inputSpan = document.createElement('span');
+
+    var headDiv = document.createElement('div');
+    headDiv.setAttribute('class','head');
+    headDiv.innerHTML = dataName;
+
+    var tipSpan = document.createElement('span');
+    tipSpan.setAttribute('class','result-tip box-group');
+
+    var numInputDiv = document.createElement('div');
+    numInputDiv.setAttribute('class','num-input box-group');
+
+    var plusBtn = document.createElement('button');
+    plusBtn.setAttribute('id','plusBtn');
+    plusBtn.setAttribute('class','btn box');
+    plusBtn.innerHTML = '+';
+    plusBtn.onclick = (e)=>(e.target.previousElementSibling.value++,start());
+
+    var minusBtn = document.createElement('button');
+    minusBtn.setAttribute('id','minusBtn');
+    minusBtn.setAttribute('class','btn box');
+    minusBtn.innerHTML = '-';
+    // 不小于0
+    minusBtn.onclick = (e)=>(e.target.nextElementSibling.value > 0 ? e.target.nextElementSibling.value-- : 0,start());
+
+    var input = document.createElement('input');
+    input.setAttribute('class','box');
+    input.setAttribute('type','number');
+    input.setAttribute('name',dataName);
+    input.setAttribute('value',initialValue);
+    inputs.push(input);
+    
+    numInputDiv.appendChild(minusBtn);
+    numInputDiv.appendChild(input);
+    numInputDiv.appendChild(plusBtn);
+
+    headDiv.appendChild(tipSpan);
+
+    inputDiv.appendChild(inputSpan);
+    inputDiv.appendChild(headDiv);
+    inputDiv.appendChild(numInputDiv);
+    
+    return inputDiv;
 }

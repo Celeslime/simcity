@@ -7,52 +7,68 @@ html {
     overflow-x: hidden;
 	overflow-y: scroll;
 }
-
 #inputs {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
     padding: 10px;
 }
-#inputs div.input{
+.input{
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    /* text-align: center; */
     font-size: 16px;
-    /* font-family: '宋体'; */
     cursor: pointer;
     justify-self: center;
     align-self: center;
 }
-#inputs div.input > input {
+.num-input{
+    position: relative;
+    display: flex;
+    margin-top: 5px;
+}
+.num-input input {
     font-family: 'Times New Roman', Times, serif;
     background: none;
-    box-sizing: border-box;
-    border: solid 1px #ccc;
-    border-radius: 5px;
     width: 100%;
     font-size: 32px;
     text-align: center;
-    margin: 5px 0;
+    z-index: 1;
+}
+.num-input .btn{
+    -moz-user-focus: disabled;
+    background: none;
+    width: 50%;
+    font-family: cursive;
+    font-size: 105%;
+}
+.input input::-webkit-inner-spin-button{
+    -webkit-appearance: none;
 }
 .input span{
     font-family: '黑体';
-    display: flex;
+    /* display: flex; */
     justify-content: space-between;
     align-items: center;
 }
-.input span > span{
+.input span.result-tip{
+    position: absolute;
+    height: 100%;
+    right: 0;
+    /* background-color: #000; */
     font-size: 60%;
-    /* color: #ccc; */
-    border: solid 1px #ccc;
-    border-radius: 5px;
-    padding: 3px 5px;
+
+}
+.result-tip span{
+    height: 100%;
+    display: inline-flex;
+    padding: 0 5px;
+}
+
+.head {
+    position: relative;
 }
 .input span > span.trade{
     color: #2f7dd5;
-    border-color: #2f7dd5;
+    /* border-color: #2f7dd5; */
 }
 h1{
     margin: 10px;
@@ -66,24 +82,25 @@ h1{
     #inputs {
         grid-template-columns: 1fr 1fr 1fr;
     }
-    
 }
 @media screen and (max-width: 500px) {
     #header{
         flex-direction: column!important;
     }
-    #inputs div.input {
-        /* width: 80px; */
+    #inputs .input {
         font-size: 14px;
         padding: 5px;
     }
-    #inputs div.input > input {
+    .input input {
         font-size: 24px;
+    }
+    .num-input{
+        margin-top: 2px;
     }
 }
 
 
-div#table{
+#table{
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
@@ -93,12 +110,8 @@ div#table{
     flex-direction: column;
 }
 .btnDiv input{
-    /* float: right; */
     margin: 0 10px 10px 10px;
     padding: 10px;
-    border-radius: 5px;
-    border: solid 1px #ccc;
-    background-color: #f9f9f9;
     font-size: 16px;
     line-height: 1.5;
 }
@@ -106,12 +119,9 @@ div#table{
     visibility: hidden;
     width: 0;
 }
-div#outputDiv{
+#outputDiv{
     margin: 0 0 10px 10px;
     padding: 10px;
-    border: solid 1px #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
     font-size: 16px;
     width: 100%;
     line-height: 1.5;
@@ -131,13 +141,17 @@ span.card{
 }
 #copyText {
     z-index: -1;
-    position: absolute;
+    position: fixed;
     margin-top: -200px;
     margin-left: 50px;
     opacity: 0;
     color: transparent;
     height: 0;
     width: 0;
+}
+.links{
+    position: sticky;
+    top: 95%;
 }
 .links a{
     float: right;
@@ -158,26 +172,36 @@ span.card{
     clip: rect(0, 0, 0, 0);
     pointer-events: none;
 }
-.btn-group>.btn:not(:last-child) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right: 0;
-
-}
-.btn-group>.btn-check:not(:first-child)+.btn {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
 .btn-check:checked+.btn{
     background-color: #eee;
 }
-.btn-group>.btn{
-    background-color: #f9f9f9;
-    border: solid 1px #ccc;
-    box-sizing: border-box;
-    border-radius: 5px;
+.btn-group .btn{
     padding: 0 12px;
     line-height: 36px;
-    /* font-size: 90%; */
     transition: 100ms;
+}
+.btn-group input:first-child+.btn{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.box{
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+.box-group > .box{
+    border-radius: 0;
+}
+.box-group > .box:first-child{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.box-group > .box:last-child{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.box-group > .box:not(:last-child){
+    border-right: none;
 }
