@@ -3,11 +3,12 @@
     <head>
         <meta charset="utf-8">
         <title>全卡组卡器</title>
-        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="./styles/index.css">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script>// 百度统计
             var _hmt = _hmt || [];
             (function() {
+              if(window.location.host === '127.0.0.1')return;
               var hm = document.createElement("script");
               hm.src = "https://hm.baidu.com/hm.js?cfa2d29e9c66eee6d2ffb44fb51a3de4";
               var s = document.getElementsByTagName("script")[0]; 
@@ -19,35 +20,33 @@
         <div id="header">
             <h1>全卡组卡器</h1>
             <div id="selectMode" class="btn-group box-group">
-                <input type="radio" id="mode1" name="mode" class="btn-check" value="19" checked>
-                <label class="btn box" for="mode1">综合模式</label>
-                <input type="radio" id="mode2" name="mode" class="btn-check" value="16">
+                <!-- <input type="radio" id="mode1" name="mode" class="btn-check" value="19" checked>
+                <label class="btn box" for="mode1">平衡模式</label> -->
+                <input type="radio" id="mode2" name="mode" class="btn-check" value="16" checked>
                 <label class="btn box" for="mode2">头奖模式</label>
                 <input type="radio" id="mode3" name="mode" class="btn-check" value="15">
                 <label class="btn box" for="mode3">仅分数</label>
             </div>
         </div>
-        <div id="inputs">
-        </div>
+        <div id="inputs"></div>
         <div id="table">
             <div class="btnDiv">
-                <!-- <input type="button" id="startBtn" class="box" value="开始"> -->
                 <input type="button" id="copyBtn" class="box" value="复制">
                 <input type="button" id="freshBtn" class="box" value="刷新">
+                <input type="button" id="setBtn" class="box" value="配置">
             </div>
             <div id="outputDiv" class="box">
                 模拟，启动！QQ: 779750526
             </div>
         </div>
         <div class="links box">
-            <a>tip：算法并不稳定，结果可能出现一些bug</a>
-            <a href="https://github.com/SakurabaSeira/Simplex-Online" target="_blank">算法来自 Github @ SakurabaSeira</a>
+            <a href="https://github.com/SakurabaSeira/Simplex-Online" target="_blank">算法来自 Github@SakurabaSeira</a>
             <a href="./v2/" target="_blank">查看旧版v2</a>
             <a href="./v1/" target="_blank">查看旧版v1</a>
         </div>
         <div id="copyText"></div>
-        <script src="js/raw_data.js"></script>
-        <script src="js/lp-simplex.js"></script>
-        <script src="js/index.js"></script>
+        <script src="./settings/raw_data.js"></script>
+        <script src="./js/lp-simplex.js"></script>
+        <script src="./js/index.js"></script>
     </body>
 </html>

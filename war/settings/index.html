@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <title>全卡组卡器</title>
+        <link rel="stylesheet" href="settings.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script>// 百度统计
+            var _hmt = _hmt || [];
+            (function() {
+              if(window.location.host === '127.0.0.1')return;
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?cfa2d29e9c66eee6d2ffb44fb51a3de4";
+              var s = document.getElementsByTagName("script")[0]; 
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>    
+    </head>
+    <body>
+        <div id="header">
+            <h1>卡牌等级配置</h1>
+            <div class="box-group btn-group">
+                <div id="clear" class="box">恢复默认</div>
+                <div id="set0" class="box">清空数据</div>
+                <div id="return" class="box">返回计算</div>
+            </div>
+        </div>
+        <div id="inputs"></div>
+        <script src="raw_data.js"></script>
+        <script src="settings.js"></script>
+    </body>
+</html>

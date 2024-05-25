@@ -19,32 +19,27 @@ V机器人	2				2								0.63	4.00	4	8	8	1.10074	8.81
 收缩射线						2	1						0.47	5.33	3	6	8	1.10074	6.60
 远古诅咒			3			2				1			1.25	2.00	8	16	16	1	16.00
 号角						4	3		4				1.72	1.45	11	22	8	1.10074	24.22
-触手								1	2		1		0.31	8.00	2	4	4	1.211628548	4.85
+漩涡								1	2		1		0.31	8.00	2	4	4	1.211628548	4.85
 冰风暴	2								1		3		0.94	2.67	6	12	8	1.10074	13.21
 植物					2			2		2			0.63	4.00	4	8	4	1.211628548	9.69
 磁铁		2	1	2									0.47	5.33	3	6	3	1.260869766	7.57
 电击之神		3			3	3							0.00	5.33	9	12	16	1	12.00
 `.split('\n');
 let rows = [];
-var data = [], mode = 19;
+var data = [], mode = 16, dataLevels = [];
 for(var i=2;i<raw_data.length;i++){
     if(raw_data[i]==''){continue;}
     rows[i] = raw_data[i].split('\t');
     data.push({
         name: rows[i][0],
         value: rows[i].slice(1,13).map(Number),
-        score: Number(rows[i][mode]),
     });
+    dataLevels.push(5 - Math.log2(Number(rows[i][17])));
+}
+if(localStorage.getItem('levels')==null){
+    localStorage.setItem('levels',JSON.stringify(dataLevels));
+}
+if(localStorage.getItem('levels') != null){
+    var levels = JSON.parse(localStorage.getItem('levels'));
 }
 var dataNames = raw_data[1].split('\t').slice(1);
-// select mode
-function changeMode(){
-    mode = Number(document.querySelector('input[name="mode"]:checked').value);
-    for(var i = 0; i < data.length; i++){
-        data[i].score = Number(rows[i + 2][mode]);
-    }
-    start();
-}
-document.getElementById('mode1').onclick = changeMode;
-document.getElementById('mode2').onclick = changeMode;
-document.getElementById('mode3').onclick = changeMode;

@@ -1,13 +1,29 @@
+// select mode
+function changeMode(){
+    mode = Number(document.querySelector('input[name="mode"]:checked').value);
+    for(var i = 0; i < data.length; i++){
+        var sc = Number(rows[i + 2][mode]) * Math.pow(1.10074,levels[i]-1);
+        if(levels[i] == 0){
+            sc = 0;
+        }
+        data[i].score = sc;
+    }
+    start();
+}
+// document.getElementById('mode1').onclick = changeMode;
+document.getElementById('mode2').onclick = changeMode;
+document.getElementById('mode3').onclick = changeMode;
+
 var outputDiv = document.getElementById('outputDiv');
 var copyText = document.getElementById('copyText');
 
 var temp, loading = 0; 
 var inputs = [], maxCost = [], deletedCard = [];
-var num = getUnit(data.length, 0)
+var num = new Array(data.length).fill(0);
 
 var own = JSON.parse(localStorage.getItem("own"));
 if(own == null) own = [];
-if(own.length != 12) own = getUnit(12,0);
+if(own.length != 12) own = new Array(12).fill(0);
 
 for(var i = 0; i < data[0].value.length; i++){
     var initialValue = (own.length != 0) ? own[i] : 0;
@@ -15,8 +31,13 @@ for(var i = 0; i < data[0].value.length; i++){
     document.getElementById('inputs').appendChild(inputElement);
 }
 document.getElementById('copyBtn').addEventListener('click', copyFn);
-document.getElementById('freshBtn').addEventListener('click', refresh);
-start()
+document.getElementById('copyBtn').style.backgroundImage = 'url("./styles/images/copy.svg")';
+document.getElementById('freshBtn').addEventListener('click', freshFn);
+document.getElementById('freshBtn').style.backgroundImage = 'url("./styles/images/fresh.svg")';
+document.getElementById('setBtn').addEventListener('click', setFn);
+document.getElementById('setBtn').style.backgroundImage = 'url("./styles/images/set.svg")';
+
+changeMode();
 /*
     算法改进史，1000战资：
         14700
@@ -27,7 +48,6 @@ start()
         14912 冲向终点！
         14932 抵达终点！
 
-
     未知bug，在这里记录：
         1. 某些数据的计算结果会出现大量负数
             未完全修复：设置了自动刷新
@@ -35,10 +55,9 @@ start()
             未修复
 */
 function start(rand = false){
+    var num;
     freshMaxCost();
-    var num = getWarBest(maxCost,rand);
-    // console.log(num,maxCost);
-    num = num.slice(0,24)
+    num = getWarBest(maxCost,rand);
     show(num);
 }
 function show(u){
@@ -69,8 +88,6 @@ function show(u){
         if(num[i] != 0 || deletedCard.indexOf(i) != -1){
             var cardSpan = getSpan('', 'card');
             var textSpan = getSpan(data[i].name + ' × ' + num[i], 'text');
-            // var adjustBtns = document.createElement('div');
-            // adjustBtns.className = 'adjust-btns box-group';
             var plusBtn = getSpan('+', 'adjust-btn box');
             plusBtn.addEventListener('click', function(){
                 let id = i;
@@ -83,25 +100,22 @@ function show(u){
             var minusBtn = getSpan('-', 'adjust-btn box');
             minusBtn.addEventListener('click', function(){
                 let id = i;
-                if(num[id] == 1)
-                    deletedCard.push(id);
                 if(num[id] == 0)
                     return;
                 for(var j in maxCost){
                     maxCost[j] -= data[id].value[j];
                 }
+                deletedCard.push(id);
                 setMaxCost(maxCost)
                 start();
             })
             if(num[i] == 0){
-                //disable minusBtn
                 minusBtn.className += ' disable';
             }
             cardSpan.appendChild(minusBtn);
             cardSpan.appendChild(textSpan);
             cardSpan.appendChild(plusBtn);
 
-            // cardSpan.appendChild(adjustBtns);
             outputDiv.appendChild(cardSpan);
             copyText.innerHTML += ' '+getPureText(data[i].name + ' × ' + getPureNum(num[i]) +'<br>');
         }   
@@ -131,7 +145,7 @@ function show(u){
     }
 
     // 显示多余或缺少
-    var idState = getUnit(12,0);
+    var idState = new Array(12).fill(0);
     // 缺少战资
     var maxScore = 0;
     var maxId = [];
@@ -200,12 +214,6 @@ function show(u){
         }
     }
 }
-function getSpan(text, className = 'card'){
-    var span = document.createElement('span');
-    span.className = className;
-    span.innerHTML = text;
-    return span;
-}
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
@@ -232,7 +240,7 @@ function getScore(list){
     return ans;
 }
 function calcCost(num){
-    var ans = getUnit(data[0].value.length, 0)
+    var ans = new Array(12).fill(0);
     for(var i = 0; i < num.length; i++){
         if(num[i] == 0){
             continue;
@@ -247,32 +255,43 @@ function copyFn(){
     var val = document.getElementById('copyText');
     window.getSelection().selectAllChildren(val);
     document.execCommand ("Copy");
+
     var copyBtn = document.getElementById('copyBtn');
-    copyBtn.value = '👌';
+    copyBtn.style.backgroundImage = 'url("./styles/images/check.svg")';
     setTimeout(function(){
-        copyBtn.value = '复制';
+        copyBtn.style.backgroundImage = 'url("./styles/images/copy.svg")';
     },500);
 }
-function refresh(){
+function freshFn(){
     start(true);
+
     var freshBtn = document.getElementById('freshBtn');
-    freshBtn.value = '🎉';
+    freshBtn.style.backgroundImage = 'url("./styles/images/check.svg")';
     setTimeout(function(){
-        freshBtn.value = '刷新';
+        freshBtn.style.backgroundImage = 'url("./styles/images/fresh.svg")';
     },500);
 }
-function getPureText(text){
-    return text.replace(/日/g,'曰').replace(/霖/g,'-霖');
+function setFn(){
+    var setBtn = document.getElementById('setBtn');
+    setBtn.style.backgroundImage = 'url("./styles/images/check.svg")';
+    window.location.href = "./settings";
+}
+function getPureText(note){
+    var text = note;
+    text = text.replace(/日/g,'曰');
+    text = text.replace(/甘霖/g,'甘!霖');
+    text = text.replace(/服务/g,'服雾');
+    // text = text.replace(/服务/g,'服雾');
+    return text;
 }
 function getPureNum(num){
-    return num.toFixed(0).replace(/15/g,'l5')
+    return num.toFixed(0).replace(/15/g,'1@5')
 }
-function getUnit(n,value){
-    var list = []
-    for(var i = 0; i < n; i++){
-        list.push(value)
-    }
-    return list;
+function getSpan(text, className = 'card'){
+    var span = document.createElement('span');
+    span.className = className;
+    span.innerHTML = text;
+    return span;
 }
 function createInputElement(dataName, initialValue){
     var inputDiv = document.createElement('div');

@@ -112,8 +112,9 @@ h1{
 .btnDiv input{
     margin: 0 10px 10px 10px;
     padding: 10px;
-    font-size: 16px;
-    line-height: 1.5;
+    background: url('./images/check.svg') no-repeat center;
+    background-color: #f9f9f9;
+    color: transparent;
 }
 .btnDiv textarea{
     visibility: hidden;
@@ -134,21 +135,26 @@ span.tips{
     border-radius: 5px;
     padding: 5px 10px;
 }
-span.card{
+.card{
     color: #555;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: block;
     margin: 0 10px;
 }
+.card span:last-child{
+    float: right;
+}
 .card .adjust-btn{
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     margin: 1px;
     height: 25px;
     width: 25px;
     font-family: cursive;
+    cursor: pointer;
+}
+.card .text{
+    padding: 0 10px;
 }
 #copyText {
     z-index: -1;

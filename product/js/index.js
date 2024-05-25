@@ -77,14 +77,9 @@ function dataToGraph(data){
     var symbolData = function(){
         var list = getProductsPressure();
         for(var i=0;i<63;i++){
-            // list[i] -= 1;
-            // list[i] = data[i].cost/getBaseTime(i)/list[i];
-            list[i] = (data[i].cost)/(getBaseTime(i) + 10 * getClickCount(i));
-            // list[i] = getProductDepth(i);
-            if(i<11){
-                list[i]/=15;
-            }
-            // list[i] = getClickCount(i)
+            
+            list[i] = data[i].cost / getCostTimes(i);
+            if(i<11)list[i]=0;
         }
         return list;
     }();
@@ -94,7 +89,6 @@ function dataToGraph(data){
                 listMax = (listMax>list[j]?listMax:list[j]);
             }
         }
-        // return 20;
         return (i<11?1:1) * list[i]/listMax*40;
     }
     var depthCounter = [5,4.5,4,3.5,3,2.5,2,1.5,1,0.5,0.25];
@@ -139,28 +133,44 @@ function dataToGraph(data){
 
 
 // 获取累加的基本原料
-function getBaseValue(id){
+function getBaseValues(id){
     var baseValue = data[id].value.slice(0,11);
     baseValue[11] = data[id].time;
     for(var i=11;i<data[id].value.length;i++){
         if(data[id].value[i] != 0){
-            baseValue = addList(baseValue,getBaseValue(i),data[id].value[i]);
+            baseValue = addList(baseValue,getBaseValues(i),data[id].value[i]);
         }
     }
     return baseValue;
 }
 // 获取累加的时间
-function getBaseTime(id){
+function getAddTime(id){
     var baseTime = data[id].time;
     for(var i=0;i<data[id].value.length;i++){
         if(data[id].value[i] != 0){
             if(i < 11)
-                baseTime = baseTime + getBaseTime(i)*data[id].value[i]/5;
+                baseTime = baseTime + getAddTime(i)*data[id].value[i]/5;
             else
-                baseTime = baseTime + getBaseTime(i)*data[id].value[i];
+                baseTime = baseTime + getAddTime(i)*data[id].value[i];
         }
     }
     return baseTime;
+}
+// 获取实际最大时间
+function getCostTimes(id){
+    var allProducts = new Array(data.length).fill(0);
+    allProducts[id] = 1;
+    var costTimes = getAllProduced(allProducts);
+    var maxTime = 0;
+    for(var i in costTimes){
+        costTimes[i] *= data[i].time;
+        if(i<11)costTimes[i]/=500;
+    }
+    var li=new Array(20).fill(0);
+    for(var i in costTimes){
+        li[data[i].type]+=costTimes[i];
+    }
+    return li.reduce((max,a)=>(Math.max(max,a)));
 }
 // 获取商品成本价值
 function getProductsCost(id){
@@ -195,7 +205,6 @@ function getAllProduced(products = allProducts()){
 }
 // 生产压力：各种商品净生产1份时，各种商品的数量*生产时间/min
 function getProductsPressure(){
-    
     // 这些参数在正常范围内对数据外观影响不大，暂不做细致探究
     var onlineTime = 0;// 持续在线时间/min
     var offlineTime = 0;// 持续离线时间/min
@@ -231,7 +240,7 @@ function getClickCount(id){
     return clickCount;
 }
 // List相加
-function addList(list1, list2, time2){
+function addList(list1, list2, time2 = 1){
     var list3 = [];
     for(var i=0;i<list1.length;i++){
         list3[i] = (list1[i] + list2[i] * time2);
@@ -242,22 +251,15 @@ function addList(list1, list2, time2){
 function getId(text){
     return data.findIndex(x => x.name === text);
 }
-// List为空，但是好像没用到
-function isEmptyList(list){
-    for(var i=0;i<list.length;i++){
-        if(list[i]!=0){
-            return false;
-        }
-    }
-    return true;
-}
 // 初始化数据
 function readData(rawData){
     var data = [];
     let data_text = []
-    let data_row = rawData.split("#");
+    let data_row = rawData;
     for(var i=0;i<data_row.length;i++){
-        var text = data_row[i].split("@")
+        if(data_row[i].length == 0)
+            continue;
+        var text = data_row[i].split("\t")
         data_text.push(text);
         var temp_data=[];
         for(var j=0;j<text.length;j++){
@@ -274,20 +276,11 @@ function readData(rawData){
             "type" : temp_data[1],
             "name" : temp_data[2],
             "time" : temp_data[3],
-            "value" : temp_data.slice(4,67),
-            "cost": temp_data[67],
+            "value" : temp_data.slice(5,68),
+            "cost": temp_data[4],
         }
         if(!isNaN(item.type))
             data.push(item);
     }
     return data;
-}
-// 有意思的函数
-function Oo0(n){
-    var ans = '';
-    for(var i = 0;i < n;i++){
-        var p = Math.random()
-        ans += p<1/3?'O':p<2/3?'o':'0'
-    }
-    return ans;
 }
