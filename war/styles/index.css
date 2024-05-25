@@ -68,7 +68,6 @@ html {
 }
 .input span > span.trade{
     color: #2f7dd5;
-    /* border-color: #2f7dd5; */
 }
 h1{
     margin: 10px;
@@ -115,10 +114,6 @@ h1{
     background: url('./images/check.svg') no-repeat center;
     background-color: #f9f9f9;
     color: transparent;
-}
-.btnDiv textarea{
-    visibility: hidden;
-    width: 0;
 }
 #outputDiv{
     margin: 0 0 10px 10px;
@@ -173,6 +168,7 @@ span.tips{
 .links a{
     float: right;
     margin: 10px;
+    text-decoration: none;
 }
 #selectMode{
     display: flex;

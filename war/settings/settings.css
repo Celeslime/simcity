@@ -22,7 +22,8 @@ html {
     line-height: 36px;
     font-size: 16px;
     color: #333;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
 }
 .input{
@@ -55,48 +56,23 @@ html {
 .input input::-webkit-inner-spin-button{
     -webkit-appearance: none;
 }
-.input span{
-    font-family: '黑体';
-    /* display: flex; */
-    justify-content: space-between;
-    align-items: center;
-}
-.input span.result-tip{
-    position: absolute;
-    height: 100%;
-    right: 0;
-    /* background-color: #000; */
-    font-size: 60%;
-
-}
 .result-tip span{
     height: 100%;
     display: inline-flex;
     padding: 0 5px;
 }
-
 .head {
     position: relative;
     overflow: hidden;
     line-height: 16px;
     height: 16px;
 }
-.input span > span.trade{
-    color: #2f7dd5;
-    /* border-color: #2f7dd5; */
-}
 h1{
     margin: 10px;
 }
 @media screen and (max-width: 900px) {
-    #inputs {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
 }
 @media screen and (max-width: 650px) {
-    #inputs {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
 }
 @media screen and (max-width: 500px) {
     #header{
@@ -114,109 +90,12 @@ h1{
     }
 }
 
-
-#table{
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-}
-.btnDiv{
-    display: flex;
-    flex-direction: column;
-}
-.btnDiv input{
-    margin: 0 10px 10px 10px;
-    padding: 10px;
-    background: url('./images/check.svg') no-repeat center;
-    background-color: #f9f9f9;
-    color: transparent;
-}
-.btnDiv textarea{
-    visibility: hidden;
-    width: 0;
-}
-#outputDiv{
-    margin: 0 0 10px 10px;
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    line-height: 1.5;
-}
-span.tips{
-    color: #333;
-    display: block;
-    margin: 5px 0;
-    border: solid 1px #ccc;
-    border-radius: 5px;
-    padding: 5px 10px;
-}
-.card{
-    color: #555;
-    display: block;
-    margin: 0 10px;
-}
-.card span:last-child{
-    float: right;
-}
-.card .adjust-btn{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1px;
-    height: 25px;
-    width: 25px;
-    font-family: cursive;
-    cursor: pointer;
-}
-.card .text{
-    padding: 0 10px;
-}
-#copyText {
-    z-index: -1;
-    position: fixed;
-    margin-top: -200px;
-    margin-left: 50px;
-    opacity: 0;
-    color: transparent;
-    height: 0;
-    width: 0;
-}
-.links{
-    position: sticky;
-    top: 95%;
-}
-.links a{
-    float: right;
-    margin: 10px;
-}
-#selectMode{
-    display: flex;
-    margin: 10px;
-}
 #header{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
-.btn-check {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-    pointer-events: none;
-}
-.btn-check:checked+.btn{
-    background-color: #eee;
-}
-.btn-group .btn{
-    padding: 0 12px;
-    line-height: 36px;
-    transition: 100ms;
-}
-.btn-group input:first-child+.btn{
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
 .box{
     border: solid 1px #ccc;
     border-radius: 5px;
