@@ -43,3 +43,4 @@ if(localStorage.getItem('levels') != null){
     var levels = JSON.parse(localStorage.getItem('levels'));
 }
 var dataNames = raw_data[1].split('\t').slice(1);
+var idList = [17, 3, 12, 2, 22, 14, 20, 6, 13, 7, 16, 15, 18, 10, 0, 23, 1, 11, 19, 5, 9, 8, 4, 21];

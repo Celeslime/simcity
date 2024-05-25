@@ -9,10 +9,16 @@ var inputs = [];
 if(localStorage.getItem('levels') != null){
     levels = JSON.parse(localStorage.getItem('levels'));
 }
+var temList = [];
 for(var i = 0; i < data.length; i++){
     var initialValue = levels[i];
     var inputElement = createInputElement(data[i].name, initialValue);
-    document.getElementById('inputs').appendChild(inputElement);
+    temList.push(inputElement);
+    // document.getElementById('inputs').appendChild(inputElement);
+}
+for(let i in temList){
+    // console.log(idList.indexOf(Number(i)));
+    document.getElementById('inputs').appendChild(temList[idList.indexOf(Number(i))]);
 }
 function createInputElement(dataName, initialValue){
     var inputDiv = document.createElement('div');
@@ -25,17 +31,17 @@ function createInputElement(dataName, initialValue){
     headDiv.innerHTML = dataName;
 
     var tipSpan = document.createElement('span');
-    tipSpan.setAttribute('class','result-tip box-group');
+    tipSpan.setAttribute('class','result-tip box-group-T');
 
     var numInputDiv = document.createElement('div');
-    numInputDiv.setAttribute('class','num-input box-group');
+    numInputDiv.setAttribute('class','num-input box-group-T');
 
     var plusBtn = document.createElement('button');
     plusBtn.setAttribute('class','btn box plus');
     plusBtn.innerHTML = '+';
     plusBtn.onclick = function(e){
-        var value = parseInt(e.target.previousElementSibling.value);
-        e.target.previousElementSibling.value = Math.floor(value) + 1;
+        var value = parseInt(e.target.nextElementSibling.value);
+        e.target.nextElementSibling.value = Math.floor(value) + 1;
         save();
     }
 
@@ -44,9 +50,9 @@ function createInputElement(dataName, initialValue){
     minusBtn.innerHTML = '-';
     // 不小于0
     minusBtn.onclick = function(e){
-        var value = e.target.nextElementSibling.value;
+        var value = e.target.previousElementSibling.value;
         if(value > 0){
-            e.target.nextElementSibling.value = Math.ceil(value) - 1;
+            e.target.previousElementSibling.value = Math.ceil(value) - 1;
         }
         save();
     }
@@ -58,9 +64,11 @@ function createInputElement(dataName, initialValue){
     input.setAttribute('value',initialValue);
     inputs.push(input);
     
-    numInputDiv.appendChild(minusBtn);
-    numInputDiv.appendChild(input);
     numInputDiv.appendChild(plusBtn);
+    numInputDiv.appendChild(input);
+    numInputDiv.appendChild(minusBtn);
+    
+    
 
     headDiv.appendChild(tipSpan);
 
