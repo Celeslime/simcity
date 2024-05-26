@@ -5,7 +5,7 @@
         <title>LP组卡器</title>
         <link rel="stylesheet" href="./styles/index.css">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script>// 百度统计
+        <script>
             var _hmt = _hmt || [];
             (function() {
               if(window.location.host === '127.0.0.1')return;
@@ -29,13 +29,14 @@
         <div id="inputs"></div>
         <div id="table">
             <div class="btnDiv">
-                <input type="button" id="copyBtn" class="box" value="复制">
-                <input type="button" id="freshBtn" class="box" value="刷新">
-                <input type="button" id="setBtn" class="box" value="配置">
+                <input type="radio" id="copyBtn">
+                <label for="copyBtn" class="box"></label>
+                <input type="radio" id="freshBtn">
+                <label for="freshBtn" class="box"></label>
+                <input type="radio" id="setBtn">
+                <label for="setBtn" class="box"></label>
             </div>
-            <div id="outputDiv" class="box">
-                模拟，启动！QQ: 779750526
-            </div>
+            <div id="outputDiv" class="box"></div>
         </div>
         <div class="links box">
             <a href="https://github.com/SakurabaSeira/Simplex-Online" target="_blank">算法来自 Github@SakurabaSeira</a>

@@ -7,6 +7,9 @@ html {
     overflow-x: hidden;
 	overflow-y: scroll;
 }
+h1{
+    margin: 10px;
+}
 #inputs {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -43,61 +46,28 @@ html {
 .input input::-webkit-inner-spin-button{
     -webkit-appearance: none;
 }
-.input span{
-    font-family: '黑体';
-    /* display: flex; */
-    justify-content: space-between;
-    align-items: center;
-}
-.input span.result-tip{
+.input .result-tip{
     position: absolute;
     height: 100%;
     right: 0;
-    /* background-color: #000; */
     font-size: 60%;
-
 }
 .result-tip span{
     height: 100%;
     display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 0 5px;
 }
-
+.result-tip span.trade{
+    color: #2f7dd5;
+}
+.result-tip span.remain{
+    color: #d52f2f;
+}
 .head {
     position: relative;
 }
-.input span > span.trade{
-    color: #2f7dd5;
-}
-h1{
-    margin: 10px;
-}
-@media screen and (max-width: 900px) {
-    #inputs {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-}
-@media screen and (max-width: 650px) {
-    #inputs {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-}
-@media screen and (max-width: 500px) {
-    #header{
-        flex-direction: column!important;
-    }
-    #inputs .input {
-        font-size: 14px;
-        padding: 5px;
-    }
-    .input input {
-        font-size: 24px;
-    }
-    .num-input{
-        margin-top: 2px;
-    }
-}
-
 
 #table{
     display: flex;
@@ -109,11 +79,55 @@ h1{
     flex-direction: column;
 }
 .btnDiv input{
+    display: none;
+}
+.btnDiv label{
     margin: 0 10px 10px 10px;
-    padding: 10px;
-    background: url('./images/check.svg') no-repeat center;
+    padding: 10px 15px;
     background-color: #f9f9f9;
+    background-repeat: no-repeat;
+    background-position: center;
     color: transparent;
+}
+.btnDiv label::before{
+    content: "";
+    height: 16px;
+    width: 16px;
+    display: block;
+}
+#copyBtn + label::before{
+    background-image: url('./images/copy.svg');
+}
+#copyBtn:checked + label:not(:active)::before{
+    animation: check 500ms;
+}
+#freshBtn + label::before{
+    background-image: url('./images/fresh.svg');
+}
+#freshBtn:checked + label:not(:active)::before{
+    animation: rout 500ms;
+}
+#setBtn + label::before{
+    background-image: url('./images/set.svg');
+}
+#setBtn:checked + label:not(:active)::before{
+    transform: rotateY(180deg)
+}
+@keyframes check {
+    0%{
+        background-image: url('./images/check.svg');
+    }
+    80%{
+        background-image: url('./images/check.svg');
+    }
+}
+@keyframes rout {
+    100%{
+        transform: rotate(360deg);
+    }
+}
+#setBtn{
+    background-image: url('./images/set.svg');
 }
 #outputDiv{
     margin: 0 0 10px 10px;
@@ -221,4 +235,30 @@ span.tips{
 
 .disable{
     opacity: 0.5;
+}
+
+@media screen and (max-width: 900px) {
+    #inputs {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+@media screen and (max-width: 650px) {
+    #inputs {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+@media screen and (max-width: 500px) {
+    #header{
+        flex-direction: column!important;
+    }
+    #inputs .input {
+        font-size: 14px;
+        padding: 5px;
+    }
+    .input input {
+        font-size: 24px;
+    }
+    .num-input{
+        margin-top: 2px;
+    }
 }

@@ -55,7 +55,6 @@ function getResult(goal,limit){
 	while(counter++){
 		//限制迭代次数
 		if(counter>100){
-			console.log('WARNING: 迭代次数过多熔断');
 			return false;
 		}
 		//判断是否存在正的检验数
@@ -101,6 +100,16 @@ function getResult(goal,limit){
 	for(var i of loosen){
 		result[i[2]]=i[1];
 	}
+	for(var j of limit){
+		var sum = 0;
+		for(var i=0;i<24;i++){
+			sum += j[0][i] * result[i];
+		}
+		if(Math.round((sum-j[1])*1e9)>0){
+			return false;
+		}
+	}
+
 	//返回该数组
 	return result;
 };
@@ -133,22 +142,22 @@ function getBizhiNum(cb,loosen,index,maxIndex){
 function getCheckNum(cb,loosen,index){
 	var num=cb[index][0];
 	for(var i=0;i<loosen.length;i++){
-	num-=(loosen[i][3]*loosen[i][0][index]);
+		num-=(loosen[i][3]*loosen[i][0][index]);
 	}
 	return num;
 };
 //插入松弛变量，决策变量和价值系数
 function getLoosen(limit,goal){
-	var loosen=limit.slice(0);
-	for(var i=0;i<limit.length;i++){
+	var loosen=deepCopyArray(limit);
+	for(var i=0;i<loosen.length;i++){
 		//插入松弛变量
-		for(var j=0;j<limit.length;j++){
-			limit[i][0].push(i==j?1:0);
+		for(var j=0;j<loosen.length;j++){
+			loosen[i][0].push(i==j?1:0);
 		}
 		//插入决策变量
-		limit[i].push(i+goal.length);
+		loosen[i].push(i+goal.length);
 		//插入价值系数
-		limit[i].push(0);
+		loosen[i].push(0);
 	}
 	return loosen;
 };
@@ -160,7 +169,6 @@ function getWarBest(cost, rand = false){
 	}
 	if(rand){
 		order.sort(()=>(Math.random()-0.5));
-		// console.log(rand);
 	}
 	var temData = [];
 	for(var i=0;i<order.length;i++){
@@ -176,8 +184,7 @@ function getWarBest(cost, rand = false){
 	        A[i][j] = temData[j].value[i];
 	    }
 	}
-	// var b = new Array(m).fill(1);
-    var b = cost;
+    var b = cost.concat();
 	var c = new Array(n);
 	for(var i=0;i<n;i++){
 	    c[i] = temData[i].score;
@@ -185,11 +192,9 @@ function getWarBest(cost, rand = false){
 	var r=solveLP(A,b,c);
 	var counter = 1;
 	while(r === false){
+		// 计算出错，重新计算
 		order.sort(()=>(Math.random()-0.5));
-		temData = [];
-		for(var i=0;i<order.length;i++){
-			temData.push(data[order[i]]);
-		}
+		temData = getDataByOrder(order);
 		for(var i=0;i<m;i++){
 			A[i] = new Array();
 			for(var j=0;j<n;j++){
@@ -205,7 +210,6 @@ function getWarBest(cost, rand = false){
 			break;
 		}
 	}
-	r=r.slice(0,n);
 	// 将r按照order还原
 	var result = [];
 	for(var i=0;i<order.length;i++){
@@ -213,10 +217,23 @@ function getWarBest(cost, rand = false){
 	}
     return result;
 }
+function getDataByOrder(order){
+	var temData = [];
+	for(var i=0;i<order.length;i++){
+		temData.push(data[order[i]]);
+	}
+	return temData;
+}
 function solveLP(A,b,c){
 	var t=new Array();
 	for(var i=0;i<A.length;i++){
-		t[i] = [A[i],b[i]];
+		t[i] = [A[i].concat(),b[i]];
 	}
-    return getResult(c,t)
+    return getResult(c,t);
+}
+function deepCopyArray(arr){
+	if(Array.isArray(arr)){
+		return arr.map(deepCopyArray);
+	}
+	return arr;
 }

@@ -1,4 +1,31 @@
-// select mode
+var outputDiv = document.getElementById('outputDiv');
+var copyText = document.getElementById('copyText');
+
+var temp, loading = 0; 
+var inputs = [], maxCost = [], deletedCard = [];
+var num = new Array(data.length).fill(0);
+
+var own = new Array(12).fill(0);
+if(localStorage.getItem("own") != null){
+    own = JSON.parse(localStorage.getItem("own"));
+}
+
+for(var i = 0; i < data[0].value.length; i++){
+    var initialValue = (own.length != 0) ? own[i] : 0;
+    var inputElement = createInputElement(dataNames[i], initialValue);
+    document.getElementById('inputs').appendChild(inputElement);
+}
+document.getElementById('copyBtn').addEventListener('click', copyFn);
+document.getElementById('freshBtn').addEventListener('click', freshFn);
+document.getElementById('setBtn').addEventListener('click', setFn);
+document.getElementById('mode2').onclick = changeMode;
+document.getElementById('mode3').onclick = changeMode;
+changeMode();
+/*
+    未知bug，在这里记录：
+    1.某些数据的计算结果会出现大量负数
+      - 未完全修复：设置了自动刷新
+*/
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
     for(var i = 0; i < data.length; i++){
@@ -10,78 +37,35 @@ function changeMode(){
     }
     start();
 }
-// document.getElementById('mode1').onclick = changeMode;
-document.getElementById('mode2').onclick = changeMode;
-document.getElementById('mode3').onclick = changeMode;
-
-var outputDiv = document.getElementById('outputDiv');
-var copyText = document.getElementById('copyText');
-
-var temp, loading = 0; 
-var inputs = [], maxCost = [], deletedCard = [];
-var num = new Array(data.length).fill(0);
-
-var own = JSON.parse(localStorage.getItem("own"));
-if(own == null) own = [];
-if(own.length != 12) own = new Array(12).fill(0);
-
-for(var i = 0; i < data[0].value.length; i++){
-    var initialValue = (own.length != 0) ? own[i] : 0;
-    var inputElement = createInputElement(dataNames[i], initialValue);
-    document.getElementById('inputs').appendChild(inputElement);
-}
-document.getElementById('copyBtn').addEventListener('click', copyFn);
-document.getElementById('copyBtn').style.backgroundImage = 'url("./styles/images/copy.svg")';
-document.getElementById('freshBtn').addEventListener('click', freshFn);
-document.getElementById('freshBtn').style.backgroundImage = 'url("./styles/images/fresh.svg")';
-document.getElementById('setBtn').addEventListener('click', setFn);
-document.getElementById('setBtn').style.backgroundImage = 'url("./styles/images/set.svg")';
-
-changeMode();
-/*
-    算法改进史，1000战资：
-        14700
-        14710
-        14717
-        14747 算法更新！
-        14903 直达九霄！
-        14912 冲向终点！
-        14932 抵达终点！
-
-    未知bug，在这里记录：
-        1. 某些数据的计算结果会出现大量负数
-            未完全修复：设置了自动刷新
-        2. 减少战资反而分数上升
-            未修复
-*/
-function start(rand = false){
+function start(refresh = false){
     var num;
     freshMaxCost();
-    num = getWarBest(maxCost,rand);
+    num = getWarBest(maxCost,refresh)
+        .map(function(x){
+            return Math.round(x*1e9)/1e9;
+        });
     show(num);
 }
 function show(u){
     var num = u.map((x)=>(Math.floor(x + 0.05)));
+    var scores = (getScore(u)*100).toFixed(0);
+    var score  = (getScore(num)*100).toFixed(0);
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
 
     // 显示剩余战资数量
     var tipSpans = document.getElementsByClassName('result-tip');
-    var cost = calcCost(num)
+    var cost = calcCost(u)
     for(var i = 0; i < cost.length; i++){
         tipSpans[i].innerHTML = '';
-        if((maxCost[i] - cost[i]) > 0){
-            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]),'remain box'));
-        }
-        else if((maxCost[i] - cost[i]) < 0){// 出现数据问题，刷新
-            start(true);
-            return;
+        if(Math.round((maxCost[i]-cost[i])*1e9) > 0){
+            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]).toFixed(1),'remain box'));
         }
     }
-
+    
     // 显示卡牌
     outputDiv.appendChild(
-        getSpan('总计：'+(getScore(num)*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分', 'tips')
+        getSpan('总计：'+score+'/'+scores+'分', 'tips')
     );
     copyText.innerHTML += '可使用卡牌最优解：<br>';
     for(let i = 0;i < num.length;i++){
@@ -120,7 +104,6 @@ function show(u){
             copyText.innerHTML += ' '+getPureText(data[i].name + ' × ' + getPureNum(num[i]) +'<br>');
         }   
     }
-
     // 显示可选的卡牌
     var collectCards = [];
     for(var i = 0;i < num.length; i++){
@@ -137,81 +120,22 @@ function show(u){
         var rate = (collectCards[i].rate * 100).toFixed(0);
         if(rate < 10) break;
         if(i == 0){
-            outputDiv.appendChild(getSpan(
-                '可选：'+((getScore(u)-getScore(num))*100).toFixed(0)+'/'+(getScore(u)*100).toFixed(0)+'分','tips'
-            ));
+            outputDiv.appendChild(
+                getSpan('预备：'+(scores-score)+'/'+scores+'分','tips')
+            );
         }
         outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
     }
-
     // 显示多余或缺少
     var idState = new Array(12).fill(0);
     // 缺少战资
-    var maxScore = 0;
-    var maxId = [];
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] += 1;
-        var temScore = Math.round(getScore(getWarBest(temList)));
-        if(temScore > maxScore){
-            maxScore = temScore;
-            maxId = [i];
-        }
-        else if(temScore == maxScore){
-            maxId.push(i);
-        }
-    }
-    for(var i in maxId){
-        idState[maxId[i]] -= 1;
-    }
-    // 多余战资
-    var maxScore = 0;
-    var maxId = [];
-    for(var i = 0; i < maxCost.length; i++){
-        var temList = maxCost.concat()
-        temList[i] -= 1;
-        if(temList[i] < 0)continue;
-        var temScore = Math.round(getScore(getWarBest(temList)));
-        if(temScore > maxScore){
-            maxScore = temScore;
-            maxId = [i];
-        }
-        else if(temScore == maxScore){
-            maxId.push(i);
-        }
-    }
-    for(var i in maxId){
-        idState[maxId[i]] += 1;
-    }
-    // console.log(idState);
-    var flag = true;
-    for(var i in idState){
-        if(idState[i] > 0){
-            tipSpans[i].appendChild(getSpan('余','trade box'));
-            if(flag){
-                copyText.innerHTML += '多余战资：' + getPureText(dataNames[i]);
-                flag = false;
-            }
-            else{
-                copyText.innerHTML += '、' + getPureText(dataNames[i]);
-            }
-        }
-    }
-    if(!flag){
-        copyText.innerHTML += '<br>';
-    }
-    var flag = true;
-    for(var i in idState){
-        if(idState[i] < 0){
-            tipSpans[i].appendChild(getSpan('缺','trade box'));
-            if(flag){
-                copyText.innerHTML += '缺少战资：' + getPureText(dataNames[i]);
-                flag = false;
-            }
-            else{
-                copyText.innerHTML += '、' + getPureText(dataNames[i]);
-            }
-        }
+        var temScore = getScore(getWarBest(temList));
+        idState[i] = temScore*100 - scores;
+        if(idState[i] > 0)
+            tipSpans[i].appendChild(getSpan('+'+idState[i].toFixed(0),'trade box'));
     }
 }
 function freshMaxCost(){
@@ -255,25 +179,11 @@ function copyFn(){
     var val = document.getElementById('copyText');
     window.getSelection().selectAllChildren(val);
     document.execCommand ("Copy");
-
-    var copyBtn = document.getElementById('copyBtn');
-    copyBtn.style.backgroundImage = 'url("./styles/images/check.svg")';
-    setTimeout(function(){
-        copyBtn.style.backgroundImage = 'url("./styles/images/copy.svg")';
-    },500);
 }
 function freshFn(){
     start(true);
-
-    var freshBtn = document.getElementById('freshBtn');
-    freshBtn.style.backgroundImage = 'url("./styles/images/check.svg")';
-    setTimeout(function(){
-        freshBtn.style.backgroundImage = 'url("./styles/images/fresh.svg")';
-    },500);
 }
 function setFn(){
-    var setBtn = document.getElementById('setBtn');
-    setBtn.style.backgroundImage = 'url("./styles/images/check.svg")';
     window.location.href = "./settings";
 }
 function getPureText(note){
@@ -281,7 +191,6 @@ function getPureText(note){
     text = text.replace(/日/g,'曰');
     text = text.replace(/甘霖/g,'甘!霖');
     text = text.replace(/服务/g,'服雾');
-    // text = text.replace(/服务/g,'服雾');
     return text;
 }
 function getPureNum(num){
@@ -296,8 +205,6 @@ function getSpan(text, className = 'card'){
 function createInputElement(dataName, initialValue){
     var inputDiv = document.createElement('div');
     inputDiv.setAttribute('class','input box');
-
-    var inputSpan = document.createElement('span');
 
     var headDiv = document.createElement('div');
     headDiv.setAttribute('class','head');
@@ -318,7 +225,13 @@ function createInputElement(dataName, initialValue){
     minusBtn.setAttribute('class','btn box minus');
     minusBtn.innerHTML = '-';
     // 不小于0
-    minusBtn.onclick = (e)=>(e.target.nextElementSibling.value > 0 ? e.target.nextElementSibling.value-- : 0,start());
+    minusBtn.onclick = function(e){
+        var value = e.target.nextElementSibling.value;
+        if(value > 0){
+            e.target.nextElementSibling.value--;
+        }
+        start();
+    }
 
     var input = document.createElement('input');
     input.setAttribute('class','box');
@@ -333,7 +246,6 @@ function createInputElement(dataName, initialValue){
 
     headDiv.appendChild(tipSpan);
 
-    inputDiv.appendChild(inputSpan);
     inputDiv.appendChild(headDiv);
     inputDiv.appendChild(numInputDiv);
     
