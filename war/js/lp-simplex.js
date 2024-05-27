@@ -9,47 +9,47 @@ function getResult(goal,limit){
 		//插入决策变量，基变量和价值系数
 		cb.push([goal[i]||0,i]);
 	}
-	while(true){
-		//判断是否存在为负数项的约束条件
-		var needAssist=false;
-		for(var i of loosen){
-			if(i[1]<0){
-				needAssist=true;
-			}
-		}
-		//如果存在，则需要使用对偶单纯形法消去负数项
-		if(needAssist){
-			var min=0,min_index=null;
-			//寻找b列值最小的负数项 决定换出变量
-			for(var i=0;i<loosen.length;i++){
-				if(loosen[i][1]<min){
-					min=loosen[i][1];
-					min_index=i;
-				}
-			}
-			//在决定换出变量后 决定换入变量
-			var min2=Infinity,min_index2=null;
-			for(var i=0;i<cb.length;i++){
-				var num=loosen[min_index][0][i];
-				if(num>=0) continue;
-				var check=(getCheckNum(cb,loosen,i))/num;
-				if(check<min2){
-					min2=check;
-					min_index2=i;
-				}
-			}
-			if(typeof min_index2=='number'){
-				//若成功寻找到换入变量 则对矩阵进行初等变换
-				loosen[min_index][2]=min_index2;
-				loosen[min_index][3]=cb[min_index2][0];
-				updateMartix(loosen,min_index,min_index2);
-			}
-			//若找不到换入变量 则该矩阵不存在最优解 返回false值 结束函数运行
-			else return false;
-		}
-		//若不存在为负数项的约束条件 则结束循环判断 转向单纯形法运算
-		else break;
-	}
+	// while(true){
+	// 	//判断是否存在为负数项的约束条件
+	// 	var needAssist=false;
+	// 	for(var i of loosen){
+	// 		if(i[1]<0){
+	// 			needAssist=true;
+	// 		}
+	// 	}
+	// 	//如果存在，则需要使用对偶单纯形法消去负数项
+	// 	if(needAssist){
+	// 		var min=0,min_index=null;
+	// 		//寻找b列值最小的负数项 决定换出变量
+	// 		for(var i=0;i<loosen.length;i++){
+	// 			if(loosen[i][1]<min){
+	// 				min=loosen[i][1];
+	// 				min_index=i;
+	// 			}
+	// 		}
+	// 		//在决定换出变量后 决定换入变量
+	// 		var min2=Infinity,min_index2=null;
+	// 		for(var i=0;i<cb.length;i++){
+	// 			var num=loosen[min_index][0][i];
+	// 			if(num>=0) continue;
+	// 			var check=(getCheckNum(cb,loosen,i))/num;
+	// 			if(check<min2){
+	// 				min2=check;
+	// 				min_index2=i;
+	// 			}
+	// 		}
+	// 		if(typeof min_index2=='number'){
+	// 			//若成功寻找到换入变量 则对矩阵进行初等变换
+	// 			loosen[min_index][2]=min_index2;
+	// 			loosen[min_index][3]=cb[min_index2][0];
+	// 			updateMartix(loosen,min_index,min_index2);
+	// 		}
+	// 		//若找不到换入变量 则该矩阵不存在最优解 返回false值 结束函数运行
+	// 		else return false;
+	// 	}
+	// 	//若不存在为负数项的约束条件 则结束循环判断 转向单纯形法运算
+	// 	else break;
+	// }
 	//进行单纯形法的操作步骤
 	var counter=1;
 	while(counter++){
@@ -75,7 +75,7 @@ function getResult(goal,limit){
 				var bizhi=getBizhiNum(cb,loosen,i,max_index);
 				//若两个最小的比值数同时存在 则采取Bland规则 选择下标最小的一项
 				if(typeof bizhi=='number'&&
-					(bizhi<min||bizhi==min&&loosen[i][2]<min_index2)){
+					(bizhi<min||(bizhi==min&&loosen[i][2]<min_index2))){
 					min=bizhi;
 					min_index=i;
 					min_index2=loosen[i][2];
@@ -105,11 +105,10 @@ function getResult(goal,limit){
 		for(var i=0;i<24;i++){
 			sum += j[0][i] * result[i];
 		}
-		if(Math.round((sum-j[1])*1e9)>0){
+		if(Math.round((sum-j[1])*1e5)>0){
 			return false;
 		}
 	}
-
 	//返回该数组
 	return result;
 };
@@ -161,19 +160,29 @@ function getLoosen(limit,goal){
 	}
 	return loosen;
 };
+// 输入标准格式
+function solveLP(A,b,c){
+	var t=new Array();
+	for(var i=0;i<A.length;i++){
+		t[i] = [A[i],b[i]];
+	}
+    return getResult(c,t);
+}
+// *************************************分割线*************************************
+// 复制高维度数组
+function deepCopyArray(arr){
+	if(Array.isArray(arr)){
+		return arr.map(deepCopyArray);
+	}
+	return arr;
+}
 function getWarBest(cost, rand = false){
-	// 随机排序
 	var order = [];
 	for(var i=0;i<data.length;i++){
 		order.push(i);
 	}
-	if(rand){
-		order.sort(()=>(Math.random()-0.5));
-	}
-	var temData = [];
-	for(var i=0;i<order.length;i++){
-		temData.push(data[order[i]]);
-	}
+	if(rand)order.sort(()=>(Math.random()-0.5));
+	var temData = getDataByOrder(order);
 	var m = temData[0].value.length; // 12
 	var n = temData.length; // 24
 	var A = new Array(m);
@@ -190,11 +199,14 @@ function getWarBest(cost, rand = false){
 	    c[i] = temData[i].score;
 	}
 	var r=solveLP(A,b,c);
-	var counter = 1;
+	/*
+		某些数据的计算结果会出现大量负数
+		- 未完全修复：设置了自动刷新
+	*/
+	var counter = 0;
 	while(r === false){
-		// 计算出错，重新计算
-		order.sort(()=>(Math.random()-0.5));
-		temData = getDataByOrder(order);
+		// 尝试打乱顺序后重新计算
+		temData = getDataByOrder(order.sort(()=>(Math.random()-0.5)));
 		for(var i=0;i<m;i++){
 			A[i] = new Array();
 			for(var j=0;j<n;j++){
@@ -210,10 +222,14 @@ function getWarBest(cost, rand = false){
 			break;
 		}
 	}
+	if(counter>1)console.log("WARNING: 熔断次数 "+counter);
 	// 将r按照order还原
 	var result = [];
 	for(var i=0;i<order.length;i++){
 		result.push(r[order.indexOf(i)]);
+	}
+	for(var i=order.length;i<r.length;i++){
+		result.push(r[i]);
 	}
     return result;
 }
@@ -223,17 +239,4 @@ function getDataByOrder(order){
 		temData.push(data[order[i]]);
 	}
 	return temData;
-}
-function solveLP(A,b,c){
-	var t=new Array();
-	for(var i=0;i<A.length;i++){
-		t[i] = [A[i].concat(),b[i]];
-	}
-    return getResult(c,t);
-}
-function deepCopyArray(arr){
-	if(Array.isArray(arr)){
-		return arr.map(deepCopyArray);
-	}
-	return arr;
 }

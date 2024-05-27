@@ -1,7 +1,15 @@
+:root{
+    --bg-color: #f9f9f9;
+    --text-color: #333333;
+    --border-style: solid 1px #cccccc;
+    --six-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    --four-columns: 1fr 1fr 1fr 1fr;
+    --tree-columns: 1fr 1fr 1fr;
+}
 body{
     max-width: 900px;
     margin: 20px auto;
-    color: #333;
+    color: var(--text-color);
 }
 html {
     overflow-x: hidden;
@@ -12,7 +20,7 @@ h1{
 }
 #inputs {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: var(--six-columns);
     gap: 10px;
     padding: 10px;
 }
@@ -62,6 +70,9 @@ h1{
 .result-tip span.trade{
     color: #2f7dd5;
 }
+.result-tip span.coin{
+    color: #f49d39;
+}
 .result-tip span.remain{
     color: #d52f2f;
 }
@@ -84,7 +95,7 @@ h1{
 .btnDiv label{
     margin: 0 10px 10px 10px;
     padding: 10px 15px;
-    background-color: #f9f9f9;
+    background-color: var(--bg-color);
     background-repeat: no-repeat;
     background-position: center;
     color: transparent;
@@ -137,10 +148,9 @@ h1{
     line-height: 1.5;
 }
 span.tips{
-    color: #333;
     display: block;
     margin: 5px 0;
-    border: solid 1px #ccc;
+    border: var(--border-style);
     border-radius: 5px;
     padding: 5px 10px;
 }
@@ -175,14 +185,11 @@ span.tips{
     height: 0;
     width: 0;
 }
-.links{
-    position: sticky;
-    top: 95%;
-}
 .links a{
     float: right;
     margin: 10px;
     text-decoration: none;
+    color: var(--text-color);
 }
 #selectMode{
     display: flex;
@@ -213,10 +220,10 @@ span.tips{
 }
 
 .box{
-    border: solid 1px #ccc;
+    border: var(--border-style);
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #f9f9f9;
+    background-color: var(--bg-color);
 }
 .box-group > .box{
     border-radius: 0;
@@ -239,12 +246,12 @@ span.tips{
 
 @media screen and (max-width: 900px) {
     #inputs {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: var(--four-columns);
     }
 }
 @media screen and (max-width: 650px) {
     #inputs {
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: var(--tree-columns);
     }
 }
 @media screen and (max-width: 500px) {
