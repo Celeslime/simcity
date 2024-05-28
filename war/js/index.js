@@ -24,38 +24,16 @@ document.getElementById('mode2').onclick = changeMode;
 document.getElementById('mode3').onclick = changeMode;
 changeMode();
 
-function getLevelScore(baseScore, level){// 3*100/5 
-    if(level == 1){
-        return baseScore;
-    }
-    if(level <= 0){
-        return 0;
-    }
-    return getLevelScore(Math.round(baseScore*20*1.1)/20, level-1);
-}
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
     for(var i = 0; i < data.length; i++){
-        var sc = getLevelScore(rows[i + 2][15], levels[i]);
-        if(data[i].name == '破盾' && levels[i] != 0){
-            sc = 7 + 1.5 * (levels[i] - 1);
-        }
-        else if(data[i].name == '末日鸭叫'){
-            sc *= 25;
-        }
-        else if(data[i].name == '电击之神'){
-            sc *= 3;
-        }
-        if(mode == 16){
-            if(data[i].name == '末日鸭叫'){
-                sc *= 26/25;
-            }
-            else if(data[i].name == '电击之神'){
-                sc *= 4/3;
-            }
-            else{
-                sc *= 2;
-            }
+        var sc = getLevelScore(i, levels[i]);
+        if(data[i].name == '鸭叫'){sc *= 25;}
+        else if(data[i].name == '电击之神'){sc *= 3;}
+        if(mode == 2){
+            if(data[i].name == '鸭叫'){sc *= 26/25;}
+            else if(data[i].name == '电击之神'){sc *= 4/3;}
+            else{sc *= 2;}
         }
         data[i].score = sc;
     }
@@ -65,55 +43,39 @@ function start(refresh = false){
     freshMaxCost();
     var num = getWarBest(maxCost,refresh)
         .map(function(x){
-            return Math.round(x*1e9)/1e9;
+            var exRate = 1e5;
+            return Math.round(x*exRate)/exRate;
         });
     show(num);
 }
-function show(u){
-    var num = u.map((x)=>(Math.floor(x + 0.05)));
-    var scores = (getScore(u)*100).toFixed(0);
-    var score  = (getScore(num)*100).toFixed(0);
+function show(num){
+    var score  = getScore(num);
+    var cost = calcCost(num);
     outputDiv.innerHTML = '';
     copyText.innerHTML = '';
 
     // 显示卡牌
-    outputDiv.appendChild(
-        getSpan('总计：'+score+'/'+scores+'分', 'tips')
-    );
+    outputDiv.appendChild(getSpan('总计：'+score.toFixed()+'分', 'tips'));
     copyText.innerHTML += '可使用卡牌最优解：<br>';
+    var cardSpans = [];
     for(let i = 0;i < data.length;i++){
         if(num[i] != 0 || deletedCard.indexOf(i) != -1){
-            var cardSpan = creatCardSpan(i,num);
-            outputDiv.appendChild(cardSpan);
-            copyText.innerHTML += ' '+getPureText(data[i].name + ' × ' + num[i].toFixed(0) +'<br>');
+            cardSpans.push({
+                id: i,
+                card: creatCardSpan(i,num),
+                value: num[i]
+            })
         }   
     }
-    // 显示可选的卡牌
-    var collectCards = [];
-    for(var i = 0;i < data.length; i++){
-        var rate = u[i] - num[i];
-        collectCards.push({
-            id: i,
-            rate: rate
-        });
-    }
-    collectCards.sort(function(a, b){
-        return b.rate - a.rate;
-    })
-    for(var i = 0;i < collectCards.length; i++){
-        var rate = (collectCards[i].rate * 100).toFixed(0);
-        if(rate < 10) break;
-        if(i == 0){
-            outputDiv.appendChild(
-                getSpan('预备：'+(scores-score)+'/'+scores+'分','tips')
-            );
-        }
-        outputDiv.appendChild(getSpan(rate + '% ' + data[collectCards[i].id].name, 'card'));
+    cardSpans.sort((a,b)=>(b.value-a.value));
+    for(var i=0;i<cardSpans.length;i++){
+        outputDiv.appendChild(cardSpans[i].card);
+        copyText.innerHTML+=getPureText(data[cardSpans[i].id].name+' × '+cardSpans[i].value.toFixed(2)+'<br>')
     }
 
     // 显示多余卡牌
     var tipSpans = document.getElementsByClassName('result-tip');
-    var cost = calcCost(u)
+    
     for(var i = 0; i < cost.length; i++){
         tipSpans[i].innerHTML = '';
         if(Math.round((maxCost[i]-cost[i])*10) > 0)
@@ -126,7 +88,7 @@ function show(u){
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] += 1;
-        var temScore = getScore(getWarBest(temList))*100 - scores;
+        var temScore = getScore(getWarBest(temList)) - score;
         temScores1.push(temScore);
         maxScore = Math.max(maxScore, temScore);
     }
@@ -135,7 +97,7 @@ function show(u){
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] -= 1;
-        var temScore = getScore(getWarBest(temList))*100 - scores;
+        var temScore = getScore(getWarBest(temList)) - score;
         temScores2.push(temScore);
         // maxScore = Math.max(maxScore, -temScore);
     }
@@ -156,7 +118,7 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         if(window.location.host === '127.0.0.1'){
-            // maxCost[i] = Math.floor(10*Math.random());// @测试
+            // maxCost[i] = 0//Math.floor(10*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
@@ -200,6 +162,8 @@ function getPureText(note){
         .replace(/日/g,'曰')
         .replace(/甘霖/g,'甘!霖')
         .replace(/服务/g,'服雾')
+        .replace(/15/g,'1@5')
+        .replace(/购买/g,'兑换')
         .replace(/15/g,'1@5');
 }
 function getSpan(text, className = 'card'){
@@ -259,7 +223,7 @@ function createInputElement(dataName, initialValue){
 }
 function creatCardSpan(i,num){
     var cardSpan = getSpan('', 'card');
-    var textSpan = getSpan(data[i].name + ' × ' + num[i], 'text');
+    var textSpan = getSpan(data[i].name + ' × ' + num[i].toFixed(2), 'text');
     var plusBtn = getSpan('+', 'adjust-btn box');
     var minusBtn = getSpan('-', 'adjust-btn box');
     plusBtn.addEventListener('click', function(){
@@ -281,7 +245,7 @@ function creatCardSpan(i,num){
         setMaxCost(maxCost)
         start();
     })
-    if(num[i] == 0){
+    if(num[i] < 1){
         minusBtn.className += ' disable';
     }
     cardSpan.appendChild(minusBtn);

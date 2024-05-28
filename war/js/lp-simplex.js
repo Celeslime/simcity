@@ -222,7 +222,6 @@ function getWarBest(cost, rand = false){
 			break;
 		}
 	}
-	if(counter>1)console.log("WARNING: 熔断次数 "+counter);
 	// 将r按照order还原
 	var result = [];
 	for(var i=0;i<order.length;i++){

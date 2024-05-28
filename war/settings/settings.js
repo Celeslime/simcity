@@ -17,9 +17,9 @@ for(var i = 0; i < data.length; i++){
     // document.getElementById('inputs').appendChild(inputElement);
 }
 for(let i in temList){
-    // console.log(idList.indexOf(Number(i)));
-    document.getElementById('inputs').appendChild(temList[idList.indexOf(Number(i))]);
+    document.getElementById('inputs').appendChild(temList[i]);
 }
+showScore();
 function createInputElement(dataName, initialValue){
     var inputDiv = document.createElement('div');
     inputDiv.setAttribute('class','input box');
@@ -31,7 +31,7 @@ function createInputElement(dataName, initialValue){
     headDiv.innerHTML = dataName;
 
     var tipSpan = document.createElement('span');
-    tipSpan.setAttribute('class','result-tip box-group-T');
+    tipSpan.setAttribute('class','result-tip box');
 
     var numInputDiv = document.createElement('div');
     numInputDiv.setAttribute('class','num-input box-group-T');
@@ -68,8 +68,6 @@ function createInputElement(dataName, initialValue){
     numInputDiv.appendChild(input);
     numInputDiv.appendChild(minusBtn);
     
-    
-
     headDiv.appendChild(tipSpan);
 
     inputDiv.appendChild(inputSpan);
@@ -78,11 +76,19 @@ function createInputElement(dataName, initialValue){
     
     return inputDiv;
 }
+function showScore(){
+    var tipSpan = document.getElementsByClassName('result-tip');
+    for(var i=0; i<tipSpan.length; i++){
+        var sc = getLevelScore(i, levels[i]);
+        tipSpan[i].innerHTML = sc.toFixed()+'分';
+    }
+}
 function save(){
     for(var i in inputs){
         levels[i] = Number(inputs[i].value);
     }
     localStorage.setItem('levels',JSON.stringify(levels));
+    showScore();
 }
 function clearLevels(){
     if(confirm('确认恢复为默认等级信息？')){
