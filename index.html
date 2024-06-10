@@ -6,7 +6,36 @@
         <title>simcity</title>
     </head>
     <body>
-        <a href="./war/" style="display: block;">全卡组卡器 @ ./war/</a>
-        <a href="./product/">商品to模拟币 @ ./product/</a>
+        <a href="./war/" style="display: block;">全卡组卡器</a>
+        <a href="./products-time/" style="display: block;">商店组商品</a>
+        <a href="./product/">商品Echarts</a>
+        <script>
+            function fillOne(list){
+                list[Math.floor(Math.random()*9)]++;
+            }
+            function check(list){
+                for(let i of list){
+                    if(i<7){
+                        return false;
+                    }
+                }
+                return true;
+            }
+            var a;
+            var sum=0,count=0;
+            var k=1;
+            while(k--){
+                a=new Array(9).fill(0);
+                a[0]=10;
+                var cnt=0
+                while(!check(a)){
+                    fillOne(a);
+                    cnt++;
+                }
+                sum+=cnt;
+                count++;
+                console.log(sum/count);
+            }
+        </script>
     </body>
 </html>

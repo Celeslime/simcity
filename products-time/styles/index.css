@@ -74,11 +74,7 @@ h1{
     color: #d52f2f;
 }
 .head {
-    display: flex;
     position: relative;
-    line-height: 16px;
-    height: 16px;
-    overflow: hidden;
 }
 @media screen and (max-width: 530px) {
     #inputs {
@@ -236,11 +232,6 @@ span.tips{
 .btn-check:checked+.btn{
     background-color: #eee;
 }
-
-.btn-group {
-    margin: 10px;
-    display: flex;
-}
 .btn-group .btn{
     padding: 0 12px;
     line-height: 36px;
@@ -272,24 +263,6 @@ span.tips{
     border-right: none;
 }
 
-.box-group-T > .box{
-    border-radius: 0;
-}
-.box-group-T > .box:first-child{
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-.box-group-T > .box:last-child{
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-.box-group-T > .box:not(:last-child){
-    border-bottom: none;
-}
-
-.disable,.opacity{
-    opacity: 0.2;
-}
-.small{
-    font-size: 60%;
+.disable{
+    opacity: 0.5;
 }

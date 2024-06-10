@@ -150,13 +150,13 @@ function show(num){
     
     for(var i=0;i<num.length;i++){
         if(num[i] != 0){
-            if(i > 8 && flag){
-                listSpan = document.createElement('span');
-                listSpan.className = 'tips';
-                listSpan.innerHTML = '以下卡牌可能不适合囤积战资：'
-                outputDiv.appendChild(listSpan)
-                flag = false;
-            }
+            // if(i > 8 && flag){
+            //     listSpan = document.createElement('span');
+            //     listSpan.className = 'tips';
+            //     listSpan.innerHTML = '以下卡牌可能不适合囤积战资：'
+            //     outputDiv.appendChild(listSpan)
+            //     flag = false;
+            // }
             listSpan = document.createElement('span');
             listSpan.className = 'card';
             listSpan.innerHTML = data[i].name + ' × ' + num[i];
@@ -183,7 +183,7 @@ function copyFn(){
     },2000);
 }
 function getPureText(text){
-    return text.replace(/日/g,'曰').replace(/霖/g,'-霖');
+    return text.replace(/日/g,'曰').replace(/霖/g,'!霖');
 }
 function SectionToChinese(section){
     var chnNumChar = ["零","一","二","三","四","五","六","七","八","九"];

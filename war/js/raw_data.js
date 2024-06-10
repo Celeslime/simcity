@@ -1,6 +1,6 @@
 let raw_data = `
-简称	弹药	铁砧	望远镜	消防栓	汽油	扩音器	老虎钳	疏通塞	螺旋桨	橡胶靴	橡胶鸭	医药包	种类	能量	分数
-滑稽之手								1			1		3	1	100
+简称	弹药	铁砧	望远镜	消防栓	汽油	扩音器	老虎钳	疏通塞	螺旋桨	橡胶靴	橡胶鸭	医药包	默认	能量	分数
+小手								1			1		3	1	100
 收缩射线						2	1						2	3	300
 巨石怪			1	1									2	2	200
 人生地不熟		1							1				1	4	300
@@ -44,6 +44,7 @@ if(localStorage.getItem('levels') == null){
 var levels = JSON.parse(localStorage.getItem('levels'));
 var dataNames = raw_data[1].split('\t').slice(1);
 function getLevelScore(id, level){
+    if(!level)return 0;
     if(level == 1){return data[id].baseScore;}
     else if(level < 1){return 0;}
     if(data[id].name=='破盾'){return 700+150*(level-1)}

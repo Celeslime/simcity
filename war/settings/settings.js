@@ -1,6 +1,7 @@
 document.getElementById('inputs');
 document.getElementById('return').addEventListener('click', function(){
-    window.location.replace(document.referrer);
+    save();
+    jumpBack();
 });
 document.getElementById('clear').addEventListener('click', clearLevels);
 document.getElementById('set0').addEventListener('click', setLevelsToZero);
@@ -93,7 +94,7 @@ function save(){
 function clearLevels(){
     if(confirm('确认恢复为默认等级信息？')){
         localStorage.removeItem('levels');
-        window.location.replace(document.referrer);
+        jumpBack();
     }
 }
 function setLevelsToZero(){
@@ -103,4 +104,7 @@ function setLevelsToZero(){
         }
         save();
     }
+}
+function jumpBack(){
+    window.location.href = '../';
 }
