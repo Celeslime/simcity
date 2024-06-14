@@ -42,7 +42,8 @@ function createInputElement(dataName, initialValue){
     plusBtn.innerHTML = '+';
     plusBtn.onclick = function(e){
         var value = parseInt(e.target.nextElementSibling.value);
-        e.target.nextElementSibling.value = Math.floor(value) + 1;
+        if(value < 20)
+            e.target.nextElementSibling.value = Math.floor(value) + 1;
         save();
     }
 

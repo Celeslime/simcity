@@ -22,11 +22,15 @@ document.getElementById('copyBtn').addEventListener('click', copyFn);
 document.getElementById('freshBtn').addEventListener('click', function(){start(true);});
 document.getElementById('setBtn').addEventListener('click', function(){window.location.href = "./settings";});
 document.getElementById('mode2').onclick = changeMode;
-document.getElementById('mode3').onclick = changeMode;
+document.getElementById('mode1').onclick = changeMode;
+document.getElementById('mode0').onclick = changeMode;
 changeMode();
 
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
+    if(mode == 0){
+        // alert("仅提供方案，非最优解");
+    }
     for(var i = 0; i < data.length; i++){
         var sc = getLevelScore(i, levels[i]);
         if(data[i].name == '鸭叫'){sc *= 25;}
@@ -35,6 +39,12 @@ function changeMode(){
             if(data[i].name == '鸭叫'){sc *= 26/25;}
             else if(data[i].name == '电击之神'){sc *= 4/3;}
             else{sc *= 2;}
+        }
+        if(mode == 0){
+            if(data[i].name == '鸭叫'){sc = 0}
+            else if(data[i].name == '电击之神'){sc = 0}
+            else if(data[i].name == '破盾'){sc = 0}
+            sc *= (getLevelScore(i,1)/100/data[i].power)**1;
         }
         data[i].score = sc;
     }
@@ -143,8 +153,8 @@ function show(num){
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        if(window.location.host === '127.0.0.1'){
-            // maxCost[i] = 1;Math.floor(10*Math.random());// @测试
+        if(window.location.host === '127.0.0.1'||1){
+            // maxCost[i] = 5;Math.floor(10*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
