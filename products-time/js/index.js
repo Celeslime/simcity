@@ -5,17 +5,18 @@ var num;
 var temp, loading = 0; 
 var inputs = [], maxCost = [], deletedCard = [];
 
-var own = (new Array(11).fill(0)).concat(new Array(9).fill(60*8*0));
+var own = [40,20,10,10,10,5,5,5,5,5,5]
+    .concat(new Array(9).fill(60*4));
 
 for(var i = 0; i < data[0].value.length; i++){
-    console.log(i)
+    // console.log(i)
     var initialValue = (own.length != 0) ? own[i] : 0;
     var inputElement = createInputElement(dataNames[i], initialValue);
     document.getElementById('inputs').appendChild(inputElement);
 }
 document.getElementById('copyBtn').addEventListener('click', copyFn);
 document.getElementById('freshBtn').addEventListener('click', function(){start(true);});
-document.getElementById('setBtn').addEventListener('click', function(){window.location.href = "./settings";});
+// document.getElementById('setBtn').addEventListener('click', function(){window.location.href = "./settings";});
 // document.getElementById('mode2').onclick = changeMode;
 // document.getElementById('mode3').onclick = changeMode;
 // changeMode();
