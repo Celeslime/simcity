@@ -198,6 +198,20 @@ function getWarBest(cost, rand = false){
 	for(var i=0;i<n;i++){
 	    c[i] = temData[i].score;
 	}
+	// 节能测试版
+	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
+	if(mode == 0){
+		for(var i=0;i<24;i++){
+			var temA = new Array(24).fill(0);
+			temA[i] = 1;
+
+			A.push(temA);
+			b.push(Math.floor(12/temData[i].power));
+			// console.log(A,b);
+			// break;
+		}
+	}
+	
 	var r=solveLP(A,b,c);
 	/*
 		某些数据的计算结果会出现大量负数
@@ -205,7 +219,7 @@ function getWarBest(cost, rand = false){
 	*/
 	var counter = 0;
 	while(r === false){
-		// 尝试打乱顺序后重新计算
+		// 尝试轻度打乱顺序后重新计算
 		temData = getDataByOrder(order.sort(()=>(Math.random()-0.5)));
 		for(var i=0;i<m;i++){
 			A[i] = new Array();

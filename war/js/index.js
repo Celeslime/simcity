@@ -28,8 +28,27 @@ changeMode();
 
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
-    if(mode == 0){
-        // alert("仅提供方案，非最优解");
+    if(mode == 64){
+        // 简单防护
+        var password=null, checkword = "MTkyNjA4MTc=";
+        if(localStorage.getItem("password") != null){
+            password = localStorage.getItem("password");
+        }
+        if(password != checkword){
+            password = prompt("请输入测试邀请码");
+        }
+        if(password == "" || password == null ){
+            mode = 2;
+            document.getElementById('mode2').checked = true;
+        }
+        else if(password != checkword){
+            mode = 2;
+            document.getElementById('mode2').checked = true;
+            alert("邀请码错误");
+        }
+        else{
+            localStorage.setItem("password", password);
+        }
     }
     for(var i = 0; i < data.length; i++){
         var sc = getLevelScore(i, levels[i]);
@@ -132,6 +151,7 @@ function show(num){
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] -= 1;
+        if(temList[i] < 0)temList[i] = 0;
         var temScore = getScore(getWarBest(temList)) - score;
         temScores2.push(temScore);
         maxScore2 = Math.max(maxScore2, temScore);
@@ -153,8 +173,8 @@ function show(num){
 function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
-        if(window.location.host === '127.0.0.1'||1){
-            // maxCost[i] = 5;Math.floor(10*Math.random());// @测试
+        if(window.location.host === '127.0.0.1'){
+            // maxCost[i] = 0;Math.floor(10*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
