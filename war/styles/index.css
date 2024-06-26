@@ -211,6 +211,7 @@ span.tips{
     color: transparent;
     height: 0;
     width: 0;
+    background-image: url('./images/check.svg');
 }
 .links a{
     float: right;

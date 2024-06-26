@@ -21,9 +21,9 @@ for(var i = 0; i < data[0].value.length; i++){
 document.getElementById('copyBtn').addEventListener('click', copyFn);
 document.getElementById('freshBtn').addEventListener('click', function(){start(true);});
 document.getElementById('setBtn').addEventListener('click', function(){window.location.href = "./settings";});
-document.getElementById('mode2').onclick = changeMode;
-document.getElementById('mode1').onclick = changeMode;
 document.getElementById('mode0').onclick = changeMode;
+document.getElementById('mode1').onclick = changeMode;
+document.getElementById('mode2').onclick = changeMode;
 changeMode();
 
 function changeMode(){
@@ -38,13 +38,11 @@ function changeMode(){
             password = prompt("请输入测试邀请码");
         }
         if(password == "" || password == null ){
-            mode = 2;
-            document.getElementById('mode2').checked = true;
+            return;
         }
         else if(password != checkword){
-            mode = 2;
-            document.getElementById('mode2').checked = true;
             alert("邀请码错误");
+            return;
         }
         else{
             localStorage.setItem("password", password);
