@@ -172,7 +172,7 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         if(window.location.host === '127.0.0.1'){
-            // maxCost[i] = 0;Math.floor(10*Math.random());// @测试
+            maxCost[i] = 1000;Math.floor(10*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
