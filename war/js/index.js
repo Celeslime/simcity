@@ -26,6 +26,16 @@ document.getElementById('mode1').onclick = changeMode;
 document.getElementById('mode2').onclick = changeMode;
 changeMode();
 
+// service worker
+navigator.serviceWorker.register('./serviceWorker.js', {scope: './'})
+	.then(function (registration) {
+		console.log('Service Worker 注册成功 with scope: ', registration.scope);
+	})
+	.catch(function (err) {
+		alert('Service Worker 注册失败: ', err);
+		console.log('Service Worker registration failed: ', err);
+	});
+
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
     if(mode == 64){
@@ -172,7 +182,7 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         if(window.location.host === '127.0.0.1'){
-            maxCost[i] = 1000;Math.floor(10*Math.random());// @测试
+            // maxCost[i] = 1000;Math.floor(10*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
