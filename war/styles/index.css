@@ -56,13 +56,14 @@ h1{
     height: 100%;
     right: 0;
     font-size: 60%;
+    padding: 0 2px;
 }
 .result-tip span{
     height: 100%;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 5px;
+    padding: 0 2px;
 }
 .result-tip span.blue{
     color: #2f7dd5;
