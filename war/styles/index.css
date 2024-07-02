@@ -64,14 +64,17 @@ h1{
     align-items: center;
     padding: 0 5px;
 }
-.result-tip span.trade{
+.result-tip span.blue{
     color: #2f7dd5;
 }
-.result-tip span.coin{
+.result-tip span.yellow{
     color: #f49d39;
 }
-.result-tip span.remain{
+.result-tip span.red{
     color: #d52f2f;
+}
+.result-tip span.pink{
+    color: #cf39f4;
 }
 .head {
     display: flex;

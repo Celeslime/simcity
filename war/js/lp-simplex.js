@@ -204,7 +204,6 @@ function getWarBest(cost, rand = false){
 		for(var i=0;i<24;i++){
 			var temA = new Array(24).fill(0);
 			temA[i] = 1;
-
 			A.push(temA);
 			b.push(Math.floor(12/temData[i].power));
 			// console.log(A,b);
@@ -219,6 +218,7 @@ function getWarBest(cost, rand = false){
 	*/
 	var counter = 0;
 	while(r === false){
+		// console.log("ERROR: 存在负数")
 		// 尝试轻度打乱顺序后重新计算
 		temData = getDataByOrder(order.sort(()=>(Math.random()-0.5)));
 		for(var i=0;i<m;i++){

@@ -68,9 +68,9 @@ function changeMode(){
             else{sc *= 2;}
         }
         if(mode == 0){
-            if(data[i].name == '鸭叫'){sc = 0}
-            else if(data[i].name == '电击之神'){sc = 0}
-            else if(data[i].name == '破盾'){sc = 0}
+            if(data[i].name == '鸭叫'){sc = 0;}
+            else if(data[i].name == '电击之神'){sc = 0;}
+            else if(data[i].name == '破盾'){sc /= 2;}
             sc *= (getLevelScore(i,1)/100/data[i].power)**1;
         }
         data[i].score = sc;
@@ -137,11 +137,7 @@ function show(num){
     // 显示多余卡牌
     var tipSpans = document.getElementsByClassName('result-tip');
     
-    for(var i = 0; i < cost.length; i++){
-        tipSpans[i].innerHTML = '';
-        if(Math.round((maxCost[i]-cost[i])*10) > 0)
-            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]).toFixed(1),'remain box'));
-    }
+    
 
     // 显示增量
     var temScores1 = [];
@@ -149,7 +145,10 @@ function show(num){
     for(var i = 0; i < maxCost.length; i++){
         var temList = maxCost.concat()
         temList[i] += 1;
-        var temScore = getScore(getWarBest(temList)) - score;
+        // console.log("id:",i);
+        var temScore = 0;
+        if(Math.round((maxCost[i]-cost[i])*10) <= 0) 
+            temScore = getScore(getWarBest(temList)) - score;
         temScores1.push(temScore);
         maxScore1 = Math.max(maxScore1, temScore);
         minScore1 = Math.min(minScore1, temScore);
@@ -160,22 +159,32 @@ function show(num){
         var temList = maxCost.concat()
         temList[i] -= 1;
         if(temList[i] < 0)temList[i] = 0;
-        var temScore = getScore(getWarBest(temList)) - score;
+        // console.log("id:",i);
+        var temScore = 0;
+        if(Math.round((maxCost[i]-cost[i])*10) <= 10) 
+            temScore = getScore(getWarBest(temList)) - score;
         temScores2.push(temScore);
         maxScore2 = Math.max(maxScore2, temScore);
         minScore2 = Math.min(minScore2, temScore);
     }
-    for(var i in temScores1){
-        if(temScores1[i] > (2*maxScore1+minScore1)/3){
-            tipSpans[i].appendChild(getSpan('+'+temScores1[i].toFixed(0),'trade box'));
-        }
-    }
-    for(var i in temScores2){
-        if(temScores2[i] > (2*maxScore2+minScore2)/3 && temScores2[i]<=-1){
-            tipSpans[i].appendChild(getSpan(''+temScores2[i].toFixed(0),'coin box'));
-        }
-    }
     
+    for(var i in temScores2){
+        tipSpans[i].innerHTML = '';
+        if(Math.abs(temScores1[i]+temScores2[i]) <= 1 && Math.round(temScores1[i].toFixed(0)) != 0){
+            tipSpans[i].appendChild(getSpan('±'+temScores1[i].toFixed(0),'pink box'));
+        }
+        else{
+            if(temScores2[i] < -1){
+                tipSpans[i].appendChild(getSpan(''+temScores2[i].toFixed(0),'yellow box'));
+            }
+            if(temScores1[i] > 1){
+                tipSpans[i].appendChild(getSpan('+'+temScores1[i].toFixed(0),'blue box'));
+            }
+        }
+        if(Math.round((maxCost[i]-cost[i])*10) > 0){
+            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]).toFixed(1),'red box'));
+        }
+    }
 }
 
 function freshMaxCost(){
