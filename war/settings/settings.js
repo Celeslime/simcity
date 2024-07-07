@@ -23,7 +23,7 @@ for(let i in temList){
 showScore();
 function createInputElement(dataName, initialValue){
     var inputDiv = document.createElement('div');
-    inputDiv.setAttribute('class','input box');
+    inputDiv.setAttribute('class','input');
 
     var inputSpan = document.createElement('span');
 

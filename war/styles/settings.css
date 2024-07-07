@@ -1,3 +1,8 @@
+:root{
+    --bg-color: #f9f9f9;
+    --text-color: #333333;
+    --border-style: solid 1px #cccccc;
+}
 #inputs {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -5,6 +10,7 @@
     padding: 10px;
 }
 .num-input{
+    display: flex;
     flex-direction: column;
 }
 .btn-group{
@@ -23,6 +29,15 @@
 .num-input .btn{
     width: unset;
 }
+.num-input input{
+    font-size: 24px;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: center;
+    /* border: none; */
+    /* outline: none; */
+    /* background-color: transparent; */
+    /* width: 100%; */
+}
 .result-tip{
     height: 100%;
     display: inline-flex;
@@ -32,6 +47,51 @@
     padding: 0 5px;
     right: 0;
     font-size: 60%;
+}
+span.result-tip {
+    width: unset;
+    height: 16px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2px;
+}
+.input{
+    /* padding: 10px; */
+    font-size: 16px;
+    cursor: pointer;
+    justify-self: center;
+    align-self: center;
+    position: relative;
+}
+.head {
+    display: flex;
+    position: relative;
+    line-height: 16px;
+    height: 16px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+.box{
+    width: 100%;
+    border: var(--border-style);
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: var(--bg-color);
+}
+.box-group > .box{
+    border-radius: 0;
+}
+.box-group > .box:first-child{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.box-group > .box:last-child{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.box-group > .box:not(:last-child){
+    border-right: none;
 }
 
 .box-group-T > .box{
