@@ -3,7 +3,8 @@ var copyText = document.getElementById('copyText');
 
 var num;
 var temp, loading = 0; 
-var inputs = [], maxCost = [], deletedCard = [];
+var maxCost = [], deletedCard = [];
+var inputs = [], plusBtns = [], minusBtns = [];
 
 var own;
 if(localStorage.getItem("own") != null){
@@ -27,14 +28,14 @@ document.getElementById('mode2').onclick = changeMode;
 changeMode();
 
 // service worker
-navigator.serviceWorker.register('./serviceWorker.js', {scope: './'})
-	.then(function (registration) {
-		console.log('Service Worker 注册成功 with scope: ', registration.scope);
-	})
-	.catch(function (err) {
-		alert('Service Worker 注册失败: ', err);
-		console.log('Service Worker registration failed: ', err);
-	});
+// navigator.serviceWorker.register('./serviceWorker.js', {scope: './'})
+// 	.then(function (registration) {
+// 		console.log('Service Worker 注册成功 with scope: ', registration.scope);
+// 	})
+// 	.catch(function (err) {
+// 		// alert('Service Worker 注册失败: ', err);
+// 		console.log('Service Worker registration failed: ', err);
+// 	});
 
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
@@ -169,27 +170,33 @@ function show(num){
     }
     
     for(var i in temScores2){
-        tipSpans[i].innerHTML = '';
-        if(Math.abs(temScores1[i]+temScores2[i]) <= 2 && Math.round(temScores1[i].toFixed(0)) != 0){
-            var span = getSpan('±'+temScores1[i].toFixed(0),'pink')
-            span.style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
-            tipSpans[i].appendChild(span);
-        }
-        else{
-            if(temScores2[i] < -1){
-                var span = getSpan(''+temScores2[i].toFixed(0),'yellow')
-                span.style.opacity = 1.1+0.9*(temScores2[i]-maxScore2)/(maxScore2-minScore2);
-                tipSpans[i].appendChild(span);
-            }
-            if(temScores1[i] > 1){
-                var span = getSpan('+'+temScores1[i].toFixed(0),'pink');
-                span.style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
-                tipSpans[i].appendChild(span);
-            }
-        }
-        if(Math.round((maxCost[i]-cost[i])*10) > 0){
-            tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]).toFixed(1),'red'));
-        }
+        plusBtns[i].innerHTML = '+'+temScores1[i].toFixed(0);
+        if(temScores2[i].toFixed(0)[0]!='-')
+            minusBtns[i].innerHTML = '-'+temScores2[i].toFixed(0);
+        else
+            minusBtns[i].innerHTML = temScores2[i].toFixed(0);
+        // tipSpans[i].innerHTML = '';
+        // if(Math.abs(temScores1[i]+temScores2[i]) <= 2 && Math.round(temScores1[i].toFixed(0)) != 0){
+        //     var span = getSpan('±'+temScores1[i].toFixed(0),'pink')
+        //     span.style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
+        //     tipSpans[i].appendChild(span);
+
+        // }
+        // else{
+        //     if(temScores2[i] < -1){
+        //         var span = getSpan(''+temScores2[i].toFixed(0),'yellow')
+        //         span.style.opacity = 1.1+0.9*(temScores2[i]-maxScore2)/(maxScore2-minScore2);
+        //         tipSpans[i].appendChild(span);
+        //     }
+        //     if(temScores1[i] > 1){
+        //         var span = getSpan('+'+temScores1[i].toFixed(0),'pink');
+        //         span.style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
+        //         tipSpans[i].appendChild(span);
+        //     }
+        // }
+        // if(Math.round((maxCost[i]-cost[i])*10) > 0){
+        //     tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]).toFixed(1),'red'));
+        // }
     }
 }
 
@@ -258,34 +265,17 @@ function getSpan(text, className = 'card'){
 function createInputElement(dataName, initialValue){
     // 好讨厌DOM啊！！！
     var inputDiv = document.createElement('div');
-    inputDiv.setAttribute('class','input box');
+    inputDiv.setAttribute('class','input');
 
     var headDiv = document.createElement('div');
-    headDiv.setAttribute('class','head');
-    headDiv.innerHTML = dataName;
+    headDiv.setAttribute('class','head box-group');
+    // headDiv.innerHTML = dataName;
 
-    var tipSpan = document.createElement('span');
-    tipSpan.setAttribute('class','result-tip box');
+    // var tipSpan = document.createElement('span');
+    // tipSpan.setAttribute('class','result-tip box');
 
     var numInputDiv = document.createElement('div');
     numInputDiv.setAttribute('class','num-input box-group');
-
-    var plusBtn = document.createElement('button');
-    plusBtn.setAttribute('class','btn box plus');
-    plusBtn.innerHTML = '+';
-    plusBtn.onclick = (e)=>(e.target.previousElementSibling.value++,start());
-
-    var minusBtn = document.createElement('button');
-    minusBtn.setAttribute('class','btn box minus');
-    minusBtn.innerHTML = '-';
-    // 不小于0
-    minusBtn.onclick = function(e){
-        var value = e.target.nextElementSibling.value;
-        if(value > 0){
-            e.target.nextElementSibling.value--;
-        }
-        start();
-    }
 
     var input = document.createElement('input');
     input.setAttribute('class','box');
@@ -293,15 +283,43 @@ function createInputElement(dataName, initialValue){
     input.setAttribute('name',dataName);
     input.setAttribute('value',initialValue);
     inputs.push(input);
+
+    var img = document.createElement('img');
+    img.setAttribute('class','box');
+    img.setAttribute('src','./styles/items/' + dataName + '.png');
+    headDiv.appendChild(img);
+    headDiv.appendChild(input);
+    var plusBtn = document.createElement('button');
+    plusBtn.setAttribute('class','btn box plus');
+    plusBtn.innerHTML = '+';
+    plusBtn.onclick = (e)=>(input.value++,start());
+    plusBtns.push(plusBtn);
+
+    var minusBtn = document.createElement('button');
+    minusBtn.setAttribute('class','btn box minus');
+    minusBtn.innerHTML = '-';
+    // 不小于0
+    minusBtn.onclick = function(e){
+        if(input.value > 0){
+            input.value--;
+        }
+        start();
+    }
+    minusBtns.push(minusBtn);
+
+    
     
     numInputDiv.appendChild(minusBtn);
-    numInputDiv.appendChild(input);
     numInputDiv.appendChild(plusBtn);
 
-    headDiv.appendChild(tipSpan);
+    // headDiv.appendChild(tipSpan);
 
     inputDiv.appendChild(headDiv);
     inputDiv.appendChild(numInputDiv);
+    // 设置inputDiv伪元素after backgroundImage为'url(./styles/items/' + dataName + '.png)'
+    // inputDiv.style.setProperty('--after','url(./items/' + dataName + '.png)');
+
+
     
     return inputDiv;
 }

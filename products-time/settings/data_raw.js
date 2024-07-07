@@ -79,24 +79,26 @@ for(var i of rawData){
         value: temdata.slice(5,)
     })
 }
-var dataNames=rawData[1].split('\t').slice(5,16).concat(['建材','五金','农贸','家具','园艺','甜品','时装','快餐','家电']);
+//rawData[1].split('\t').slice(5,16)
+var dataNames=[].concat(['建材','五金','农贸','家具','园艺','甜品','时装','快餐','家电','工厂']);
 
 for(var i=0;i<dataAll.length;i++){
     getBaseValues(i);
 }
 for(var i=0;i<data.length;i++){
     data[i].value=data[i].value.slice(0,11);
-    if(i<11){
-        // data[i].value[i] = 1;
+    dataAll[i].baseValue = data[i].value.concat();
+    var baseTime = 0;
+    for(var j in dataAll[i].baseValue){
+        baseTime += dataAll[i].baseValue[j] * (dataAll[j].time+10);
     }
+    dataAll[i].baseTime = baseTime;
 
-    data[i].value=data[i].value.concat(data[i].time.slice(1,));
-    if(i<11){
-        data[i].value[i] = 1;
-    }
-    // 预览
-    // data[i].score /= getTime(data[i].value);
-    // if(data[i].score < 250)data[i].score=0;
+    //data[i].value
+    data[i].value=[].concat(data[i].time.slice(1,)).concat(dataAll[i].baseTime);
+    // if(i<11){
+    //     data[i].value[i] = 1;
+    // }
 }
 data = data.slice(11,)
 

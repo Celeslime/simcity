@@ -1,5 +1,5 @@
 /* 指定要缓存的内容，地址为相对于跟域名的访问路径 */
-const cacheName = "LP";
+const cacheName = "v1";
 const contentToCache = [
     './',
     './index.html',
@@ -18,8 +18,22 @@ const contentToCache = [
     './settings/',
     './settings/settings.js',
 
-    './manifest.webmanifest',
+    './manifest.webmanifest'
 ];
+// 将请求的响应存储到缓存中
+const putInCache = async (request, response) => {
+    const cache = await caches.open("v1");
+    await cache.put(request, response);
+};
+const cacheFirst = async (request) => {
+    const responseFromCache = await caches.match(request);
+    if (responseFromCache) {
+        return responseFromCache;
+    }
+    const responseFromNetwork = await fetch(request);
+    putInCache(request, responseFromNetwork.clone());
+    return responseFromNetwork;
+};
 /* 监听安装事件，install 事件一般是被用来设置你的浏览器的离线缓存逻辑 */
 self.addEventListener("install", (e) => {
     /* 通过这个方法可以防止缓存未完成，就关闭serviceWorker */
@@ -32,18 +46,5 @@ self.addEventListener("install", (e) => {
 });
 /* 注册fetch事件，拦截全站的请求 */
 self.addEventListener("fetch", function (event) {
-	event.respondWith(
-        fetch(event.request)
-            .then((res) => {
-                let response = res.clone();
-                caches.open(cacheName)
-                    .then((cache) => {
-                        cache.put(event.request, response);
-                    });
-                return res
-            })
-            .catch((err) => {
-                return caches.match(event.request)
-            }
-    ));
+	event.respondWith(cacheFirst(event.request));
 });

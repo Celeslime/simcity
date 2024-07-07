@@ -199,6 +199,13 @@ function getWarBest(cost, rand = false){
 	for(var i=0;i<n;i++){
 	    c[i] = temData[i].score;
 	}
+
+	// console.log(m);
+	// var temA = new Array(m).fill(0);
+	// temA[i] = 1;
+	// A.push(temA);
+	// b.push(Math.floor(12/temData[i].power));
+
 	var r=solveLP(A,b,c);
 	/*
 		某些数据的计算结果会出现大量负数
