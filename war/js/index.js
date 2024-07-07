@@ -37,6 +37,16 @@ changeMode();
 // 		console.log('Service Worker registration failed: ', err);
 // 	});
 
+// 注销servive worker
+navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    console.log(registrations);
+    for(let registration of registrations) {
+        
+        registration.unregister();
+
+    }
+})
+
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
     if(mode == 64){

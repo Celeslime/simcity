@@ -115,7 +115,34 @@ span.result-tip {
 .group-group :first-child{
     margin-right: 0;
 }
+.group-group .box{
+    width: unset;
+}
 
 .disable{
     opacity: 0.5;
+}
+#header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+@media screen and (max-width: 530px) {
+    #inputs {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    #header{
+        flex-direction: column!important;
+    }
+    #inputs .input {
+        font-size: 14px;
+        /* padding: 5px; */
+    }
+    .input input {
+        font-size: 24px;
+    }
+    .num-input{
+        /* margin-top: 2px; */
+    }
 }
