@@ -1,28 +1,28 @@
 /* 指定要缓存的内容，地址为相对于跟域名的访问路径 */
-const cacheName = "v1";
+const cacheName = "v2";
 const contentToCache = [
-    './',
-    './index.html',
+    // './',
+    // './index.html',
 
-    './styles/images/check.svg',
-    './styles/images/copy.svg',
-    './styles/images/fresh.svg',
-    './styles/images/set.svg',
-    './styles/index.css',
-    './styles/settings.css',
+    // './styles/images/check.svg',
+    // './styles/images/copy.svg',
+    // './styles/images/fresh.svg',
+    // './styles/images/set.svg',
+    // './styles/index.css',
+    // './styles/settings.css',
 
-    './js/index.js',
-    './js/lp-simplex.js',
-    './js/raw_data.js',
+    // './js/index.js',
+    // './js/lp-simplex.js',
+    // './js/raw_data.js',
 
-    './settings/',
-    './settings/settings.js',
+    // './settings/',
+    // './settings/settings.js',
 
-    './manifest.webmanifest'
+    // './manifest.webmanifest'
 ];
 // 将请求的响应存储到缓存中
 const putInCache = async (request, response) => {
-    const cache = await caches.open("v1");
+    const cache = await caches.open("v2");
     await cache.put(request, response);
 };
 const cacheFirst = async (request) => {
@@ -45,6 +45,6 @@ self.addEventListener("install", (e) => {
 	);
 });
 /* 注册fetch事件，拦截全站的请求 */
-self.addEventListener("fetch", function (event) {
-	event.respondWith(cacheFirst(event.request));
-});
+// self.addEventListener("fetch", function (event) {
+// 	event.respondWith(cacheFirst(event.request));
+// });

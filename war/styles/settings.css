@@ -3,6 +3,11 @@
     --text-color: #333333;
     --border-style: solid 1px #cccccc;
 }
+body {
+    max-width: 900px;
+    margin: 20px auto;
+    color: var(--text-color);
+}
 #inputs {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -129,9 +134,6 @@ span.result-tip {
     align-items: center;
 }
 @media screen and (max-width: 530px) {
-    #inputs {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    }
     #header{
         flex-direction: column!important;
     }
