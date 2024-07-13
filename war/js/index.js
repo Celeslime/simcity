@@ -180,11 +180,12 @@ function show(num){
     }
     
     for(var i in temScores2){
-        plusBtns[i].innerHTML = '+'+temScores1[i].toFixed(0);
+        plusBtns[i].innerHTML = '+'+temScores1[i].toFixed(0)+'<i></i>';
         if(temScores2[i].toFixed(0)[0]!='-')
             minusBtns[i].innerHTML = '-'+temScores2[i].toFixed(0);
         else
             minusBtns[i].innerHTML = temScores2[i].toFixed(0);
+        minusBtns[i].innerHTML = '<i></i>' + minusBtns[i].innerHTML;
         // tipSpans[i].innerHTML = '';
         // if(Math.abs(temScores1[i]+temScores2[i]) <= 2 && Math.round(temScores1[i].toFixed(0)) != 0){
         //     var span = getSpan('±'+temScores1[i].toFixed(0),'pink')

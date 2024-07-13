@@ -33,6 +33,7 @@ body {
 }
 .num-input .btn{
     width: unset;
+    padding: 5px;
 }
 .num-input input{
     font-size: 24px;

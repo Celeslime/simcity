@@ -12,13 +12,20 @@
               var s = document.getElementsByTagName("script")[0]; 
               s.parentNode.insertBefore(hm, s);
             })();
-            </script>
+        </script>
+        <style>
+            body a{
+                margin: 10px;
+                display: block;
+            }
+        </style>
             
     </head>
     <body>
-        <a href="./war/" style="display: block;">全卡组卡器</a>
-        <a href="./products-time/" style="display: block;">商店组商品</a>
+        <a href="./war/">全卡组卡器</a>
+        <a href="./products-time/">商店组商品</a>
         <a href="./product/">商品Echarts</a>
+        <a href="./club/">胜率</a>
         <script>
             function fillOne(list){
                 list[Math.floor(Math.random()*9)]++;

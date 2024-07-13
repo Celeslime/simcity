@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Club</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+<body>
+    <div class="container">
+        <div class="club">
+            <h1>Winning Percentage Calculation</h1>
+            <p>Enter the scores of your club and the opposing team to calculate the winning percentage.</p>
+        </div>
+        <div class="inputs">
+            <input type="number" placeholder="Your Score">
+            <input type="number" placeholder="Enemy Score">
+            <button>Submit</button>
+        </div>
+    </div>
+    <script>
+        const button = document.querySelector('button');
+        
+        button.addEventListener('click', calculateWinningPercentage);
+
+        function calculateWinningPercentage() {
+            var yourScore = document.querySelector('input[type="number"]:nth-child(1)').value;
+            var enemyScore = document.querySelector('input[type="number"]:nth-child(2)').value;
+            
+
+            yourScore = parseInt(yourScore);
+            enemyScore = parseInt(enemyScore);
+            const winningPercentage = 1/(1 + Math.pow(10, (enemyScore - yourScore) / 400)) * 100;
+
+            
+            alert(`Your winning percentage is ${winningPercentage.toFixed(1)}%`);
+        }
+    </script>
+</body>
