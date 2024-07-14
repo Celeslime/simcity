@@ -54,7 +54,7 @@ function getResult(goal,limit){
 	var counter=1;
 	while(counter++){
 		//限制迭代次数
-		if(counter>100){
+		if(counter>limit.length*20){
 			return false;
 		}
 		//判断是否存在正的检验数
@@ -99,6 +99,15 @@ function getResult(goal,limit){
 	//将b列的值读取入该数组
 	for(var i of loosen){
 		result[i[2]]=i[1];
+	}
+	// console.log("result",result);
+	// console.log("limit",limit[0]);
+	var sumR=0;
+	for(var i of limit[0][0]){
+		sumR+=result[i];
+	}
+	if(sumR==0){
+		return false;
 	}
 	for(var j of limit){
 		var sum = 0;
@@ -177,15 +186,18 @@ function deepCopyArray(arr){
 	return arr;
 }
 function getWarBest(cost, rand = false){
+	var m = data[0].value.length; // 12
+	var n = data.length; // 24
+	var A = new Array(m);
+
+
 	var order = [];
 	for(var i=0;i<data.length;i++){
 		order.push(i);
 	}
 	if(rand)order.sort(()=>(Math.random()-0.5));
 	var temData = getDataByOrder(order);
-	var m = temData[0].value.length; // 12
-	var n = temData.length; // 24
-	var A = new Array(m);
+	m=temData[0].value.length;
 
 	for(var i=0;i<m;i++){
 		A[i] = new Array();
@@ -194,23 +206,16 @@ function getWarBest(cost, rand = false){
 	    }
 	}
     var b = cost.concat();
+	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
+	if(mode == 0){
+		for(var i=0;i<24;i++){
+			b.push(Math.floor(12/data[i].power));
+		}
+	}
 	var c = new Array(n);
 	for(var i=0;i<n;i++){
 	    c[i] = temData[i].score;
 	}
-	// 节能测试版
-	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
-	if(mode == 0){
-		for(var i=0;i<24;i++){
-			var temA = new Array(24).fill(0);
-			temA[i] = 1;
-			A.push(temA);
-			b.push(Math.floor(12/temData[i].power));
-			// console.log(A,b);
-			// break;
-		}
-	}
-	
 	var r=solveLP(A,b,c);
 	/*
 		某些数据的计算结果会出现大量负数
@@ -247,9 +252,19 @@ function getWarBest(cost, rand = false){
     return result;
 }
 function getDataByOrder(order){
-	var temData = [];
+	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
+	var temData = new Array();
 	for(var i=0;i<order.length;i++){
-		temData.push(data[order[i]]);
+		var temD = {
+			value: deepCopyArray(data[order[i]].value),
+			score: data[order[i]].score,
+		};
+		if(mode == 0){
+			var temA = new Array(24).fill(0);
+			temA[order[i]] = 1;
+			temD.value = temD.value.concat(temA);
+		}
+		temData.push(temD);
 	}
 	return temData;
 }
