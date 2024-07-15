@@ -38,14 +38,12 @@ changeMode();
 // 	});
 
 // 注销servive worker
-navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    console.log(registrations);
-    for(let registration of registrations) {
-        
-        registration.unregister();
-
-    }
-})
+// navigator.serviceWorker.getRegistrations().then(function(registrations) {
+//     console.log(registrations);
+//     for(let registration of registrations) {
+//         registration.unregister();
+//     }
+// })
 
 function changeMode(){
     mode = Number(document.querySelector('input[name="mode"]:checked').value);
@@ -105,7 +103,7 @@ function show(num){
 
     // 显示卡牌
     var cardSpans = [];
-    var rank = getWarBest(new Array(12).fill(1)).slice(0,24);
+    var rank = [];//getWarBest(new Array(12).fill(1)).slice(0,24);
     for(var i in rank){
         rank[i] *= data[i].score;
     }
@@ -144,12 +142,8 @@ function show(num){
         if(cardSpans[i].value!=0)
             copyText.innerHTML+=getPureText(data[cardSpans[i].id].name+' × '+cardSpans[i].value.toFixed(0)+'<br>');
     }
-
-    // 显示多余卡牌
-    var tipSpans = document.getElementsByClassName('result-tip');
-    
-    
-
+        
+    // return;
     // 显示增量
     var temScores1 = [];
     var maxScore1 = 0,minScore1 = Infinity;
@@ -180,12 +174,15 @@ function show(num){
     }
     
     for(var i in temScores2){
-        plusBtns[i].innerHTML = '+'+temScores1[i].toFixed(0)+'<i></i>';
-        if(temScores2[i].toFixed(0)[0]!='-')
-            minusBtns[i].innerHTML = '-'+temScores2[i].toFixed(0);
-        else
-            minusBtns[i].innerHTML = temScores2[i].toFixed(0);
-        minusBtns[i].innerHTML = '<i></i>' + minusBtns[i].innerHTML;
+        if(temScores1[i].toFixed(0) == '-0'){
+            temScores1[i] = 0;
+        }
+        
+        if(temScores2[i].toFixed(0) == '0'){
+            temScores2[i] = -0.1;
+        }
+        plusBtns[i].innerHTML  = '+'+temScores1[i].toFixed(0) + '<i></i>';
+        minusBtns[i].innerHTML = '<i></i>' + temScores2[i].toFixed(0);
         // tipSpans[i].innerHTML = '';
         // if(Math.abs(temScores1[i]+temScores2[i]) <= 2 && Math.round(temScores1[i].toFixed(0)) != 0){
         //     var span = getSpan('±'+temScores1[i].toFixed(0),'pink')

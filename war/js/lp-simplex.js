@@ -1,4 +1,5 @@
 //port from Github @ https://github.com/SakurabaSeira/Simplex-Online
+var limitO;
 function getResult(goal,limit){
 	//调用getLoosen函数 将原先的限制条件矩阵进行扩充
 	//加入松弛变量，基变量和价值系数
@@ -9,6 +10,7 @@ function getResult(goal,limit){
 		//插入决策变量，基变量和价值系数
 		cb.push([goal[i]||0,i]);
 	}
+	// 初始化寻找可行解，因为0为可行解，所以直接进行单纯形法运算
 	// while(true){
 	// 	//判断是否存在为负数项的约束条件
 	// 	var needAssist=false;
@@ -68,29 +70,29 @@ function getResult(goal,limit){
 				break;
 			}
 		}
-		//若存在为正的检验数 则寻找最小的比值数
-		if(typeof max_index=='number'){
-			var min=Infinity,min_index=null,min_index2=null;
-			for(var i=0;i<loosen.length;i++){
-				var bizhi=getBizhiNum(cb,loosen,i,max_index);
-				//若两个最小的比值数同时存在 则采取Bland规则 选择下标最小的一项
-				if(typeof bizhi=='number'&&
-					(bizhi<min||(bizhi==min&&loosen[i][2]<min_index2))){
-					min=bizhi;
-					min_index=i;
-					min_index2=loosen[i][2];
-				}
-			}
-			if(typeof min_index=='number'){
-				//换入决策变量和价值系数
-				loosen[min_index][2]=max_index;
-				loosen[min_index][3]=cb[max_index][0];
-				//调用updateMartix函数 对矩阵进行初等变换
-				updateMartix(loosen,min_index,max_index);
+		//若已经不存在正的检验数，则说明已经找到了最优解，结束循环
+		if(max_index === null){
+			break;
+		}
+		//则寻找最小的比值数
+		var min=Infinity,min_index=null,min_index2=null;
+		for(var i=0;i<loosen.length;i++){
+			var bizhi=getBizhiNum(cb,loosen,i,max_index);
+			//若两个最小的比值数同时存在 则采取Bland规则 选择下标最小的一项
+			if(typeof bizhi=='number' && (bizhi<min || (bizhi==min&&loosen[i][2]<min_index2))){
+				min=bizhi;
+				min_index=i;
+				min_index2=loosen[i][2];
 			}
 		}
-		//若已经不存在正的检验数 则直接跳出循环检索
-		else break;
+		//若成功寻找到比值数 则对矩阵基变量进行替换
+		if(typeof min_index=='number'){
+			//换入决策变量和价值系数
+			loosen[min_index][2]=max_index;
+			loosen[min_index][3]=cb[max_index][0];
+			//调用updateMartix函数 对矩阵进行初等变换
+			updateMartix(loosen,min_index,max_index);
+		}
 	}
 	//使用一维数组表示最优结果
 	var result=[];
@@ -100,30 +102,13 @@ function getResult(goal,limit){
 	for(var i of loosen){
 		result[i[2]]=i[1];
 	}
-	// console.log("result",result);
-	// console.log("limit",limit[0]);
-	var sumR=0;
-	for(var i of limit[0][0]){
-		sumR+=result[i];
-	}
-	if(sumR==0){
-		return false;
-	}
-	for(var j of limit){
-		var sum = 0;
-		for(var i=0;i<24;i++){
-			sum += j[0][i] * result[i];
-		}
-		if(Math.round((sum-j[1])*1e5)>0){
-			return false;
-		}
-	}
 	//返回该数组
 	return result;
 };
 //进行初等行变换
 function updateMartix(loosen,index1,index2){
-	var list=loosen[index1],num=list[0][index2];
+	var list=loosen[index1];
+	var num=list[0][index2];
 	//对中心点所在行进行除法运算 将该中心点的值变为1
 	for(var i=0;i<list[0].length;i++){
 		list[0][i]/=num;
@@ -143,7 +128,8 @@ function updateMartix(loosen,index1,index2){
 function getBizhiNum(cb,loosen,index,maxIndex){
 	var num=loosen[index][0][maxIndex];
 	//若系数为负 则该行不可能被换出 返回null
-	if(num<=0) return null;
+	//问题出在这里，目前已经修复
+	if(num<=10**(-5)) return null;
 	return loosen[index][1]/num;
 };
 //获取检验数σ
@@ -220,10 +206,11 @@ function getWarBest(cost, rand = false){
 	/*
 		某些数据的计算结果会出现大量负数
 		- 未完全修复：设置了自动刷新
+		- 找到问题：bizhi数由于小数失真出现10^-17大小的数值，没有被拦截
 	*/
 	var counter = 0;
 	while(r === false){
-		// console.log("ERROR: 存在负数")
+		console.log("ERROR: 存在负数")
 		// 尝试轻度打乱顺序后重新计算
 		temData = getDataByOrder(order.sort(()=>(Math.random()-0.5)));
 		for(var i=0;i<m;i++){
