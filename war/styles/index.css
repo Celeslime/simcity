@@ -28,6 +28,8 @@ h1{
     justify-self: center;
     align-self: center;
     position: relative;
+    border-radius: 5px;
+    overflow: hidden;
 }
 .input > *{
     background-color: var(--bg-color);
@@ -53,6 +55,15 @@ h1{
 .minus, .plus{
     display: flex;
     align-items: center;
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    color: #555;
+    font-family: cursive;
+    font-size: inherit;
     /* justify-content: space-between; */
 }
 .minus{
@@ -86,8 +97,6 @@ input.box {
     -moz-user-focus: disabled;
     background: none;
     width: 50%;
-    font-family: cursive;
-    font-size: 105%;
 }
 .input input::-webkit-inner-spin-button{
     -webkit-appearance: none;
@@ -138,14 +147,10 @@ input.box {
         flex-direction: column!important;
     }
     #inputs .input {
-        font-size: 14px;
-        /* padding: 5px; */
+        font-size: 14px!important;
     }
     .input input {
         font-size: 24px;
-    }
-    .num-input{
-        /* margin-top: 2px; */
     }
 }
 #table{

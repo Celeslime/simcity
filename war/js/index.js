@@ -103,7 +103,7 @@ function show(num){
 
     // 显示卡牌
     var cardSpans = [];
-    var rank = [];//getWarBest(new Array(12).fill(1)).slice(0,24);
+    var rank = getWarBest(new Array(12).fill(1)).slice(0,24);
     for(var i in rank){
         rank[i] *= data[i].score;
     }
@@ -174,34 +174,11 @@ function show(num){
     }
     
     for(var i in temScores2){
-        if(temScores1[i].toFixed(0) == '-0'){
-            temScores1[i] = 0;
-        }
-        
-        if(temScores2[i].toFixed(0) == '0'){
-            temScores2[i] = -0.1;
-        }
-        plusBtns[i].innerHTML  = '+'+temScores1[i].toFixed(0) + '<i></i>';
-        minusBtns[i].innerHTML = '<i></i>' + temScores2[i].toFixed(0);
-        // tipSpans[i].innerHTML = '';
-        // if(Math.abs(temScores1[i]+temScores2[i]) <= 2 && Math.round(temScores1[i].toFixed(0)) != 0){
-        //     var span = getSpan('±'+temScores1[i].toFixed(0),'pink')
-        //     span.style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
-        //     tipSpans[i].appendChild(span);
+        plusBtns[i].innerHTML  = '+' + Math.abs(temScores1[i]).toFixed(0) + '<i></i>';
+        minusBtns[i].innerHTML = '<i></i>' + '-' + Math.abs(temScores2[i]).toFixed(0);
+        minusBtns[i].style.opacity = 1.1+0.9*(temScores2[i]-maxScore2)/(maxScore2-minScore2);
+        plusBtns[i].style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
 
-        // }
-        // else{
-        //     if(temScores2[i] < -1){
-        //         var span = getSpan(''+temScores2[i].toFixed(0),'yellow')
-        //         span.style.opacity = 1.1+0.9*(temScores2[i]-maxScore2)/(maxScore2-minScore2);
-        //         tipSpans[i].appendChild(span);
-        //     }
-        //     if(temScores1[i] > 1){
-        //         var span = getSpan('+'+temScores1[i].toFixed(0),'pink');
-        //         span.style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
-        //         tipSpans[i].appendChild(span);
-        //     }
-        // }
         // if(Math.round((maxCost[i]-cost[i])*10) > 0){
         //     tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]).toFixed(1),'red'));
         // }
@@ -298,13 +275,13 @@ function createInputElement(dataName, initialValue){
     headDiv.appendChild(img);
     headDiv.appendChild(input);
     var plusBtn = document.createElement('button');
-    plusBtn.setAttribute('class','btn box plus');
+    plusBtn.setAttribute('class','plus');
     plusBtn.innerHTML = '+';
     plusBtn.onclick = (e)=>(input.value++,start());
     plusBtns.push(plusBtn);
 
     var minusBtn = document.createElement('button');
-    minusBtn.setAttribute('class','btn box minus');
+    minusBtn.setAttribute('class','minus');
     minusBtn.innerHTML = '-';
     // 不小于0
     minusBtn.onclick = function(e){
@@ -316,9 +293,16 @@ function createInputElement(dataName, initialValue){
     minusBtns.push(minusBtn);
 
     
+    var btnBox1 = document.createElement('div');
+    btnBox1.setAttribute('class','btn box');
+    btnBox1.appendChild(plusBtn);
     
-    numInputDiv.appendChild(minusBtn);
-    numInputDiv.appendChild(plusBtn);
+    var btnBox2 = document.createElement('div');
+    btnBox2.setAttribute('class','btn box');
+    btnBox2.appendChild(minusBtn);
+
+    numInputDiv.appendChild(btnBox2);
+    numInputDiv.appendChild(btnBox1);
 
     // headDiv.appendChild(tipSpan);
 
