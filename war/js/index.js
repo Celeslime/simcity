@@ -178,10 +178,6 @@ function show(num){
         minusBtns[i].innerHTML = '<i></i>' + '-' + Math.abs(temScores2[i]).toFixed(0);
         minusBtns[i].style.opacity = 1.1+0.9*(temScores2[i]-maxScore2)/(maxScore2-minScore2);
         plusBtns[i].style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
-
-        // if(Math.round((maxCost[i]-cost[i])*10) > 0){
-        //     tipSpans[i].appendChild(getSpan('余'+(maxCost[i]-cost[i]).toFixed(1),'red'));
-        // }
     }
 }
 
@@ -189,7 +185,7 @@ function freshMaxCost(){
     for(var i=0;i<inputs.length;i++){
         maxCost[i] = Number(inputs[i].value);
         if(window.location.host === '127.0.0.1'){
-            // maxCost[i] = 10;Math.floor(10*Math.random());// @测试
+            // maxCost[i] = 10//;*Math.floor(10*Math.random());// @测试
         }
         if(maxCost[i] < 0){
             maxCost[i] = 0;
@@ -348,4 +344,70 @@ function turnCard(i,n){
     deletedCard.push(i);
     setMaxCost(maxCost)
     start();
+}
+// 复制高维度数组
+function deepCopyArray(arr){
+	if(Array.isArray(arr)){
+		return arr.map(deepCopyArray);
+	}
+	return arr;
+}
+function getWarBest(cost, rand = false){
+	var m = data[0].value.length; // 12
+	var n = data.length; // 24
+	var A = new Array(m);
+
+
+	var order = [];
+	for(var i=0;i<data.length;i++){
+		order.push(i);
+	}
+	if(rand)order.sort(()=>(Math.random()-0.5));
+	var temData = getDataByOrder(order);
+	m=temData[0].value.length;
+
+	for(var i=0;i<m;i++){
+		A[i] = new Array();
+	    for(var j=0;j<n;j++){
+	        A[i][j] = temData[j].value[i];
+	    }
+	}
+    var b = cost.concat();
+	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
+	if(mode == 0){
+		for(var i=0;i<24;i++){
+			b.push(Math.floor(12/data[i].power));
+		}
+	}
+	var c = new Array(n);
+	for(var i=0;i<n;i++){
+	    c[i] = temData[i].score;
+	}
+	var r=solveLP(A,b,c);
+	// 将r按照order还原
+	var result = [];
+	for(var i=0;i<order.length;i++){
+		result.push(r[order.indexOf(i)]);
+	}
+	for(var i=order.length;i<r.length;i++){
+		result.push(r[i]);
+	}
+    return result;
+}
+function getDataByOrder(order){
+	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
+	var temData = new Array();
+	for(var i=0;i<order.length;i++){
+		var temD = {
+			value: deepCopyArray(data[order[i]].value),
+			score: data[order[i]].score,
+		};
+		if(mode == 0){
+			var temA = new Array(24).fill(0);
+			temA[order[i]] = 1;
+			temD.value = temD.value.concat(temA);
+		}
+		temData.push(temD);
+	}
+	return temData;
 }

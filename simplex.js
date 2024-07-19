@@ -1,8 +1,6 @@
+//fix from Github @ https://github.com/SakurabaSeira/Simplex-Online
 /*
-参考代码 Github @ https://github.com/SakurabaSeira/Simplex-Online
-参考资料 Wikipedia @ https://zh.wikipedia.org/wiki/单纯形法
-
-使用“单纯形法”求解“线性规划问题”
+使用单纯形法求解线性规划问题
 	对于不等式：
 		a1x1 + a2x2 + a3x3 <= b1
 		a4x1 + a5x2 + a6x3 <= b2
@@ -11,7 +9,11 @@
 		z = c1x1 + c2x2 + c3x3
 	结果样例: 
 		[x1,x2,x3,b1',b2',b3']
-	无解返回false
+		无解返回false
+
+	Q: 如何求解最小值？
+	A: 将目标函数取反，然后求解最大值即可
+
 */
 
 // 精度配置：防止因为精度原因出现BUG
@@ -40,7 +42,7 @@ function getResult(goal,limit){
 		//插入决策变量，基变量和价值系数
 		cb.push([goal[i]||0,i]);
 	}
-	//初始化消除负数约束项
+	//初始化寻找可行解
 	while(true){
 		//判断是否存在为负数项的约束条件
 		var needAssist = false;
@@ -49,7 +51,7 @@ function getResult(goal,limit){
 				needAssist = true;
 			}
 		}
-		//若不存在为负数项的约束条件 开始单纯形法运算
+		//若不存在为负数项的约束条件，为可行解
 		if(!needAssist){
 			break;
 		}
@@ -126,21 +128,7 @@ function getResult(goal,limit){
 	}
 	//返回该数组
 	return result;
-}
-//插入松弛变量，决策变量和价值系数
-function getLoosen(limit,goal){
-	for(var i=0;i<limit.length;i++){
-		//插入松弛变量
-		for(var j=0;j<limit.length;j++){
-			limit[i][0].push(i==j?1:0);
-		}
-		//插入决策变量
-		limit[i].push(i+goal.length);
-		//插入价值系数
-		limit[i].push(0);
-	}
-	return limit;
-}
+};
 //获取检验数σ
 function getCheckNum(cb,loosen,index){
 	var num = cb[index][0];
@@ -148,7 +136,7 @@ function getCheckNum(cb,loosen,index){
 		num -= loosen[i][3] * loosen[i][0][index];
 	}
 	return num;
-}
+};
 //使用比值判别法 获取比值数θ
 function getBizhiNum(cb,loosen,index,maxIndex){
 	var num = loosen[index][0][maxIndex];
@@ -157,7 +145,7 @@ function getBizhiNum(cb,loosen,index,maxIndex){
 		return null;
 	}
 	return loosen[index][1]/num;
-}
+};
 //进行初等行变换，转化为基向量
 function updateMartix(loosen,index1,index2){
 	var list = loosen[index1];
@@ -176,4 +164,18 @@ function updateMartix(loosen,index1,index2){
 		}
 		loosen[i][1] -= loosen[index1][1]*num2;
 	}
-}
+};
+//插入松弛变量，决策变量和价值系数
+function getLoosen(limit,goal){
+	for(var i=0;i<limit.length;i++){
+		//插入松弛变量
+		for(var j=0;j<limit.length;j++){
+			limit[i][0].push(i==j?1:0);
+		}
+		//插入决策变量
+		limit[i].push(i+goal.length);
+		//插入价值系数
+		limit[i].push(0);
+	}
+	return limit;
+};

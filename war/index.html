@@ -8,13 +8,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script>
             var _hmt = _hmt || [];
+            if(!window.location.href.includes('127.0.0.1'))
             (function() {
-              var hm = document.createElement("script");
-              hm.src = "https://hm.baidu.com/hm.js?481d92efea57384944511820a0c6af44";
-              var s = document.getElementsByTagName("script")[0]; 
-              s.parentNode.insertBefore(hm, s);
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?481d92efea57384944511820a0c6af44";
+                var s = document.getElementsByTagName("script")[0]; 
+                s.parentNode.insertBefore(hm, s);
             })();
-            </script>
+        </script>
             
     </head>
     <body>
@@ -23,10 +24,11 @@
             <div id="selectMode" class="btn-group box-group">
                 <input type="radio" id="mode2" name="mode" class="btn-check" value="2" checked>
                 <label class="btn box" for="mode2">头奖模式</label>
-                <input type="radio" id="mode1" name="mode" class="btn-check" value="1">
-                <label class="btn box" for="mode1">分数模式</label>
                 <input type="radio" id="mode0" name="mode" class="btn-check" value="0">
-                <label class="btn box" for="mode0">机器Beta</label>
+                <label class="btn box" for="mode0">机器模式</label>
+                <input type="radio" id="mode1" name="mode" class="btn-check" value="1">
+                <label class="btn box" for="mode1">裸分模式</label>
+
             </div>
         </div>
         <div id="inputs"></div>
