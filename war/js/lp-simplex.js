@@ -19,11 +19,11 @@ const Zero = 1e-6;
 
 // 输入标准A,b,c格式
 function solveLP(A,b,c){
-	var t=new Array();
+	var limit = new Array();
 	for(var i=0;i<A.length;i++){
-		t[i] = [A[i],b[i]];
+		limit[i] = [A[i],b[i]];
 	}
-    return getResult(c,t);
+    return getResult(c,limit);
 }
 function getResult(goal,limit){
 	// Limit样例:

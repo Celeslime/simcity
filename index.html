@@ -22,37 +22,26 @@
             
     </head>
     <body>
-        <a href="./war/">全卡组卡器</a>
-        <a href="./products-time/">商店组商品</a>
-        <a href="./product/">商品Echarts</a>
-        <a href="./club/">胜率</a>
-        <script>
-            function fillOne(list){
-                list[Math.floor(Math.random()*9)]++;
-            }
-            function check(list){
-                for(let i of list){
-                    if(i<7){
-                        return false;
-                    }
-                }
-                return true;
-            }
-            var a;
-            var sum=0,count=0;
-            var k=1;
-            while(k--){
-                a=new Array(9).fill(0);
-                a[0]=10;
-                var cnt=0
-                while(!check(a)){
-                    fillOne(a);
-                    cnt++;
-                }
-                sum+=cnt;
-                count++;
-                console.log(sum/count);
-            }
-        </script>
+        <h2>模拟城市：我是市长（SCBI）</h2>
+        <h3>攻略WIKI</h3>
+        <ul>
+            <li><a href="https://simcity-buildit.fandom.com/wiki/SimCity_BuildIt_Wiki">Fandom</a></li>
+            <li><a href="https://www.reddit.com/r/SCBuildIt/wiki/index/">Reddit</a></li>
+            <li><a href="https://www.islaatlas.com/en/more/simcity-buildit-complete-guide">islaatlas club</a></li>
+        </ul>
+        <h3>社区Communities</h3>
+        <ul>
+            <li><a href="https://www.taptap.cn/app/35691/topic">Taptap</a></li>
+            <li><a href="https://tieba.baidu.com/f?kw=模拟城市官方">百度贴吧</a></li>
+            <li><a href="https://www.reddit.com/r/SCBuildIt/">Reddit</a></li>
+            <li><a href="https://tieba.baidu.com/f?kw=simcity模拟城市">百度贴吧（国际服）</a></li>
+        </ul>
+        <h3>线性规划LP</h3>
+        <ul>
+            <li><a href="./war/">全卡组卡器</a></li>
+            <li><a href="./products-time/">商店组商品</a></li>
+            <li><a href="./product/">商品Echarts</a></li>
+            <li><a href="./club/">ELO胜率</a></li>
+        </ul>
     </body>
 </html>
