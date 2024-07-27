@@ -18,3 +18,8 @@ li{
 a{
     text-decoration: none;
 }
+hr{
+    border-style: solid;
+    border-color: #ccc;
+    border-width: .8px;
+}
