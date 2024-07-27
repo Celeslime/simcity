@@ -1,0 +1,20 @@
+body{
+    max-width: 600px;
+    margin: auto;
+    color: #333;
+    padding: 10px;
+}
+ul{
+    border-radius: 10px;
+    background-color: #eee;
+    list-style: none;
+    padding: 10px 0;
+}
+li{
+    border-radius: 10px;
+    background-color: #eee;
+    padding: 10px;
+}
+a{
+    text-decoration: none;
+}
