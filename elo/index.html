@@ -1,38 +1,96 @@
 <!DOCTYPE html>
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Club</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <title>Club</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            margin: 10px;
+        }
+        .container h1 {
+            margin: 0 0 20px;
+        }
+        .inputs {
+            margin-top: 20px;
+        }
+        .inputs input {
+            margin: 0 0 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .inputs button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .inputs button:hover {
+            background-color: #0056b3;
+        }
+        @media (min-width: 600px) {
+            .inputs input {
+                width: calc(50% - 10px);
+            }
+            .inputs button {
+                width: calc(50% - 10px);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="club">
-            <h1>Winning Percentage Calculation</h1>
-            <p>Enter the scores of your club and the opposing team to calculate the winning percentage.</p>
+            <h1>胜率计算</h1>
+            <p>输入您的俱乐部分数和敌方分数以计算胜率</p>
         </div>
         <div class="inputs">
-            <input type="number" placeholder="Your Score">
-            <input type="number" placeholder="Enemy Score">
-            <button>Submit</button>
+            <input type="number" placeholder="您的分数">
+            <input type="number" placeholder="敌方分数">
+            <button>提交</button>
         </div>
     </div>
     <script>
-        const button = document.querySelector('button');
-        
-        button.addEventListener('click', calculateWinningPercentage);
-
-        function calculateWinningPercentage() {
-            var yourScore = document.querySelector('input[type="number"]:nth-child(1)').value;
-            var enemyScore = document.querySelector('input[type="number"]:nth-child(2)').value;
-            
+        document.querySelector('button').addEventListener('click', function() {
+            var yourScore = document.querySelector('input:nth-of-type(1)').value;
+            var enemyScore = document.querySelector('input:nth-of-type(2)').value;
 
             yourScore = parseInt(yourScore);
             enemyScore = parseInt(enemyScore);
-            const winningPercentage = 1/(1 + Math.pow(10, (enemyScore - yourScore) / 400)) * 100;
 
-            
-            alert(`Your winning percentage is ${winningPercentage.toFixed(1)}%`);
-        }
+            if (isNaN(yourScore) || isNaN(enemyScore)) {
+                alert('请输入有效的分数');
+                return;
+            }
+
+            var winningPercentage = 1 / (1 + Math.pow(10, (enemyScore - yourScore) / 400)) * 100;
+            alert(`您的胜率是 ${winningPercentage.toFixed(1)}%`);
+        });
     </script>
 </body>
+</html>

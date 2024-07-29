@@ -127,7 +127,7 @@ function show(num){
     }
     else
         outputDiv.appendChild(getSpan(`总计：${score.toFixed()}分 <i>⚡${sumPower}</i>`, 'tips'));
-    copyText.innerHTML += '组卡器组卡：<br>';
+    // copyText.innerHTML += '我可以发动的：<br>';
     var flag = true;
     for(var i=0;i<cardSpans.length;i++){
         if(cardSpans[i].rank!=0)
