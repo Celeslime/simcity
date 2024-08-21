@@ -25,6 +25,20 @@ V机器人	2				2								2	4	400
 破盾					5							1	2	7	700
 天降甘霖	3	3	2										3	6	700
 `.split('\n');
+var english = {
+    '弹药':'Ammo',
+    '铁砧':'Anvil',
+    '望远镜':'Binoculars',
+    '消防栓':'FireHydrant',
+    '汽油':'Gasoline',
+    '扩音器':'Megaphone',
+    '老虎钳':'Pliers',
+    '疏通塞':'Plunger',
+    '螺旋桨':'Propeller',
+    '橡胶靴':'RubberBoots',
+    '橡胶鸭':'RubberDuck',
+    '医药包':'MedKit'
+}
 let rows = [];
 var data = [], mode, defualtLevels = [];
 for(var i=2;i<raw_data.length;i++){

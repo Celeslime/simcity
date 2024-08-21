@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>攻略网站</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            position: relative;
+        }
+        .nav-link {
+            cursor: pointer;
+        }
+        .highlight {
+            background-color: yellow;
+            width: fit-content;
+        }
+        #backToTopBtn {
+            display: none; /* 初始隐藏 */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body data-spy="scroll" data-target="#navbar" data-offset="70">
+<button id="backToTopBtn" class="btn btn-primary">回到顶部</button>
+<div class="container">
+    <h1 class="my-4">游戏攻略</h1>
+    <div class="row">
+        <nav id="navbar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#section-general">常规</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#section-events">事件</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#section-buildings">建筑物</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#section-currency">货币</a>
+                    </li>
+                </ul>
+                <input type="text" id="search" class="form-control mt-4" placeholder="搜索...">
+                <ul id="search-results" class="list-group mt-2"></ul>
+            </div>
+        </nav>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="content">
+                <div id="section1">
+                    <h2>第一部分</h2>
+                    <p>这里是第一部分的内容。</p>
+                </div>
+                <div id="section2">
+                    <h2>第二部分</h2>
+                    <p>这里是第二部分的内容9。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分6</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分8</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+                <div id="section3">
+                    <h2>第三部分9</h2>
+                    <p>这里是第三部分的内容。</p>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</div>
+<script>
+    // 按下回车
+    document.getElementById('search').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            search(event);
+        }
+    });
+    function search(event) {
+        event.preventDefault();
+        var keyword = document.getElementById('search').value.toLowerCase();
+        var sections = document.querySelectorAll('.content div > *');
+        var found = false;
+        
+        sections.forEach(function(section) {
+            section.classList.remove('highlight');
+            if (section.innerText.toLowerCase().includes(keyword)) {
+                section.classList.add('highlight');
+                if (!found) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                    found = true;
+                }
+            }
+        });
+    }
+</script>
+<script>
+    // 当用户滚动时，显示或隐藏按钮
+    window.onscroll = function() {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        var backToTopBtn = document.getElementById("backToTopBtn");
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            backToTopBtn.style.display = "block";
+        } else {
+            backToTopBtn.style.display = "none";
+        }
+    }
+
+    // 当用户点击按钮时，平滑滚动到顶部
+    document.getElementById("backToTopBtn").addEventListener("click", function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>

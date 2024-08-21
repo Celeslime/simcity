@@ -22,7 +22,7 @@ for(var i = 0; i < data[0].value.length; i++){
 document.getElementById('copyBtn').addEventListener('click', copyFn);
 document.getElementById('freshBtn').addEventListener('click', function(){start(true);});
 document.getElementById('setBtn').addEventListener('click', function(){window.location.href = "./settings";});
-document.getElementById('mode0').onclick = changeMode;
+// document.getElementById('mode0').onclick = changeMode;
 document.getElementById('mode1').onclick = changeMode;
 document.getElementById('mode2').onclick = changeMode;
 changeMode();
@@ -84,6 +84,34 @@ function changeMode(){
         }
         data[i].score = sc;
     }
+    if(mode == 0){
+        outputDiv.innerHTML = '';
+        copyText.innerHTML = '';
+        document.getElementById('inputs').style.display = 'none';
+        var cardSpans = [];
+        for(var i = 0; i < data.length; i++){
+            if(data[i].name == '鸭叫' || data[i].name == '电击之神' || data[i].name == '破盾'){
+                continue;
+            }
+            var cost = data[i].value.reduce((sum,j)=>(sum+j),0);
+            var k = 0.5;
+            var val = (data[i].score/100)/data[i].power**k/cost**(1-k);
+            cardSpans.push({
+                span: creatCardSpanPercent(i,val),
+                value: val,
+            });
+        }
+        cardSpans.sort((a,b)=>(b.value-a.value));
+        cardSpans.forEach(function(span){
+            outputDiv.appendChild(span.span);
+        });
+
+
+        return;
+    }
+    else{
+        document.getElementById('inputs').style.display = '';
+    }
     start();
 }
 function start(refresh = false){
@@ -122,28 +150,11 @@ function show(num){
     }
     cardSpans.sort((a,b)=>(b.rank-a.rank));
     var sumPower = cardSpans.reduce((sum,i)=>(sum+i.power),0);
-    if(sumPower==0){
-        outputDiv.appendChild(getSpan(`总计：${score.toFixed()}分`, 'tips'));
-    }
-    else
-        outputDiv.appendChild(getSpan(`总计：${score.toFixed()}分 <i>⚡${sumPower}</i>`, 'tips'));
-    // copyText.innerHTML += '我可以发动的：<br>';
-    var flag = true;
+    outputDiv.appendChild(getSpan(`总计：${score.toFixed()}分 <i>⚡${sumPower}</i>`, 'tips'));
     for(var i=0;i<cardSpans.length;i++){
-        if(cardSpans[i].rank!=0)
-            outputDiv.appendChild(cardSpans[i].card);
-        else{
-            if(flag){
-                flag=false
-                // outputDiv.appendChild(getSpan(`预备`, 'tips'));
-            }
-            outputDiv.appendChild(cardSpans[i].card);
-        }
-        if(cardSpans[i].value!=0)
-            copyText.innerHTML+=getPureText(data[cardSpans[i].id].name+' × '+cardSpans[i].value.toFixed(0)+'<br>');
+        outputDiv.appendChild(cardSpans[i].card);
     }
         
-    // return;
     // 显示增量
     var temScores1 = [];
     var maxScore1 = 0,minScore1 = Infinity;
@@ -174,9 +185,11 @@ function show(num){
     }
     
     for(var i in temScores2){
-        plusBtns[i].innerHTML  = '+' + Math.abs(temScores1[i]).toFixed(0) + '<i></i>';
-        minusBtns[i].innerHTML = '<i></i>' + '-' + Math.abs(temScores2[i]).toFixed(0);
-        minusBtns[i].style.opacity = 1.1+0.9*(temScores2[i]-maxScore2)/(maxScore2-minScore2);
+        let addText = '+' + Math.abs(temScores1[i]).toFixed(0);
+        let minusText = '-' + Math.abs(temScores2[i]).toFixed(0);
+        plusBtns[i].innerHTML  = addText + '<i></i>';
+        minusBtns[i].innerHTML = '<i></i>' + minusText;
+        minusBtns[i].style.opacity = 1.1 + 0.9*(temScores2[i]-maxScore2)/(maxScore2-minScore2);
         plusBtns[i].style.opacity = (temScores1[i]-minScore1)/(maxScore1-minScore1)*0.9+0.1;
     }
 }
@@ -250,10 +263,6 @@ function createInputElement(dataName, initialValue){
 
     var headDiv = document.createElement('div');
     headDiv.setAttribute('class','head box-group');
-    // headDiv.innerHTML = dataName;
-
-    // var tipSpan = document.createElement('span');
-    // tipSpan.setAttribute('class','result-tip box');
 
     var numInputDiv = document.createElement('div');
     numInputDiv.setAttribute('class','num-input box-group');
@@ -300,8 +309,6 @@ function createInputElement(dataName, initialValue){
     numInputDiv.appendChild(btnBox2);
     numInputDiv.appendChild(btnBox1);
 
-    // headDiv.appendChild(tipSpan);
-
     inputDiv.appendChild(headDiv);
     inputDiv.appendChild(numInputDiv);
     // 设置inputDiv伪元素after backgroundImage为'url(./styles/items/' + dataName + '.png)'
@@ -329,6 +336,18 @@ function creatCardSpan(i,num){
         `;
     spanText+=`
             <span class="adjust-btn box plus" onclick=turnCard(${i},1)>+</span>
+        </div>
+    `
+    var cardSpan = getSpan(spanText, 'card');
+    return cardSpan;
+}
+function creatCardSpanPercent(i,percent){
+    var spanText = `
+        <div class="left">
+            <span class="text">${data[i].name}<span class="small">⚡${data[i].power}</span></span>
+        </div>
+        <div class="right">
+            <span class="power">${(100*percent).toFixed()}%</span>
         </div>
     `
     var cardSpan = getSpan(spanText, 'card');
@@ -373,12 +392,6 @@ function getWarBest(cost, rand = false){
 	    }
 	}
     var b = cost.concat();
-	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
-	if(mode == 0){
-		for(var i=0;i<24;i++){
-			b.push(Math.floor(12/data[i].power));
-		}
-	}
 	var c = new Array(n);
 	for(var i=0;i<n;i++){
 	    c[i] = temData[i].score;
@@ -395,18 +408,12 @@ function getWarBest(cost, rand = false){
     return result;
 }
 function getDataByOrder(order){
-	var mode = Number(document.querySelector('input[name="mode"]:checked').value);
 	var temData = new Array();
 	for(var i=0;i<order.length;i++){
 		var temD = {
 			value: deepCopyArray(data[order[i]].value),
 			score: data[order[i]].score,
 		};
-		if(mode == 0){
-			var temA = new Array(24).fill(0);
-			temA[order[i]] = 1;
-			temD.value = temD.value.concat(temA);
-		}
 		temData.push(temD);
 	}
 	return temData;
