@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SimCity BuildIt</title>
+    <title>SimCity BuildIt Club</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -13,55 +15,105 @@
           var s = document.getElementsByTagName("script")[0]; 
           s.parentNode.insertBefore(hm, s);
         })();
-    </script>    
+    </script>
 </head>
 <body>
     <header>
-        <h1>模拟，启动！<span>#NRDDTP</span></h1>
+        <div class="container">
+            <h1>模拟城市，启动！<span>#NRDDTP</span></h1>
+        </div>
     </header>
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#resources">核心资源</a></li>
+                <li><a href="#community">社区互动</a></li>
+                <li><a href="#support">支持与反馈</a></li>
+                <!-- <li><a href="#features">新功能</a></li> -->
+            </ul>
+        </div>
+    </nav>
     <main>
-        <section>
-            <h2>攻略 <span>Wiki</span></h2>
-            <ul>
-                <li><a href="https://simcity-buildit.fandom.com/wiki/SimCity_BuildIt_Wiki" target="_blank">Fandom（英文）</a></li>
-                <li><a href="https://www.reddit.com/r/SCBuildIt/wiki/index/" target="_blank">Reddit（英文）</a></li>
-                <li><a href="https://www.islaatlas.com/en/more/simcity-buildit-complete-guide" target="_blank">islaatlas club（英文）</a></li>
-            </ul>
+        <!-- Essential Resources -->
+        <section id="resources" class="section">
+            <div class="container">
+                <h2>核心资源 <span>Essential</span></h2>
+                <div class="resource-group">
+                    <div class="resource-item">
+                        <h3><i class="bi bi-book-half"></i> WIKI</h3>
+                        <ul>
+                            <li><a href="https://simcity-buildit.fandom.com/wiki/SimCity_BuildIt_Wiki" target="_blank"><i class="bi bi-journal-bookmark"></i> Fandom</a></li>
+                            <li><a href="https://www.reddit.com/r/SCBuildIt/wiki/index/" target="_blank"><i class="bi bi-reddit"></i> Reddit</a></li>
+                            <li><a href="https://www.islaatlas.com/en/more/simcity-buildit-complete-guide" target="_blank"><i class="bi bi-clipboard-data"></i> Islaatlas</a></li>
+                        </ul>
+                    </div>
+                    <div class="resource-item">
+                        <h3><i class="bi bi-tools"></i> 线上工具</h3>
+                        <ul>
+                            <li><a href="./war/" target="_blank"><i class="bi bi-shield"></i> 战争组卡器</a></li>
+                            <li><a href="./products-time/" target="_blank"><i class="bi bi-cart"></i> 商店组商品</a></li>
+                            <li><a href="./product/" target="_blank"><i class="bi bi-graph-up"></i> 商品Echarts</a></li>
+                            <li><a href="./elo/" target="_blank"><i class="bi bi-trophy"></i> ELO胜率</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </section>
-        <hr>
-        <section>
-            <h2>社区 <span>Communities</span></h2>
-            <ul>
-                <li><a href="https://www.taptap.cn/app/35691/topic" target="_blank">Taptap</a></li>
-                <li><a href="https://tieba.baidu.com/f?kw=模拟城市官方" target="_blank">百度贴吧</a></li>
-                <li><a href="https://tieba.baidu.com/f?kw=simcity模拟城市" target="_blank">百度贴吧（国际服）</a></li>
-                <li><a href="https://s.myfans.cc/c/67d41fc329#/home" target="_blank">灯鹿粉丝圈</a></li>
-                <li><a href="https://weibo.com/p/100808028e494a3739805a9aef5d94781bf856/super_index" target="_blank">微博超话</a></li>
-                <li><a href="https://www.reddit.com/r/SCBuildIt/" target="_blank">Reddit（英文）</a></li>
-                <li><a href="https://answers.ea.com/t5/SimCity-BuildIt/bd-p/sim-city-BuildIt" target="_blank">EA官方论坛（英文）</a></li>
-            </ul>
+        
+        <!-- Community & Interaction -->
+        <section id="community" class="section">
+            <div class="container">
+                <h2>社区互动 <span>Community</span></h2>
+                <ul>
+                    <li><a href="https://www.taptap.cn/app/35691/topic" target="_blank"><i class="bi bi-chat-dots"></i> Taptap</a></li>
+                    <li><a href="https://tieba.baidu.com/f?kw=模拟城市官方" target="_blank"><i class="bi bi-megaphone"></i> 百度贴吧</a></li>
+                    <li><a href="https://tieba.baidu.com/f?kw=simcity模拟城市" target="_blank"><i class="bi bi-megaphone"></i> 百度贴吧（国际服）</a></li>
+                    <li><a href="https://s.myfans.cc/c/67d41fc329#/home" target="_blank"><i class="bi bi-people"></i> 灯鹿粉丝圈</a></li>
+                    <li><a href="https://weibo.com/p/100808028e494a3739805a9aef5d94781bf856/super_index" target="_blank"><i class="bi bi-wechat"></i> 微博超话</a></li>
+                    <li><a href="https://www.reddit.com/r/SCBuildIt/" target="_blank"><i class="bi bi-reddit"></i> Reddit（英文）</a></li>
+                </ul>
+            </div>
         </section>
-        <hr>
-        <section>
-            <h2>线上工具 <span>Tools</span></h2>
-            <ul>
-                <li><a href="./war/" target="_blank">战争组卡器</a></li>
-                <li><a href="./products-time/" target="_blank">商店组商品</a></li>
-                <li><a href="./product/" target="_blank">商品Echarts</a></li>
-                <li><a href="./elo/" target="_blank">ELO胜率</a></li>
-            </ul>
+
+        <!-- Support & Feedback -->
+        <section id="support" class="section">
+            <div class="container">
+                <h2>支持与反馈 <span>Support</span></h2>
+                <ul>
+                    <li><a href="https://bjbwdyxxjsyxgshbfgs.qiyukf.com/client?k=8e5f97764864a9376b47325e32e8e1db" target="_blank"><i class="bi bi-chat-left-text"></i> 七鱼客服（国服反馈渠道）</a></li>
+                    <li><a href="https://answers.ea.com/t5/SimCity-BuildIt/bd-p/sim-city-BuildIt" target="_blank"><i class="bi bi-envelope"></i> EA反馈渠道（英文）</a></li>
+                    <li><a href="https://simcity.gamecomb.com/" target="_blank"><i class="bi bi-globe"></i> 蜂巢游戏官网（国服）</a></li>
+                    <li><a href="https://www.ea.com/games/simcity/simcity-buildit" target="_blank"><i class="bi bi-globe"></i> EA官网（国际服）</a></li>
+                    <li><a href="https://www.apkmirror.com/apk/electronic-arts/simcity-buildit/" target="_blank"><i class="bi bi-download"></i> APKMirror（国际服镜像）</a></li>
+                </ul>
+            </div>
         </section>
-        <hr>
-        <section>
-            <h2>其他 <span>Other</span></h2>
-            <ul>
-                <li><a href="https://bjbwdyxxjsyxgshbfgs.qiyukf.com/client?k=8e5f97764864a9376b47325e32e8e1db" target="_blank">七鱼客服（国服反馈渠道）</a></li>
-                <li><a href="https://answers.ea.com/t5/SimCity-BuildIt/bd-p/sim-city-BuildIt" target="_blank">EA反馈渠道（英文）</a></li>
-                <li><a href="https://simcity.gamecomb.com/" target="_blank">蜂巢游戏官网（国服）</a></li>
-                <li><a href="https://www.ea.com/games/simcity/simcity-buildit" target="_blank">EA官网（国际服，需调节网页语言）</a></li>
-                <li><a href="https://www.apkmirror.com/apk/electronic-arts/simcity-buildit/" target="_blank">APKMirror（国际服镜像）</a></li>
-            </ul>
-        </section>
+
+        <!-- New Features (Fictional) -->
+        <!-- <section id="features" class="section">
+            <div class="container">
+                <h2>新功能 <span>New Features</span></h2>
+                <div class="feature-group">
+                    <div class="feature-item">
+                        <h3><i class="bi bi-robot"></i> AI 城市优化</h3>
+                        <p>利用最新的AI技术，根据您的城市布局和目标，为您提供最优的城市建设建议。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><i class="bi bi-bar-chart-line"></i> 实时城市数据</h3>
+                        <p>实时监控您的城市数据，包括经济状况、人口增长和交通流量。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><i class="bi bi-puzzle"></i> 自定义挑战</h3>
+                        <p>创建并分享您的自定义挑战，和其他市长一较高下。</p>
+                    </div>
+                </div>
+            </div>
+        </section> -->
     </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SimCity BuildIt Club. All Rights Reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>

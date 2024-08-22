@@ -1,63 +1,157 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
 }
 
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* Header */
 header {
     background-color: #333;
-    color: white;
-    padding: 1em 0;
+    color: #fff;
+    padding: 20px 0;
     text-align: center;
 }
 
 header h1 {
+    font-size: 2rem;
     margin: 0;
-    font-size: 2em;
+    line-height: 1.2;
 }
 
 header span {
-    font-size: 0.8em;
-    color: #ccc;
+    font-size: 1.2rem;
+    color: #f39c12;
 }
 
-main {
-    padding: 1em;
-    max-width: 800px;
-    margin: auto;
+/* Navigation */
+nav {
+    background-color: #444;
+    margin-bottom: 20px;
 }
 
-h1 {
-    font-size: 1.3em!important;
-}
-
-h2 {
-    color: #333;
-    font-size: 1.1em;
-}
-
-ul {
-    list-style-type: none;
+nav ul {
+    list-style: none;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0;
 }
 
-ul li {
-    margin: 0.5em 0;
+nav ul li {
+    margin: 0 15px;
 }
 
-ul li a {
+nav ul li a {
+    color: #fff;
     text-decoration: none;
-    color: #0066cc;
+    font-weight: 700;
+    padding: 5px 0;
+    display: block;
+    transition: color 0.3s ease;
 }
 
-ul li a:hover {
-    text-decoration: underline;
+nav ul li a:hover {
+    color: #f39c12;
 }
 
-hr {
-    border: 0;
-    height: 1px;
-    background: #ccc;
-    margin: 2em 0;
+/* Section Styles */
+.section {
+    background-color: #fff;
+    margin: 20px 0;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #f39c12;
+    padding-bottom: 10px;
+}
+
+.section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.section h3 i {
+    margin-right: 10px;
+    color: #3498db;
+}
+
+/* Lists with Icons */
+.section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.section ul li {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.section ul li i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: #3498db;
+}
+
+.section ul li a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.section ul li a:hover {
+    color: #2980b9;
+}
+
+/* Specific Styling for Resources */
+.resource-group, .feature-group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.resource-item, .feature-item {
+    flex: 0 0 48%;
+    margin-bottom: 20px;
+}
+
+.resource-item h3, .feature-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.feature-item p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 20px;
 }
