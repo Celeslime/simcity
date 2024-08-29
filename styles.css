@@ -156,3 +156,81 @@ footer {
     font-size: 0.9rem;
     margin-top: 20px;
 }
+
+/* 日历 */
+#calendar-container{
+    margin: 20px 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+#weekdays {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom:none!important;
+
+}
+#weekdays div{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    border-bottom:none!important;
+
+}
+#weekdays div{
+    color: #333;
+    text-align: center;
+}
+div.today {
+    background-color: #f39c12!important;
+    color: #fff!important;
+}
+#days {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+#days > div {
+    display: inline-flex;
+    justify-content: flex-end;
+    height: 50px;
+    width: calc(100% / 7);
+    font-size: 8px;
+    color: #333;
+    text-align: center;
+    padding: 3px;
+    position: relative;
+}
+#days > div, #weekdays > div, #days, #weekdays {
+    border: solid 0.5px #0001;
+    box-sizing: border-box;
+}
+#days > div > div {
+    position: absolute;
+    display: flex;
+    white-space: nowrap;
+    overflow: hidden;
+    left: 0;
+    top: 20px;
+    width: 100%;
+    line-height: 10px;
+    font-size: 8px;
+    align-items: center;
+    justify-content: center;
+    height: 13px;
+    color: #fff;
+}
+#days > div > div.start{
+    border-radius: 5px 0 0 5px;
+}
+#days > div > div.end{
+    border-radius: 0 5px 5px 0
+}
+#days .act1{
+    background-color: #4489b7;
+}
+#days .act2{
+    background-color: #4ab866;
+}

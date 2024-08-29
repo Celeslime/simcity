@@ -8,7 +8,7 @@ var inputs = [], maxCost = [], deletedCard = [];
 var own = [40,20,10,10,10,5,5,5,5,5,5]
     .concat(new Array(9).fill(60*4));
 
-own = new Array(9).fill(24*60).concat([24*60*2]);
+own = new Array(9).fill(12*60).concat([12*60*5*12]);
 
 for(var i = 0; i < data[0].value.length; i++){
     // console.log(i)

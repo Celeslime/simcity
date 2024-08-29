@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>模拟启动俱乐部</title>
-    <link rel="icon" href="./icon.png">
+    <link rel="icon" href="./ricon.png">
     <link rel="stylesheet" href="styles.css">
     <link href="./bootstrap.css" rel="stylesheet">
     <script>
@@ -28,8 +28,9 @@
             <ul>
                 <li><a href="#resources">核心资源</a></li>
                 <li><a href="#community">社区互动</a></li>
-                <li><a href="#support">支持反馈</a></li>
-                <!-- <li><a href="#features">新功能</a></li> -->
+                <li><a href="#support">支持与反馈</a></li>
+                <!-- <li><a href="#features">新功能</a></li>
+                <li><a href="#calendar">日历</a></li> -->
             </ul>
         </div>
     </nav>
@@ -56,6 +57,14 @@
                             <li><a href="./product/" target="_blank"><i class="bi bi-graph-up"></i> 商品Echarts</a></li>
                         </ul>
                     </div>
+                </div>
+                <h3><i class="bi bi-calendar4-week"></i> 活动日历</h3>
+                <div id="calendar-container">
+                    <!-- 星期几 -->
+                    <div id="weekdays"></div>
+                    <!-- 日期 -->
+                    <div id="days"></div>
+                    <script src="./js/calendar.js"></script>
                 </div>
             </div>
         </section>
@@ -116,6 +125,7 @@
                 </div>
             </div>
         </section>
+
     </main>
     <footer>
         <div class="container">
