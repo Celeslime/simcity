@@ -39,8 +39,8 @@ for(let i = 0; i < 4; i++) {
 }
 for(let i = 0; i < 4; i++) {
     activities.push({
-        startDate: new Date(2024, 7, 24 + i*7),
-        endDate: new Date(2024, 7, 26 + i*7),
+        startDate: new Date(2024, 7, 23 + i*7),
+        endDate: new Date(2024, 7, 25 + i*7),
         startTime: 16/24,
         endTime: 16/24,
         title: '设计'+(i*2+1),
@@ -49,8 +49,8 @@ for(let i = 0; i < 4; i++) {
 }
 for(let i = 0; i < 3; i++) {
     activities.push({
-        startDate: new Date(2024, 7, 27 + i*7),
-        endDate: new Date(2024, 7, 29 + i*7),
+        startDate: new Date(2024, 7, 26 + i*7),
+        endDate: new Date(2024, 7, 28 + i*7),
         startTime: 16/24,
         endTime: 16/24,
         title: '设计'+(i*2+2),
