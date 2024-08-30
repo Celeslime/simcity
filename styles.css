@@ -207,7 +207,7 @@ div.today {
     border: solid 0.5px #0001;
     box-sizing: border-box;
 }
-#days > div > div {
+#days > div > a {
     position: absolute;
     display: flex;
     white-space: nowrap;
@@ -221,14 +221,21 @@ div.today {
     justify-content: center;
     height: 13px;
     color: #fff;
+    transition: 0.3s;
 }
-#days > div > div.start{
+#days > div > a:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    z-index: 9;
+}
+#days > div > a.start{
     border-radius: 5px 0 0 5px;
 }
-#days > div > div.end{
+#days > div > a.end{
     border-radius: 0 5px 5px 0
 }
-#days > div > div{
+#days > div > a{
     background-color: #bababa;
 }
 #days .act1{
