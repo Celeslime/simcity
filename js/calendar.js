@@ -28,13 +28,13 @@ const endDate = new Date(2024, 8, 15);
 // 创建活动
 const activities = [];
 // 竞赛
-for(let i = 0; i < 4; i++) {
+for(let i = 0; i < 8; i++) {
     activities.push({
         startDate: new Date(2024, 7, 7 + i*7),
         endDate: new Date(2024, 7, 12 + i*7),
         startTime: 12/24,
         endTime: 24/24,
-        title: '竞赛'+(i+1),
+        title: '竞赛'+(i%4+1),
         class: 1
     });
 }
@@ -87,7 +87,7 @@ for(let i = 0; i < 4; i++) {
         endDate: new Date(2024, 7, 32 + i*7),
         startTime: 0/24,
         endTime: 24/24,
-        title: '市长委托任务',
+        title: '市长委托',
         class: 4
     })
 }
