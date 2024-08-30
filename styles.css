@@ -195,7 +195,7 @@ div.today {
 #days > div {
     display: inline-flex;
     justify-content: flex-end;
-    height: 50px;
+    height: 85px;
     width: calc(100% / 7);
     font-size: 8px;
     color: #333;
@@ -203,7 +203,7 @@ div.today {
     padding: 3px;
     position: relative;
 }
-#days > div, #weekdays > div, #days, #weekdays {
+#days div, #weekdays > div, #days, #weekdays {
     border: solid 0.5px #0001;
     box-sizing: border-box;
 }
@@ -228,9 +228,15 @@ div.today {
 #days > div > div.end{
     border-radius: 0 5px 5px 0
 }
+#days > div > div{
+    background-color: #a0a0a0;
+}
 #days .act1{
-    background-color: #4489b7;
+    background-color: #4ab866;
 }
 #days .act2{
-    background-color: #4ab866;
+    background-color: #4489b7;
+}
+#days .act3{
+    background-color: #e0604d;
 }

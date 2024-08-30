@@ -22,11 +22,12 @@ wkd.forEach((dayName, index) => {
 });
 
 // 日期范围
-const startDate = new Date(2024, 7, 7);
-const endDate = new Date(2024, 8, 16);
+const startDate = new Date(2024, 7, 26-7);
+const endDate = new Date(2024, 8, 15);
 
 // 创建活动
 const activities = [];
+// 竞赛
 for(let i = 0; i < 4; i++) {
     activities.push({
         startDate: new Date(2024, 7, 7 + i*7),
@@ -37,6 +38,7 @@ for(let i = 0; i < 4; i++) {
         class: 1
     });
 }
+// 设计
 for(let i = 0; i < 4; i++) {
     activities.push({
         startDate: new Date(2024, 7, 23 + i*7),
@@ -56,6 +58,38 @@ for(let i = 0; i < 3; i++) {
         title: '设计'+(i*2+2),
         class: 2
     });
+}
+// 战争 60 = 12 + 36 + 12
+for(let i = 0; i < 4; i++) {
+    activities.push({
+        startDate: new Date(2024, 7, 31 + i*5),
+        endDate: new Date(2024, 7, 32 + i*5),
+        startTime: 9/24,
+        endTime: 21/24,
+        title: '战争',
+        class: 3
+    })
+}
+for(let i = 0; i < 4; i++) {
+    activities.push({
+        startDate: new Date(2024, 8, 2 + i*5),
+        endDate: new Date(2024, 8, 4 + i*5),
+        startTime: 21/24,
+        endTime: 9/24,
+        title: '战争',
+        class: 3
+    })
+}
+// 市长委托
+for(let i = 0; i < 4; i++) {
+    activities.push({
+        startDate: new Date(2024, 7, 29 + i*7),
+        endDate: new Date(2024, 7, 32 + i*7),
+        startTime: 0/24,
+        endTime: 24/24,
+        title: '市长委托任务',
+        class: 4
+    })
 }
 
 // 空白格
@@ -102,11 +136,17 @@ for(let i = startDate; i <= endDate; i = new Date(i.getTime() + 24 * 60 * 60 * 1
             if(activities[j].startDate - i == 0) {
                 activity.style.left = (activities[j].startTime * 100) + '%';
                 activity.style.width = (100 - activities[j].startTime * 100) + '%';
+                if((100 - activities[j].startTime * 100)< 50){
+                    activity.textContent = "";
+                }
                 activity.classList.add('start');
             }
             if(activities[j].endDate - i == 0){
                 activity.style.right = (100 - activities[j].endTime * 100) + '%';
                 activity.style.width = (activities[j].endTime * 100) + '%';
+                if(activities[j].endTime * 100 < 50){
+                    activity.textContent = "";
+                }
                 activity.classList.add('end');
             }
             div.appendChild(activity);
@@ -116,7 +156,7 @@ for(let i = startDate; i <= endDate; i = new Date(i.getTime() + 24 * 60 * 60 * 1
 }
 
 //空白格
-const nextBlanks = 7 - endDate.getDay();
+const nextBlanks = (7 - endDate.getDay())%7;
 for(let i = 0; i < nextBlanks; i++) {
     const div = document.createElement('div');
     days.appendChild(div);
