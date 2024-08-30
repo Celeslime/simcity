@@ -34,7 +34,7 @@ for(let i = 0; i < 8; i++) {
         endDate: new Date(2024, 7, 12 + i*7),
         startTime: 12/24,
         endTime: 24/24,
-        title: '竞赛'+(i%4+1),
+        title: ((i%4+1)==4?'双倍':'')+'竞赛'+(i%4+1),
         class: 1
     });
 }
@@ -91,6 +91,19 @@ for(let i = 0; i < 4; i++) {
         class: 4
     })
 }
+// 史诗双倍
+var epic = ['全部', '交通', '教育', '娱乐', '高山', '地标', '沙滩'];
+for(let i = 0; i < 10; i++) {
+    activities.push({
+        startDate: new Date(2024, 7, 5 + i*7),
+        endDate: new Date(2024, 7, 11+ i*7),
+        startTime: 10/24,
+        endTime: 10/24,
+        title: epic[(i+3)%7]+'史诗',
+        class: 5
+    })
+}
+
 
 // 空白格
 const blanks = startDate.getDay() - 1;
