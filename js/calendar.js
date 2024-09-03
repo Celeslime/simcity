@@ -22,8 +22,8 @@ wkd.forEach((dayName, index) => {
 });
 
 // 日期范围
-const startDate = new Date(2024, 7, 26-7);
-const endDate = new Date(2024, 8, 15);
+const startDate = new Date(2024, 7, 26);
+const endDate = new Date(2024, 8, 15+7);
 
 // 创建活动
 const activities = [];
@@ -94,8 +94,8 @@ for(let i = 0; i < 4; i++) {
 // 市长委托
 for(let i = 0; i < 4; i++) {
     activities.push({
-        startDate: new Date(2024, 7, 29 + i*7),
-        endDate: new Date(2024, 7, 32 + i*7),
+        startDate: new Date(2024, 7, 29 + i*8),
+        endDate: new Date(2024, 7, 32 + i*8),
         startTime: 0/24,
         endTime: 24/24,
         title: '市长委托',
@@ -114,6 +114,18 @@ for(let i = 0; i < 10; i++) {
         title: epic[(i+3)%7]+'史诗',
         class: 5,
         label: epic[(i+3)%7]+'史诗点数双倍'
+    })
+}
+// 累计消耗
+for(let i = 0; i < 4; i++) {
+    activities.push({
+        startDate: new Date(2024, 8, 2 + i*7),
+        endDate: new Date(2024, 8, 5 + i*7),
+        startTime: 0/24,
+        endTime: 24/24,
+        title: '累计消耗',
+        class: 6,
+        label: '累计消耗绿钞'
     })
 }
 
