@@ -22,59 +22,61 @@ wkd.forEach((dayName, index) => {
 });
 
 // 日期范围
-const startDate = new Date(2024, 7, 26);
-const endDate = new Date(2024, 8, 15+7);
+const startDate = new Date(2024, 9-1, 16);
+const endDate = new Date(2024, 10-1, 6);
 
 // 创建活动
 const activities = [];
 // 竞赛
+compSeason = 40;
 CompHref = {
     39: 'https://simcity-buildit.fandom.com/wiki/Mayor%27s_Pass_Season_39:_Ireland',
     40: 'https://simcity-buildit.fandom.com/wiki/Mayor%27s_Pass_Season_40:_Canc%C3%BAn',
     41: 'https://simcity-buildit.fandom.com/wiki/Mayor%27s_Pass_Season_41:_Cape_Town',
 }
-for(let i = 0; i < 8; i++) {
+for(let i = 0; i < 4; i++) {
     activities.push({
-        startDate: new Date(2024, 7, 7 + i*7),
-        endDate: new Date(2024, 7, 12 + i*7),
+        startDate: new Date(2024, 9-1, 4 + i*7),
+        endDate: new Date(2024, 9-1, 9 + i*7),
         startTime: 12/24,
         endTime: 24/24,
         title: ((i%4+1)==4?'双倍':'')+'竞赛'+(i%4+1),
         class: 1,
-        href: CompHref[Math.floor(i/4)+39],
-        label: '市长竞赛'+(Math.floor(i/4)+39)+'期 第'+(i%4+1)+'周'
+        href: CompHref[compSeason],
+        label: '市长竞赛'+compSeason+'期 第'+(i%4+1)+'周'
     });
 }
 // 设计
+designSeason = 42;
 for(let i = 0; i < 4; i++) {
     activities.push({
-        startDate: new Date(2024, 7, 23 + i*7),
-        endDate: new Date(2024, 7, 25 + i*7),
+        startDate: new Date(2024, 7, 23 + i*7 - 41*28 + designSeason*28),
+        endDate: new Date(2024, 7, 25 + i*7 - 41*28 + designSeason*28),
         startTime: 16/24,
         endTime: 16/24,
         title: '设计'+(i*2+1),
         class: 2,
-        href: 'https://simcity-buildit.fandom.com/wiki/Design_Challenges_Season_41',
-        label: '设计挑战赛41赛季 第'+(i*2+1)+'期'
+        href: 'https://simcity-buildit.fandom.com/wiki/Design_Challenges_Season_'+designSeason,
+        label: '设计挑战赛'+designSeason+'赛季 第'+(i*2+1)+'期'
     });
 }
 for(let i = 0; i < 3; i++) {
     activities.push({
-        startDate: new Date(2024, 7, 26 + i*7),
-        endDate: new Date(2024, 7, 28 + i*7),
+        startDate: new Date(2024, 7, 26 + i*7 - 41*28 + designSeason*28),
+        endDate: new Date(2024, 7, 28 + i*7 - 41*28 + designSeason*28),
         startTime: 16/24,
         endTime: 16/24,
         title: '设计'+(i*2+2),
         class: 2,
-        href: 'https://simcity-buildit.fandom.com/wiki/Design_Challenges_Season_41',
-        label: '设计挑战赛41赛季 第'+(i*2+2)+'期'
+        href: 'https://simcity-buildit.fandom.com/wiki/Design_Challenges_Season_'+designSeason,
+        label: '设计挑战赛'+designSeason+'赛季 第'+(i*2+2)+'期'
     });
 }
 // 战争 60 = 12 + 36 + 12
 for(let i = 0; i < 4; i++) {
     activities.push({
-        startDate: new Date(2024, 7, 31 + i*5),
-        endDate: new Date(2024, 7, 32 + i*5),
+        startDate: new Date(2024, 9-1, 18 + i*5),
+        endDate: new Date(2024, 9-1, 19 + i*5),
         startTime: 9/24,
         endTime: 21/24,
         title: '战争',
@@ -83,8 +85,8 @@ for(let i = 0; i < 4; i++) {
 }
 for(let i = 0; i < 4; i++) {
     activities.push({
-        startDate: new Date(2024, 8, 2 + i*5),
-        endDate: new Date(2024, 8, 4 + i*5),
+        startDate: new Date(2024, 9-1, 20 + i*5),
+        endDate: new Date(2024, 9-1, 22 + i*5),
         startTime: 21/24,
         endTime: 9/24,
         title: '战争',
@@ -126,6 +128,18 @@ for(let i = 0; i < 4; i++) {
         title: '累计消耗',
         class: 6,
         label: '累计消耗绿钞'
+    })
+}
+// 收集印花
+for(let i = 0; i < 1; i++) {
+    activities.push({
+        startDate: new Date(2024, 8, 10 + i*14),
+        endDate: new Date(2024, 8, 17 + i*14),
+        startTime: 10/24,
+        endTime: 10/24,
+        title: '收集印花',
+        class: 7,
+        label: '收集印花'
     })
 }
 
