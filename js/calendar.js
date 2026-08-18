@@ -73,38 +73,40 @@ for(let i = 0; i < 3; i++) {
     });
 }
 // 战争 60 = 12 + 36 + 12
-for(let i = 0; i < 4; i++) {
-    activities.push({
-        startDate: new Date(2024, 9-1, 18 + i*5),
-        endDate: new Date(2024, 9-1, 19 + i*5),
-        startTime: 9/24,
-        endTime: 21/24,
-        title: '战争',
-        class: 3
-    })
-}
-for(let i = 0; i < 4; i++) {
-    activities.push({
-        startDate: new Date(2024, 9-1, 20 + i*5),
-        endDate: new Date(2024, 9-1, 22 + i*5),
-        startTime: 21/24,
-        endTime: 9/24,
-        title: '战争',
-        class: 3
-    })
-}
+// for(let i = 0; i < 4; i++) {
+//     activities.push({
+//         startDate: new Date(2024, 9-1, 18 + i*5),
+//         endDate: new Date(2024, 9-1, 19 + i*5),
+//         startTime: 9/24,
+//         endTime: 21/24,
+//         title: '战争',
+//         class: 3
+//     })
+// }
+// for(let i = 0; i < 4; i++) {
+//     activities.push({
+//         startDate: new Date(2024, 9-1, 20 + i*5),
+//         endDate: new Date(2024, 9-1, 22 + i*5),
+//         startTime: 21/24,
+//         endTime: 9/24,
+//         title: '战争',
+//         class: 3
+//     })
+// }
+
+
 // 市长委托
-for(let i = 0; i < 4; i++) {
-    activities.push({
-        startDate: new Date(2024, 7, 29 + i*8),
-        endDate: new Date(2024, 7, 32 + i*8),
-        startTime: 0/24,
-        endTime: 24/24,
-        title: '市长委托',
-        class: 4,
-        label: '市长委托任务'
-    })
-}
+// for(let i = 0; i < 4; i++) {
+//     activities.push({
+//         startDate: new Date(2024, 7, 29 + i*8),
+//         endDate: new Date(2024, 7, 32 + i*8),
+//         startTime: 0/24,
+//         endTime: 24/24,
+//         title: '市长委托',
+//         class: 4,
+//         label: '市长委托任务'
+//     })
+// }
 // 史诗双倍
 var epic = ['全部', '交通', '教育', '娱乐', '高山', '地标', '沙滩'];
 for(let i = 0; i < 10; i++) {
