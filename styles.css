@@ -1,249 +1,464 @@
-/* General Styles */
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 0;
-    padding: 0;
+/* ============================================================
+   模拟启动俱乐部 · simcity
+   页面风格继承自 Celeslime.github.io：蓝白清新 + 深浅色主题
+   ============================================================ */
+
+/* ---------- 变量（主色取自 Cele 头像 flower #4696d2） ---------- */
+:root{
+	--blue: #4696d2;
+	--blue-dark: #2c6f9e;
+	--blue-deep: #1f5b8a;
+	--blue-light: #eaf4fb;
+	--blue-soft: #f4f9fd;
+
+	--bg: #f7fafc;
+	--card: #ffffff;
+	--border: #d6e8f5;
+	--text: #3d5a73;
+	--text-strong: #1f3a52;
+	--shadow-out: 0 3px 12px rgba(70, 150, 210, 0.12);
+	--shadow-hover: 0 10px 24px rgba(70, 150, 210, 0.2);
+	--nav-bg: rgba(247, 250, 252, 0.82);
 }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px 0;
+html.dark{
+	--blue: #63aadd;
+	--blue-dark: #7db9e4;
+	--blue-deep: #9cc7e8;
+	--blue-light: #1d3346;
+	--blue-soft: #16242f;
+
+	--bg: #0e1a26;
+	--card: #16242f;
+	--border: #244055;
+	--text: #a8c1d6;
+	--text-strong: #d7e6f2;
+	--shadow-out: 0 3px 14px rgba(0, 0, 0, 0.5);
+	--shadow-hover: 0 10px 26px rgba(0, 0, 0, 0.6);
+	--nav-bg: rgba(14, 26, 38, 0.82);
 }
 
-/* Header */
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
+*{
+	box-sizing: border-box;
 }
 
-header h1 {
-    font-size: 2rem;
-    margin: 0;
-    line-height: 1.2;
+html{
+	background: var(--bg);
 }
 
-header span {
-    font-size: 1.2rem;
-    color: #f39c12;
+body{
+	margin: 0;
+	font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+	color: var(--text);
+	min-height: 100vh;
+	background: var(--bg);
 }
 
-/* Navigation */
-nav {
-    background-color: #444;
-    margin-bottom: 20px;
+a{
+	color: inherit;
+	text-decoration: none;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    margin: 0;
+:focus{
+	outline: 2px solid var(--blue);
+	outline-offset: 2px;
 }
 
-nav ul li {
-    margin: 0 15px;
+.container{
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 0 20px;
 }
 
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 700;
-    padding: 5px 0;
-    display: block;
-    transition: color 0.3s ease;
+/* ---------- 顶部导航（sticky，毛玻璃） ---------- */
+nav{
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 56px;
+	padding: 0 max(20px, calc((100vw - 900px) / 2));
+	background: var(--nav-bg);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-bottom: 1px solid var(--border);
 }
 
-nav ul li a:hover {
-    color: #f39c12;
+.nav-logo{
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 700;
+	font-size: 1.05rem;
+	color: var(--blue-deep);
 }
 
-/* Section Styles */
-.section {
-    background-color: #fff;
-    margin: 20px auto;
-    padding: 20px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+.nav-logo img{
+	height: 26px;
+	width: 26px;
+	border-radius: 50%;
+	background: #fff;
+	padding: 2px;
+	border: 1px solid var(--border);
 }
 
-.section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #333;
-    border-bottom: 2px solid #f39c12;
-    padding-bottom: 10px;
+html.dark .nav-logo img{
+	background: var(--card);
 }
 
-.section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #444;
-    display: flex;
-    align-items: center;
+.nav-links{
+	display: flex;
+	align-items: center;
+	gap: 22px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
-.section h3 i {
-    margin-right: 10px;
-    color: #3498db;
+.nav-links li{
+	display: inline-flex;
 }
 
-/* Lists with Icons */
-.section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.nav-links a{
+	font-size: 0.92rem;
+	color: var(--text);
+	font-weight: 500;
+	transition: color 0.18s ease;
 }
 
-.section ul li {
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
+.nav-links a:hover{
+	color: var(--blue);
 }
 
-.section ul li i {
-    margin-right: 10px;
-    font-size: 1.2rem;
-    color: #3498db;
+/* ---------- 主题切换按钮 ---------- */
+.nav-theme-btn{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: 50%;
+	background: var(--card);
+	color: var(--blue-dark);
+	cursor: pointer;
+	transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+	margin-left: 2px;
 }
 
-.section ul li a {
-    color: #3498db;
-    text-decoration: none;
-    transition: color 0.3s ease;
+.nav-theme-btn:hover{
+	background: var(--blue-light);
+	color: var(--blue-deep);
+	transform: translateY(-2px);
 }
 
-.section ul li a:hover {
-    color: #2980b9;
+.theme-icon{
+	width: 17px;
+	height: 17px;
+	display: none;
 }
 
-/* Specific Styling for Resources */
-.resource-group, .feature-group {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+html:not(.dark) .theme-sun{ display: block; }
+html.dark .theme-moon{ display: block; }
+
+/* ---------- 顶部欢迎区（浅蓝白清爽风） ---------- */
+header{
+	background: linear-gradient(180deg, rgba(236, 247, 255, 0.85), rgba(247, 250, 252, 0.7));
+	padding: 72px 20px 0px;
+	text-align: center;
 }
 
-.resource-item, .feature-item {
-    flex: 0 0 48%;
-    margin-bottom: 20px;
+html.dark header{
+	background: linear-gradient(180deg, rgba(20, 34, 47, 0.85), rgba(14, 26, 38, 0.7));
 }
 
-.resource-item h3, .feature-item h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #444;
+header h1{
+	margin: 0;
+	color: var(--blue-deep);
+	font-size: 2rem;
+	letter-spacing: 1px;
+	line-height: 1.3;
 }
 
-.feature-item p {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.5;
+header h1 span{
+	display: block;
+	margin-top: 10px;
+	color: var(--blue-dark);
+	font-size: 1.1rem;
+	letter-spacing: 2px;
 }
 
-/* Footer */
-footer {
-    background-color: #333;
-    color: #fff;
-    padding: 15px 0;
-    text-align: center;
-    font-size: 0.9rem;
-    margin-top: 20px;
+/* ---------- 内容卡片 ---------- */
+main{
+	display: block;
+	padding: 32px 0 8px;
 }
 
-/* 日历 */
+.section{
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	box-shadow: var(--shadow-out);
+	max-width: 800px;
+	margin: 0 auto 24px;
+	padding: 24px 0 4px;
+	scroll-margin-top: 72px;
+	transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.section:hover{
+	border-color: var(--blue);
+	box-shadow: var(--shadow-hover);
+}
+
+.section h2{
+	margin: 0 0 18px;
+	font-size: 1.3rem;
+	color: var(--blue-deep);
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	letter-spacing: 1px;
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 12px;
+}
+
+.section h2 span{
+	font-size: 0.8rem;
+	font-weight: 400;
+	letter-spacing: 0;
+	opacity: 0.7;
+	color: var(--text);
+}
+
+.section h3{
+	margin: 0 0 12px;
+	font-size: 1.05rem;
+	color: var(--text-strong);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.section h3 i{
+	margin-right: 2px;
+	color: var(--blue-dark);
+}
+
+/* ---------- 图标列表 ---------- */
+.section ul{
+	list-style: none;
+	padding: 0;
+	margin: 0 0 16px;
+}
+
+.section ul li{
+	margin: 8px 0;
+	display: flex;
+	align-items: center;
+}
+
+.section ul li i{
+	margin-right: 10px;
+	font-size: 1.05rem;
+	color: var(--blue);
+}
+
+.section ul li a{
+	color: var(--text);
+	font-weight: 500;
+	transition: color 0.18s ease;
+}
+
+.section ul li a:hover{
+	color: var(--blue);
+}
+
+/* ---------- 核心资源双列 ---------- */
+.resource-group{
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.resource-item{
+	flex: 1 1 260px;
+}
+
+/* ---------- 新功能描述 ---------- */
+.section div > div > p{
+	margin: 0 0 18px;
+	font-size: 0.92rem;
+	color: var(--text);
+	line-height: 1.6;
+	opacity: 0.85;
+}
+
+/* ---------- 页脚 ---------- */
+footer{
+	margin: 8px 0 36px;
+	text-align: center;
+	color: var(--text);
+	opacity: 0.75;
+	font-size: 0.9rem;
+}
+
+footer p{
+	margin: 0;
+}
+
+/* ---------- 活动日历板块：暂隐藏（保留代码，需要时删除此块即可恢复） ---------- */
+#resources .container > h3{
+	display: none;
+}
 #calendar-container{
-    margin: 20px 0;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	display: none;
 }
-#weekdays {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom:none!important;
 
+/* ---------- 日历 ---------- */
+#calendar-container{
+	margin: 18px 0 22px;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: var(--shadow-out);
+	background: var(--card);
 }
-#weekdays div{
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    width: 100%;
-    border-bottom:none!important;
 
+#weekdays{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: none !important;
 }
+
 #weekdays div{
-    color: #333;
-    text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	width: 100%;
+	border-bottom: none !important;
+	color: var(--text);
+	text-align: center;
+	font-weight: 600;
 }
-div.today {
-    background-color: #f39c12!important;
-    color: #fff!important;
+
+#weekdays div:first-child,
+#weekdays div:last-child{
+	color: var(--blue-dark);
 }
-#days {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+
+div.today{
+	background-color: var(--blue) !important;
+	color: #fff !important;
 }
-#days > div {
-    display: inline-flex;
-    justify-content: flex-end;
-    height: 120px;
-    width: calc(100% / 7);
-    font-size: 8px;
-    color: #333;
-    text-align: center;
-    padding: 3px;
-    position: relative;
+
+#days{
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 }
-#days div, #weekdays > div, #days, #weekdays {
-    border: solid 0.5px #0001;
-    box-sizing: border-box;
+
+#days > div{
+	display: inline-flex;
+	justify-content: flex-end;
+	height: 120px;
+	width: calc(100% / 7);
+	font-size: 8px;
+	color: var(--text);
+	text-align: center;
+	padding: 3px;
+	position: relative;
 }
-#days > div > a {
-    position: absolute;
-    display: flex;
-    white-space: nowrap;
-    overflow: hidden;
-    left: 0;
-    top: 20px;
-    width: 100%;
-    line-height: 10px;
-    font-size: 8px;
-    align-items: center;
-    justify-content: center;
-    height: 13px;
-    color: #fff;
-    transition: 0.3s;
+
+#days div, #weekdays > div, #days, #weekdays{
+	border: solid 0.5px var(--border);
+	box-sizing: border-box;
 }
-#days > div > a:hover {
-    transform: scale(1.1);
-    filter: brightness(1.1);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    z-index: 9;
-}
-#days > div > a.start{
-    border-radius: 5px 0 0 5px;
-}
-#days > div > a.end{
-    border-radius: 0 5px 5px 0
-}
+
 #days > div > a{
-    background-color: #bababa;
+	position: absolute;
+	display: flex;
+	white-space: nowrap;
+	overflow: hidden;
+	left: 0;
+	top: 20px;
+	width: 100%;
+	line-height: 10px;
+	font-size: 8px;
+	align-items: center;
+	justify-content: center;
+	height: 13px;
+	color: #fff;
+	transition: 0.3s;
 }
+
+#days > div > a:hover{
+	transform: scale(1.1);
+	filter: brightness(1.1);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	z-index: 9;
+}
+
+#days > div > a.start{
+	border-radius: 5px 0 0 5px;
+}
+
+#days > div > a.end{
+	border-radius: 0 5px 5px 0;
+}
+
+#days > div > a{
+	background-color: #bababa;
+}
+
 #days .act1{
-    background-color: #4ab866;
+	background-color: #4ab866;
 }
+
 #days .act2{
-    background-color: #4489b7;
+	background-color: #4489b7;
 }
+
 #days .act3{
-    background-color: #e0604d;
+	background-color: #e0604d;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 768px){
+	nav{
+		padding: 0 14px;
+	}
+	.nav-links{
+		gap: 14px;
+	}
+	header{
+		padding: 52px 16px 40px;
+	}
+	header h1{
+		font-size: 1.5rem;
+	}
+	.section{
+		padding: 20px 0 2px;
+		border-radius: 12px;
+	}
+}
+
+@media (max-width: 480px){
+	.nav-logo span{
+		display: none;
+	}
+	.container{
+		padding: 0 14px;
+	}
+	.resource-group{
+		flex-direction: column;
+	}
 }
